@@ -10,7 +10,7 @@ import {
 import {
 	EMAIL_DOMAINS,
 	DEFAULT_EMAIL_DOMAIN,
-} from '@/constants/register.constants';
+} from '@/constants/auth.constants';
 
 export default function SelectScrollable() {
 	return (

@@ -1,0 +1,17 @@
+.countryInput {
+  button {
+    height: 32px;
+    border: 1px solid hsl(var(--input));
+
+    span {
+      width: 16px;
+      height: 11px;
+    }
+
+    >svg {
+      max-width: 12px;
+      fill: black;
+      stroke: black;
+    }
+  }
+}

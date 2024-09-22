@@ -29,3 +29,6 @@ const birthdate = watch('birthdate') // TODO: добавить day если ещ
 попробовать изменить name   
 
 потом делать красивый title 
+
+
+валидацию phone number https://github.com/omeralpi/shadcn-phone-input/blob/main/app/(home)/sections/hero.tsx
