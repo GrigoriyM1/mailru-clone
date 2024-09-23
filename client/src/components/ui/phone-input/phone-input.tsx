@@ -27,38 +27,50 @@ import { ScrollArea } from '../scroll-area';
 
 import styles from './phone-input.module.scss';
 
+import ErrorText from '../error-text';
+
 type PhoneInputProps = Omit<
 	React.InputHTMLAttributes<HTMLInputElement>,
 	'onChange' | 'value'
 > &
 	Omit<RPNInput.Props<typeof RPNInput.default>, 'onChange'> & {
 		onChange?: (value: RPNInput.Value) => void;
+		error?: boolean;
+		helperText?: string;
 	};
 
 const PhoneInput: React.ForwardRefExoticComponent<PhoneInputProps> =
 	React.forwardRef<React.ElementRef<typeof RPNInput.default>, PhoneInputProps>(
-		({ className, onChange, style, ...props }, ref) => {
+		({ className, onChange, style, error, helperText, ...props }, ref) => {
 			return (
-				<RPNInput.default
-					ref={ref}
-					className={cn('flex', styles.countryInput, className)}
-					flagComponent={FlagComponent}
-					countrySelectComponent={CountrySelect}
-					inputComponent={InputComponent}
-					defaultCountry='RU'
-					international
-					/**
-					 * Handles the onChange event.
-					 *
-					 * react-phone-number-input might trigger the onChange event as undefined
-					 * when a valid phone number is not entered. To prevent this,
-					 * the value is coerced to an empty string.
-					 *
-					 * @param {E164Number | undefined} value - The entered value
-					 */
-					onChange={value => onChange?.(value as RPNInput.Value)}
-					{...props}
-				/>
+				<>
+					<RPNInput.default
+						ref={ref}
+						className={cn(
+							'flex',
+							styles.countryInput,
+							error && styles.error,
+							className
+						)}
+						flagComponent={FlagComponent}
+						countrySelectComponent={CountrySelect}
+						inputComponent={InputComponent}
+						defaultCountry='RU'
+						international
+						/**
+						 * Handles the onChange event.
+						 *
+						 * react-phone-number-input might trigger the onChange event as undefined
+						 * when a valid phone number is not entered. To prevent this,
+						 * the value is coerced to an empty string.
+						 *
+						 * @param {E164Number | undefined} value - The entered value
+						 */
+						onChange={value => onChange?.(value as RPNInput.Value)}
+						{...props}
+					/>
+					{error && helperText && <ErrorText>{helperText}</ErrorText>}
+				</>
 			);
 		}
 	);
@@ -169,6 +181,3 @@ const FlagComponent = ({ country, countryName }: RPNInput.FlagProps) => {
 FlagComponent.displayName = 'FlagComponent';
 
 export { PhoneInput };
-
-
-// https://shadcn-phone-input.vercel.app/  валидация

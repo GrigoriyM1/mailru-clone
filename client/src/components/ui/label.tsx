@@ -13,6 +13,7 @@ const labelVariants = cva(
       variant: {
         light: "",
         normal: "text-black font-normal mb-0",
+        error: "text-red-500",
         // Add more variants here as needed
       },
     },
