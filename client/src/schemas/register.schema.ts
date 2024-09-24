@@ -1,4 +1,5 @@
 import { EMAIL_DOMAINS } from '@/constants/auth.constants';
+import { verifyEmailInput } from '@/lib/verify-email-input';
 import { isValidPhoneNumber } from 'react-phone-number-input';
 import { z } from 'zod';
 
@@ -32,7 +33,14 @@ export const RegisterSchema = z.object({
 			.string({ message: 'Укажите email' })
 			.min(1, { message: 'Укажите email' })
 			.min(5, { message: 'Email должен содержать не менее 5 символов' })
-			.max(31, { message: 'Email должен содержать не более 31 символов' }),
+			.max(31, { message: 'Email должен содержать не более 31 символов' })
+			.refine(
+				value => {
+					return verifyEmailInput(value);
+				},
+				{ message: 'Некорректный формат email' }
+			),
+		// todo: ЭТО И ДЛЯ ЛОГИНА может потом в отдельную функцию вынесу
 		domain: z.enum(EMAIL_DOMAINS as [string, ...string[]], {
 			message: 'Укажите домен',
 		}),

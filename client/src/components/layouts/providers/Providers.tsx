@@ -1,19 +1,24 @@
-'use client'
+'use client';
 
-import { PropsWithChildren } from "react";
-import { Toaster } from "sonner";
-import Layout from "./Layout";
+import { PropsWithChildren, useState } from 'react';
+import { Toaster } from 'sonner';
+import Layout from './Layout';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 const Providers = ({ children }: PropsWithChildren) => {
-  return (
-    <>
-      <Toaster position="bottom-left" theme="dark" />
+	const [client] = useState(
+		new QueryClient({
+			defaultOptions: { queries: { refetchOnWindowFocus: false } },
+		})
+	);
 
-      <Layout>
-        {children}
-      </Layout>
-    </>
-  );
+	return (
+		<QueryClientProvider client={client}>
+			<Toaster position='bottom-left' theme='dark' />
+
+			<Layout>{children}</Layout>
+		</QueryClientProvider>
+	);
 };
 
 export default Providers;

@@ -24,15 +24,18 @@ interface IEmailInputProps extends InputProps {
 const EmailInput = forwardRef<HTMLInputElement, IEmailInputProps>(
 	({ variant = 'default', register, helperText, control, ...props }, ref) => {
 		const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-			e.target.value = formatEmailInput(e.target.value);
+			handleInput(e);
 
 			props?.onChange?.(e);
+		};
+		const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+			e.target.value = formatEmailInput(e.target.value);
 		};
 
 		return (
 			<div>
 				<div className='flex items-end'>
-					<Input {...props} ref={ref} onChange={handleChange} />
+					<Input {...props} ref={ref} onChange={handleChange} onInput={handleInput} />
 
 					<FormField
 						control={control}

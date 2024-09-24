@@ -8,12 +8,18 @@ import { formatTextInput } from '@/lib/format-text-input';
 import EmailInput from '@/components/ui/email-input';
 import { PhoneInput } from '@/components/ui/phone-input/phone-input';
 import { Button } from '@/components/ui/button';
-import { IRegisterForm } from '@/types/auth.types';
+import { IRegisterData, IRegisterForm } from '@/types/auth.types';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { RegisterSchema } from '@/schemas/register.schema';
 import { FormField } from '@/components/ui/form';
 import { DEFAULT_EMAIL_DOMAIN } from '@/constants/auth.constants';
+import { useMutation } from '@tanstack/react-query';
+import { authService } from '../../../services/auth.service';
+import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
+import { formatBirthdate } from '@/lib/format-birthdate';
+import { IError } from '@/types/error.types';
 
 const RegisterPage = () => {
 	const {
@@ -22,6 +28,7 @@ const RegisterPage = () => {
 		reset,
 		control,
 		setValue,
+		setError,
 		formState: { errors },
 	} = useForm<IRegisterForm>({
 		mode: 'onChange',
@@ -44,9 +51,46 @@ const RegisterPage = () => {
 			gender: '',
 		},
 	});
+	const { push } = useRouter();
+
+	const { mutate, isPending } = useMutation({
+		mutationKey: ['register'],
+		mutationFn: (data: IRegisterData) => authService.register(data),
+		onSuccess() {
+			toast.success('Successfully registered!');
+			push('/');
+			reset();
+		},
+		onError(error: IError) {
+			const errors = error?.response?.data?.errors;
+			console.log('ERROR', error, errors);
+			if (errors) {
+				Object.keys(errors).forEach(key => {
+					const val = errors[key];
+					console.log(key, val);
+					setError(key as keyof IRegisterForm, {
+						message: val,
+					});
+				});			} else {
+				toast.error('Произошла ошибка');
+			}
+		},
+	});
+
 	const onSubmit: SubmitHandler<IRegisterForm> = data => {
 		console.log('SUBMIT DATA  ', data);
-		reset();
+		const obj = {
+			...data,
+			name: data.name.trim(),
+			lastName: data.lastName.trim(),
+			birthdate: formatBirthdate(
+				Number(data.birthdate.day),
+				Number(data.birthdate.month),
+				Number(data.birthdate.year)
+			),
+			email: data.email.email + data.email.domain,
+		};
+		mutate(obj);
 	};
 
 	return (
@@ -180,7 +224,9 @@ const RegisterPage = () => {
 					{...register('password')}
 				/>
 
-				<Button type='submit'>Зарегистрироваться</Button>
+				<Button type='submit' isLoading={isPending}>
+					Зарегистрироваться
+				</Button>
 				{/* TODO: позжеможно добавить "далее" и подтверждение по почте */}
 			</form>
 		</div>
