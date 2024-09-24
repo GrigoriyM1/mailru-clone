@@ -9,12 +9,10 @@ import EmailInput from '@/components/ui/email-input';
 import { PhoneInput } from '@/components/ui/phone-input/phone-input';
 import { Button } from '@/components/ui/button';
 import { IRegisterForm } from '@/types/auth.types';
-import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { RegisterSchema } from '@/schemas/register.schema';
 import { FormField } from '@/components/ui/form';
-import { useState } from 'react';
-import { IBirthdate } from '@/components/ui/select-birthdate/select-birthdate.types';
 import { DEFAULT_EMAIL_DOMAIN } from '@/constants/auth.constants';
 
 const RegisterPage = () => {
@@ -23,50 +21,39 @@ const RegisterPage = () => {
 		handleSubmit,
 		reset,
 		control,
-		getValues,
+		setValue,
 		formState: { errors },
 	} = useForm<IRegisterForm>({
 		mode: 'onChange',
 		reValidateMode: 'onChange',
 		resolver: zodResolver(RegisterSchema),
 		defaultValues: {
+			name: '',
+			lastName: '',
+			birthdate: {
+				day: '',
+				month: '',
+				year: '',
+			},
+			phone: '',
+			password: '',
+			linkedEmail: '',
 			email: {
 				domain: DEFAULT_EMAIL_DOMAIN,
 			},
+			gender: '',
 		},
 	});
-	const [birthDate, setBirthDate] = useState<IBirthdate>({
-		day: '',
-		month: '',
-		year: '',
-	});
-	const [birthDateError, setBirthDateError] = useState(false);
-	const [birthDateErrorText, setBirthDateErrorText] = useState('');
-
 	const onSubmit: SubmitHandler<IRegisterForm> = data => {
 		console.log('SUBMIT DATA  ', data);
 		reset();
 	};
 
-	console.log('registers  ', register('email.email'))
-
 	return (
 		<div className='shadow rounded-lg max-w-[400px] w-full mx-auto mt-5 bg-white py-[24px] px-[48px]'>
 			<h1 className='text-xl font-medium text-center mb-6'>Новая почта</h1>
 
-			<form
-				className='flex flex-col gap-8'
-				onSubmit={e => {
-					if (!birthDate.day || !birthDate.month || !birthDate.year) {
-						setBirthDateError(true);
-						setBirthDateErrorText('Выберите дату рождения');
-					} else {
-						setBirthDateError(false);
-						setBirthDateErrorText('');
-					}
-					handleSubmit(onSubmit)(e);
-				}}
-			>
+			<form className='flex flex-col gap-8' onSubmit={handleSubmit(onSubmit)}>
 				<div className='flex gap-2'>
 					<Input
 						label='Имя'
@@ -93,16 +80,19 @@ const RegisterPage = () => {
 				</div>
 
 				<div>
-					<Label variant={birthDateError ? 'error' : 'light'}>
+					<Label variant={!!errors?.birthdate ? 'error' : 'light'}>
 						Дата рождения
 					</Label>
 					<SelectBirthdate
-						birthDate={birthDate}
-						setBirthDate={setBirthDate}
-						error={birthDateError}
-						setError={setBirthDateError}
-						errorText={birthDateErrorText}
-						setErrorText={setBirthDateErrorText}
+						control={control}
+						error={!!errors?.birthdate}
+						errorText={
+							errors?.birthdate?.message ||
+							errors?.birthdate?.day?.message ||
+							errors?.birthdate?.month?.message ||
+							errors?.birthdate?.year?.message
+						}
+						setValue={setValue}
 					/>
 				</div>
 
@@ -114,6 +104,7 @@ const RegisterPage = () => {
 							className='flex gap-5'
 							error={!!errors?.gender}
 							helperText={errors?.gender?.message}
+							value={field.value}
 							onValueChange={field.onChange}
 						>
 							<div className='flex items-center'>
@@ -195,5 +186,4 @@ const RegisterPage = () => {
 		</div>
 	);
 };
-
 export default RegisterPage;
