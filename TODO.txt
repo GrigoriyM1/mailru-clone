@@ -2,35 +2,6 @@
 при выходе данные могут не сохраниться
 Запомнить, sessionstoraeg, cookies
 сделать капчу 
-снаружи register передавать и 2 страница на отправку кода 
-
-инпуты не исправлять так как у меня autoswitcher 
-npm i @nestjs/swagger	  ДОДЕЛАТЬ 
-
-
-удалил auth восстановить 
-
-исправить ошибку такой пользователь уже существует 
-
-if (!user) throw new BadRequestException('Пользователь с таким e-mail не найден'); // TODO: функция которая ищет errors или message или просто строка
-if (!user) throw new NotFoundException('User not found'); // TODO: сначала делать запрос с email потом с password 
-	@IsOptional() // TODO: по очереди потому что...
-    return true // TODO: это при валидации того логина тоже будет 
-
-иправить пропадание значения select 
-
-
-
-isauth и отловка ошибок, также  @tanstack/react-query-devtools  может попробовать 
-обрабатывать одинаковые email 
-ОБЯЗАТЕЛЬНО СДЕЛАТЬ ОБРАБОТЧИК ОШИБОК, ЧТОБ В ПЕРЕМЕННУЮ ERROR И СРАЗУ ПО НЕСКОЛЬКО ДАЛО 
-const birthdate = watch('birthdate') // TODO: добавить day если еще будут ошибки 
-когда загрузка идет на кнопку disabled делать 
-попробовать изменить name   
-
 потом делать красивый title 
 
-
-валидацию phone number https://github.com/omeralpi/shadcn-phone-input/blob/main/app/(home)/sections/hero.tsx
-
-задать вопрос о том 
+ОБЯЗАТЕЛЬНО СДЕЛАТЬ ЗАГРУЗКУ REGISTER LOGIN !!!

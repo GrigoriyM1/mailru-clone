@@ -71,7 +71,8 @@ const RegisterPage = () => {
 					setError(key as keyof IRegisterForm, {
 						message: val,
 					});
-				});			} else {
+				});
+			} else {
 				toast.error('Произошла ошибка');
 			}
 		},
@@ -97,7 +98,10 @@ const RegisterPage = () => {
 		<div className='shadow rounded-lg max-w-[400px] w-full mx-auto mt-5 bg-white py-[24px] px-[48px]'>
 			<h1 className='text-xl font-medium text-center mb-6'>Новая почта</h1>
 
-			<form className='flex flex-col gap-8' onSubmit={handleSubmit(onSubmit)}>
+			<form
+				className='flex flex-col gap-8'
+				onSubmit={handleSubmit(onSubmit)}
+			>
 				<div className='flex gap-2'>
 					<Input
 						label='Имя'
@@ -185,7 +189,6 @@ const RegisterPage = () => {
 						errors?.email?.domain?.message
 					}
 					control={control}
-					register={register}
 					{...register('email.email')}
 				/>
 

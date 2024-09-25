@@ -26,20 +26,29 @@ export interface IRegisterData {
 }
 
 export interface ILoginData {
-	email: string;
+	email: {
+		email: string;
+		domain: string;
+	};
 	password: string;
 }
 
 export interface IUser {
-	id: number 
+	id: number;
 	name: string;
 	lastName: string;
-	birthdate: string;
-	gender: string;
+
 	email: string;
 	linkedEmail: string;
-	phone: string;
 	password: string;
+
+	birthdate: string;
+	gender: string;
+	phone: string;
+	avatar?: string;
+
+	createdAt: string;
+	updatedAt: string;
 }
 
 export interface IAuthResponse {
