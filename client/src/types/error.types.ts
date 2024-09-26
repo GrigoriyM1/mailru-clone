@@ -4,6 +4,7 @@ export interface IError extends Error {
 			errors?: {
 				[key: string]: string;
 			};
+			message?: string
 		};
 	};
 }

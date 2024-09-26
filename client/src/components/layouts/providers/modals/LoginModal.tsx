@@ -3,7 +3,7 @@ import Modal from '@/components/ui/modal';
 import { DEFAULT_EMAIL_DOMAIN } from '@/constants/auth.constants';
 import { useModalsStore } from '@/store/use-modals-store';
 import { loginSchemaEmail, loginSchemaPassword } from '@/schemas/login.schema';
-import { ILoginData } from '@/types/auth.types';
+import { ILoginData, ILoginForm } from '@/types/auth.types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ArrowRight, X } from 'lucide-react';
 import { useForm } from 'react-hook-form';
@@ -13,6 +13,13 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Separator } from '@/components/ui/separator';
 import Link from 'next/link';
 import { Input } from '@/components/ui/input';
+import { combineEmailDomain } from '@/lib/combine-email-domain';
+import { useMutation } from '@tanstack/react-query';
+import { authService } from '@/services/auth.service';
+import { IError } from '@/types/error.types';
+import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
+import { userService } from '@/services/user.service';
 
 const LoginModal = () => {
 	const [isPasswordInput, setIsPasswordInput] = useState(false);
@@ -20,8 +27,11 @@ const LoginModal = () => {
 		register,
 		control,
 		handleSubmit,
+		getValues,
+		setError,
+		reset,
 		formState: { errors },
-	} = useForm<ILoginData>({
+	} = useForm<ILoginForm>({
 		defaultValues: {
 			email: {
 				email: '',
@@ -35,19 +45,77 @@ const LoginModal = () => {
 		mode: 'onChange',
 	});
 	const { isLoginModalOpen, setIsLoginModalOpen } = useModalsStore();
+	const [email, setEmail] = useState('');
+	const { push } = useRouter();
 
-	const onSubmit = (data: ILoginData) => {
-		console.log('submit  ', data, errors);
+	const loginMutation = useMutation({
+		mutationFn: (data: ILoginData) => authService.login(data),
+		onSuccess: data => {
+			push('/');
+			toast.success('Вы успешно вошли в аккаунт');
+			setIsLoginModalOpen(false);
+		},
+		onError: (error: IError) => {
+			const passwordError = error?.response?.data?.message;
+			if (passwordError) {
+				setError('password', { message: passwordError });
+			} else {
+				console.log('Login error  ', error);
+				toast.error('Что-то пошло не так, попробуйте позже');
+			}
+		},
+	});
+
+	const getByEmailMutation = useMutation({
+		mutationFn: (email: string) => userService.getByEmail(email),
+		onSuccess: data => {
+			if (!data) {
+				setError('email', {
+					message: 'Пользователь с таким email не найден',
+				});
+			} else {
+				setIsPasswordInput(true);
+			}
+		},
+		onError: (error: IError) => {
+			console.log('getByEmailMutation err  ', error);
+			toast.error('Что-то пошло не так, попробуйте позже');
+		},
+	});
+
+	const onSubmit = (data: ILoginForm) => {
 		if (!isPasswordInput) {
-			setIsPasswordInput(true);
+			const formattedEmail = combineEmailDomain(
+				data.email.email,
+				data.email.domain
+			);
+
+			setEmail(formattedEmail);
+
+			getByEmailMutation.mutate(formattedEmail);
+			return;
 		}
+
+		const obj = {
+			...data,
+			email,
+		};
+
+		loginMutation.mutate(obj);
+	};
+
+	const onClose = () => {
+		setIsLoginModalOpen(false);
+		setIsPasswordInput(false);
+		setEmail('');
+		reset();
 	};
 
 	return (
 		<div>
 			<Modal
 				isOpen={isLoginModalOpen}
-				onClose={() => setIsLoginModalOpen(false)}
+				onClose={onClose}
 				className='max-w-[420px] w-full'
 			>
 				<div className='flex justify-between items-center mb-9'>
@@ -62,8 +130,19 @@ const LoginModal = () => {
 					{isPasswordInput ? (
 						<>
 							<div className='flex items-center gap-2 text-[14px] mb-3'>
-								<div className='hover:underline'>otpravka92@mail.ru</div>
-								<div className='text-primary hover:underline'>
+								<div
+									className='hover:underline cursor-pointer'
+									onClick={() => setIsPasswordInput(false)}
+								>
+									{combineEmailDomain(
+										getValues('email.email'),
+										getValues('email.domain')
+									)}
+								</div>
+								<div
+									className='text-primary hover:underline cursor-pointer'
+									onClick={() => setIsPasswordInput(false)}
+								>
 									Сменить аккаунт
 								</div>
 							</div>
@@ -92,7 +171,13 @@ const LoginModal = () => {
 					)}
 
 					<div className='flex justify-between items-center mt-4'>
-						<Button className='flex items-center gap-2' type='submit'>
+						<Button
+							className='flex items-center gap-2'
+							type='submit'
+							isLoading={
+								loginMutation.isPending || getByEmailMutation.isPending
+							}
+						>
 							<div>Войти</div>
 							<ArrowRight className='w-4 h-4' />
 						</Button>

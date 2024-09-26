@@ -29,8 +29,6 @@ const HeaderAuth = () => {
 		mutationKey: ['logout'],
 		mutationFn: () => authService.logout(),
 		onSuccess() {
-			setIsAuth(false);
-			setUser(null);
 			push('/register');
 			toast.success('Вы успешно вышли из аккаунта');
 		},

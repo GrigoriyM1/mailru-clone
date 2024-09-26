@@ -57,8 +57,8 @@ const RegisterPage = () => {
 		mutationKey: ['register'],
 		mutationFn: (data: IRegisterData) => authService.register(data),
 		onSuccess() {
-			toast.success('Successfully registered!');
 			push('/');
+			toast.success('Successfully registered!');
 			reset();
 		},
 		onError(error: IError) {

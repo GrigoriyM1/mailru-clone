@@ -25,11 +25,15 @@ export interface IRegisterData {
 	password: string;
 }
 
-export interface ILoginData {
+export interface ILoginForm {
 	email: {
 		email: string;
 		domain: string;
 	};
+	password: string;
+}
+export interface ILoginData {
+	email: string;
 	password: string;
 }
 
@@ -55,5 +59,7 @@ export interface IAuthResponse {
 	accessToken: string;
 	user: IUser;
 }
+
+
 
 // export type TypeUserForm = Omit<IUser, 'id'> & { password?: string }

@@ -9,7 +9,7 @@ export const loginSchemaEmail = z.object({
 			.min(5, { message: 'Email должен содержать не менее 5 символов' })
 			.max(31, { message: 'Email должен содержать не более 31 символов' })
 			.refine(
-				value => {
+				(value) => {
 					return value.includes('@')
 						? z.string().email().safeParse(value).success
 						: verifyEmailInput(value);
