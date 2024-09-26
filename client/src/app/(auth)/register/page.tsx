@@ -101,6 +101,7 @@ const RegisterPage = () => {
 			<form
 				className='flex flex-col gap-8'
 				onSubmit={handleSubmit(onSubmit)}
+				noValidate
 			>
 				<div className='flex gap-2'>
 					<Input
