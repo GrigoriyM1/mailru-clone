@@ -33,8 +33,6 @@ export class AuthService {
       this.userService.getByLinkedEmail(dto.linkedEmail)
     ]);
 
-    console.log('then next', oldUser, oldUserLinkedEmail, dto.email, dto.linkedEmail)
-
     const errors: any = {};
     if (oldUser) errors.email = 'Пользователь с таким e-mail уже существует';
     if (oldUserLinkedEmail) errors.linkedEmail = 'Пользователь с таким привязанным e-mail уже существует';
@@ -47,7 +45,6 @@ export class AuthService {
     }
 
     const { password, ...user } = await this.userService.create(dto);
-    console.log('USER2222  ', user)
     const tokens = this.issueTokens(user.id)
 
     return {
@@ -99,7 +96,6 @@ export class AuthService {
     if (!user) throw new BadRequestException('Пользователь с таким e-mail не найден'); // TODO: функция которая ищет errors или message или просто строка
     // TODO: сначала делать запрос с email потом с password
 
-    console.log('VALIDATED  ', user.password, dto.password)
     if (dto.password) {
       const isValid = await verify(user.password, dto.password)
       if (!isValid) throw new BadRequestException('Неверный пароль');

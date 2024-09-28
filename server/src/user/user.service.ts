@@ -40,8 +40,6 @@ export class UserService {
       password: await hash(dto.password)
     }
 
-    console.log('user  ', user)
-
     return this.prisma.user.create({
       data: user
     })
