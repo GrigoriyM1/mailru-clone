@@ -1,23 +1,33 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, UsePipes, ValidationPipe, Put } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, UsePipes, ValidationPipe, Put, Query } from '@nestjs/common';
 import { QuestionService } from './question.service';
 import { QuestionDto } from './dto/question.dto'
 import { Auth } from 'src/auth/decorators/auth.decorator';
 import { CurrentUser } from 'src/auth/decorators/user.decorator';
+import { AddAdditionalDto } from './dto/add-additional.dto';
 
 @Controller('question')
 export class QuestionController {
   constructor(private readonly questionService: QuestionService) {}
   
-  @Get()
   @Auth()
-  async getAll(@CurrentUser('id') userId: string) {
-    return this.questionService.getAll(userId);
+  @Get()
+  async getAll(
+    @Query('skip') skip: string = '0', 
+    @Query('take') take: string = '20'
+  ) {
+    return this.questionService.getAll(Number(skip), Number(take));
+  }
+
+  @Auth()
+  @Get('get-one/:id')
+  async getOne(@Param('id') id: string) {
+    return this.questionService.getOne(id);
   }
   
   @UsePipes(new ValidationPipe())
   @HttpCode(200)
-  @Post()
   @Auth()
+  @Post()
   async create(@Body() dto: QuestionDto, @CurrentUser('id') userId: string) {
     return this.questionService.create(dto, userId);
   }
@@ -27,24 +37,41 @@ export class QuestionController {
   @Auth()
   @Put(':id')
   async update(
-    @Body() dto: QuestionDto,
-    @CurrentUser('id') userId: string,
-    @Param('id') id: string
+    @Body() dto: Partial<QuestionDto>, 
+    @Param('id') id: string, 
+    @CurrentUser('id') userId: string
   ) {
     return this.questionService.update(dto, id, userId);
   }
 
   @UsePipes(new ValidationPipe())
-  @Delete(':id')
   @Auth()
+  @Delete(':id')
   async delete(@Param('id') id: string) {
     return this.questionService.delete(id);
   }
   
   @UsePipes(new ValidationPipe())
-  @Patch('like/:id')
   @Auth()
+  @Patch('like/:id')
   async like(@Param('id') id: string, @CurrentUser('id') userId: string) {
     return this.questionService.like(id, userId);
+  }
+
+  @UsePipes(new ValidationPipe())
+  @Auth()
+  @Patch('add-additional/:id')
+  async addAdditional(
+    @Body() dto: AddAdditionalDto,
+    @Param('id') id: string, 
+    @CurrentUser('id') userId: string, 
+  ) {
+    return this.questionService.addAdditional(dto, id, userId);
+  }
+
+  @Auth()
+  @Get('categories')
+  async getCategories() {
+    return this.questionService.getCategories();
   }
 }

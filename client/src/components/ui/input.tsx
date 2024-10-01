@@ -57,7 +57,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 					<Label
 						{...labelProps}
 						htmlFor={props.id}
-						className={cn(labelProps?.className, error ? 'text-red-500' : '')}
+						className={cn(error ? 'text-red-500' : '', labelProps?.className)}
 					>
 						{label}
 					</Label>
@@ -68,7 +68,8 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 						className={cn(
 							'w-full',
 							inputVariants({ size, error, className }),
-							type === 'password' ? 'pr-10' : ''
+							type === 'password' ? 'pr-10' : '',
+							className
 						)}
 						ref={ref}
 						{...props}

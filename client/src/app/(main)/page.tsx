@@ -1,44 +1,53 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from '@/components/ui/select';
-import { IBirthdate } from '@/components/ui/select-birthdate/select-birthdate.types';
+import Questions from '@/components/shared/main/Questions';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 const MainPage = () => {
-	const [birthDate, setBirthDate] = useState<IBirthdate>({
-		day: '',
-		month: '',
-		year: '',
-	});
-	useEffect(() => {
-		console.log('VALUE CHANGED');
-		setBirthDate(prev => ({ ...prev, day: '20' }));
-	}, []);
-
-	const handleDayChange = (value: string) => {
-		setBirthDate(prev => ({ ...prev, day: value }));
-	};
+	const { push } = useRouter();
 
 	return (
-		<div className='pt-52 px-5'>
-			<Select value={String(birthDate.day)} onValueChange={handleDayChange}>
-				<SelectTrigger>
-					<SelectValue placeholder='idk' />
-				</SelectTrigger>
-				<SelectContent>
-					{[...Array(31)].map((_, index) => (
-						<SelectItem key={index} value={(index + 1).toString()}>
-							{index + 1}
-						</SelectItem>
-					))}
-				</SelectContent>
-			</Select>
+		<div className='flex'>
+			<div className='max-w-[280px] w-full p-4'>
+				<div>
+					<Link href='/smstop'>Вопросы-лидеры</Link>
+				</div>
+			</div>
+
+			<div className='bg-white w-full'>
+				<div className='p-10 pb-0'>
+					<h1 className='mb-7 text-[25px]'>Вопросы участников</h1>
+
+					<div className='flex mb-7'>
+						<Input
+							placeholder='Задайте свой вопрос здесь'
+							size='lg'
+							className='border-primary'
+						/>
+						<Button className='h-[48px]' onClick={() => push('/ask')}>Задать вопрос</Button>
+					</div>
+
+					<div className='flex items-center'>
+						<Link
+							href='/open'
+							className='block text-bold transition bg-gray-200 cursor-pointer p-3 rounded-md'
+						>
+							Открытые
+						</Link>
+						<Link
+							href='/best'
+							className='block text-bold transition hover:bg-gray-200 cursor-pointer p-3 rounded-md'
+						>
+							Лучшие
+						</Link>
+					</div>
+				</div>
+
+				<Questions />
+			</div>
 		</div>
 	);
 };

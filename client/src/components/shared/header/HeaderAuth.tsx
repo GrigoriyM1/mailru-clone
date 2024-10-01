@@ -69,7 +69,7 @@ const HeaderAuth = () => {
 			</Button>
 
 			<Dropdown
-				className='absolute w-[380px] bg-white shadow right-3 top-10 rounded-[20px] p-5'
+				className='absolute w-[380px] bg-white shadow right-3 top-10 rounded-[20px] p-5 z-[99999]'
 				isOpen={isProfileOpen}
 				setIsOpen={setIsProfileOpen}
 				handleBtnId='#open-auth-dropdown'

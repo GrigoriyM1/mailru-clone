@@ -146,6 +146,18 @@ exports.Prisma.QuestionScalarFieldEnum = {
   subcategory: 'subcategory',
   likes: 'likes',
   isLeader: 'isLeader',
+  additionals: 'additionals',
+  userId: 'userId'
+};
+
+exports.Prisma.AnswerScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  text: 'text',
+  likes: 'likes',
+  isBestAnswer: 'isBestAnswer',
+  questionId: 'questionId',
   userId: 'userId'
 };
 
@@ -167,7 +179,8 @@ exports.Prisma.NullsOrder = {
 
 exports.Prisma.ModelName = {
   User: 'User',
-  Question: 'Question'
+  Question: 'Question',
+  Answer: 'Answer'
 };
 
 /**
