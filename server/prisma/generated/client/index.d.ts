@@ -1122,6 +1122,7 @@ export namespace Prisma {
     email: string | null
     linkedEmail: string | null
     password: string | null
+    avatar: string | null
     phone: string | null
     birthdate: string | null
     gender: string | null
@@ -1136,6 +1137,7 @@ export namespace Prisma {
     email: string | null
     linkedEmail: string | null
     password: string | null
+    avatar: string | null
     phone: string | null
     birthdate: string | null
     gender: string | null
@@ -1150,6 +1152,7 @@ export namespace Prisma {
     email: number
     linkedEmail: number
     password: number
+    avatar: number
     phone: number
     birthdate: number
     gender: number
@@ -1166,6 +1169,7 @@ export namespace Prisma {
     email?: true
     linkedEmail?: true
     password?: true
+    avatar?: true
     phone?: true
     birthdate?: true
     gender?: true
@@ -1180,6 +1184,7 @@ export namespace Prisma {
     email?: true
     linkedEmail?: true
     password?: true
+    avatar?: true
     phone?: true
     birthdate?: true
     gender?: true
@@ -1194,6 +1199,7 @@ export namespace Prisma {
     email?: true
     linkedEmail?: true
     password?: true
+    avatar?: true
     phone?: true
     birthdate?: true
     gender?: true
@@ -1281,6 +1287,7 @@ export namespace Prisma {
     email: string
     linkedEmail: string
     password: string
+    avatar: string | null
     phone: string
     birthdate: string
     gender: string
@@ -1312,6 +1319,7 @@ export namespace Prisma {
     email?: boolean
     linkedEmail?: boolean
     password?: boolean
+    avatar?: boolean
     phone?: boolean
     birthdate?: boolean
     gender?: boolean
@@ -1330,6 +1338,7 @@ export namespace Prisma {
     email?: boolean
     linkedEmail?: boolean
     password?: boolean
+    avatar?: boolean
     phone?: boolean
     birthdate?: boolean
     gender?: boolean
@@ -1344,6 +1353,7 @@ export namespace Prisma {
     email?: boolean
     linkedEmail?: boolean
     password?: boolean
+    avatar?: boolean
     phone?: boolean
     birthdate?: boolean
     gender?: boolean
@@ -1373,6 +1383,7 @@ export namespace Prisma {
       email: string
       linkedEmail: string
       password: string
+      avatar: string | null
       phone: string
       birthdate: string
       gender: string
@@ -1780,6 +1791,7 @@ export namespace Prisma {
     readonly email: FieldRef<"User", 'String'>
     readonly linkedEmail: FieldRef<"User", 'String'>
     readonly password: FieldRef<"User", 'String'>
+    readonly avatar: FieldRef<"User", 'String'>
     readonly phone: FieldRef<"User", 'String'>
     readonly birthdate: FieldRef<"User", 'String'>
     readonly gender: FieldRef<"User", 'String'>
@@ -4318,6 +4330,7 @@ export namespace Prisma {
     email: 'email',
     linkedEmail: 'linkedEmail',
     password: 'password',
+    avatar: 'avatar',
     phone: 'phone',
     birthdate: 'birthdate',
     gender: 'gender'
@@ -4464,6 +4477,7 @@ export namespace Prisma {
     email?: StringFilter<"User"> | string
     linkedEmail?: StringFilter<"User"> | string
     password?: StringFilter<"User"> | string
+    avatar?: StringNullableFilter<"User"> | string | null
     phone?: StringFilter<"User"> | string
     birthdate?: StringFilter<"User"> | string
     gender?: StringFilter<"User"> | string
@@ -4481,6 +4495,7 @@ export namespace Prisma {
     email?: SortOrder
     linkedEmail?: SortOrder
     password?: SortOrder
+    avatar?: SortOrderInput | SortOrder
     phone?: SortOrder
     birthdate?: SortOrder
     gender?: SortOrder
@@ -4501,6 +4516,7 @@ export namespace Prisma {
     name?: StringFilter<"User"> | string
     lastName?: StringFilter<"User"> | string
     password?: StringFilter<"User"> | string
+    avatar?: StringNullableFilter<"User"> | string | null
     phone?: StringFilter<"User"> | string
     birthdate?: StringFilter<"User"> | string
     gender?: StringFilter<"User"> | string
@@ -4518,6 +4534,7 @@ export namespace Prisma {
     email?: SortOrder
     linkedEmail?: SortOrder
     password?: SortOrder
+    avatar?: SortOrderInput | SortOrder
     phone?: SortOrder
     birthdate?: SortOrder
     gender?: SortOrder
@@ -4538,6 +4555,7 @@ export namespace Prisma {
     email?: StringWithAggregatesFilter<"User"> | string
     linkedEmail?: StringWithAggregatesFilter<"User"> | string
     password?: StringWithAggregatesFilter<"User"> | string
+    avatar?: StringNullableWithAggregatesFilter<"User"> | string | null
     phone?: StringWithAggregatesFilter<"User"> | string
     birthdate?: StringWithAggregatesFilter<"User"> | string
     gender?: StringWithAggregatesFilter<"User"> | string
@@ -4721,6 +4739,7 @@ export namespace Prisma {
     email: string
     linkedEmail: string
     password: string
+    avatar?: string | null
     phone: string
     birthdate: string
     gender: string
@@ -4738,6 +4757,7 @@ export namespace Prisma {
     email: string
     linkedEmail: string
     password: string
+    avatar?: string | null
     phone: string
     birthdate: string
     gender: string
@@ -4755,6 +4775,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     linkedEmail?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
     birthdate?: StringFieldUpdateOperationsInput | string
     gender?: StringFieldUpdateOperationsInput | string
@@ -4772,6 +4793,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     linkedEmail?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
     birthdate?: StringFieldUpdateOperationsInput | string
     gender?: StringFieldUpdateOperationsInput | string
@@ -4789,6 +4811,7 @@ export namespace Prisma {
     email: string
     linkedEmail: string
     password: string
+    avatar?: string | null
     phone: string
     birthdate: string
     gender: string
@@ -4803,6 +4826,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     linkedEmail?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
     birthdate?: StringFieldUpdateOperationsInput | string
     gender?: StringFieldUpdateOperationsInput | string
@@ -4817,6 +4841,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     linkedEmail?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
     birthdate?: StringFieldUpdateOperationsInput | string
     gender?: StringFieldUpdateOperationsInput | string
@@ -5028,6 +5053,21 @@ export namespace Prisma {
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
+  export type StringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  }
+
   export type QuestionListRelationFilter = {
     every?: QuestionWhereInput
     some?: QuestionWhereInput
@@ -5038,6 +5078,11 @@ export namespace Prisma {
     every?: AnswerWhereInput
     some?: AnswerWhereInput
     none?: AnswerWhereInput
+  }
+
+  export type SortOrderInput = {
+    sort: SortOrder
+    nulls?: NullsOrder
   }
 
   export type QuestionOrderByRelationAggregateInput = {
@@ -5057,6 +5102,7 @@ export namespace Prisma {
     email?: SortOrder
     linkedEmail?: SortOrder
     password?: SortOrder
+    avatar?: SortOrder
     phone?: SortOrder
     birthdate?: SortOrder
     gender?: SortOrder
@@ -5071,6 +5117,7 @@ export namespace Prisma {
     email?: SortOrder
     linkedEmail?: SortOrder
     password?: SortOrder
+    avatar?: SortOrder
     phone?: SortOrder
     birthdate?: SortOrder
     gender?: SortOrder
@@ -5085,6 +5132,7 @@ export namespace Prisma {
     email?: SortOrder
     linkedEmail?: SortOrder
     password?: SortOrder
+    avatar?: SortOrder
     phone?: SortOrder
     birthdate?: SortOrder
     gender?: SortOrder
@@ -5122,7 +5170,7 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
-  export type StringNullableFilter<$PrismaModel = never> = {
+  export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
     in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
     notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
@@ -5134,7 +5182,10 @@ export namespace Prisma {
     startsWith?: string | StringFieldRefInput<$PrismaModel>
     endsWith?: string | StringFieldRefInput<$PrismaModel>
     mode?: QueryMode
-    not?: NestedStringNullableFilter<$PrismaModel> | string | null
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
   export type IntNullableFilter<$PrismaModel = never> = {
@@ -5170,11 +5221,6 @@ export namespace Prisma {
   export type UserNullableRelationFilter = {
     is?: UserWhereInput | null
     isNot?: UserWhereInput | null
-  }
-
-  export type SortOrderInput = {
-    sort: SortOrder
-    nulls?: NullsOrder
   }
 
   export type UserOrderByRelationAggregateInput = {
@@ -5227,24 +5273,6 @@ export namespace Prisma {
 
   export type QuestionSumOrderByAggregateInput = {
     likes?: SortOrder
-  }
-
-  export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    mode?: QueryMode
-    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedStringNullableFilter<$PrismaModel>
-    _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
   export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -5375,6 +5403,10 @@ export namespace Prisma {
     set?: Date | string
   }
 
+  export type NullableStringFieldUpdateOperationsInput = {
+    set?: string | null
+  }
+
   export type QuestionUpdateManyWithoutUserNestedInput = {
     create?: XOR<QuestionCreateWithoutUserInput, QuestionUncheckedCreateWithoutUserInput> | QuestionCreateWithoutUserInput[] | QuestionUncheckedCreateWithoutUserInput[]
     connectOrCreate?: QuestionCreateOrConnectWithoutUserInput | QuestionCreateOrConnectWithoutUserInput[]
@@ -5491,10 +5523,6 @@ export namespace Prisma {
     connectOrCreate?: AnswerCreateOrConnectWithoutQuestionInput | AnswerCreateOrConnectWithoutQuestionInput[]
     createMany?: AnswerCreateManyQuestionInputEnvelope
     connect?: AnswerWhereUniqueInput | AnswerWhereUniqueInput[]
-  }
-
-  export type NullableStringFieldUpdateOperationsInput = {
-    set?: string | null
   }
 
   export type NullableIntFieldUpdateOperationsInput = {
@@ -5633,6 +5661,20 @@ export namespace Prisma {
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
+  export type NestedStringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  }
+
   export type NestedStringWithAggregatesFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -5675,7 +5717,7 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
-  export type NestedStringNullableFilter<$PrismaModel = never> = {
+  export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
     in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
     notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
@@ -5686,7 +5728,10 @@ export namespace Prisma {
     contains?: string | StringFieldRefInput<$PrismaModel>
     startsWith?: string | StringFieldRefInput<$PrismaModel>
     endsWith?: string | StringFieldRefInput<$PrismaModel>
-    not?: NestedStringNullableFilter<$PrismaModel> | string | null
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
   export type NestedIntNullableFilter<$PrismaModel = never> = {
@@ -5703,23 +5748,6 @@ export namespace Prisma {
   export type NestedBoolNullableFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
     not?: NestedBoolNullableFilter<$PrismaModel> | boolean | null
-  }
-
-  export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedStringNullableFilter<$PrismaModel>
-    _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
   export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -5950,6 +5978,7 @@ export namespace Prisma {
     email: string
     linkedEmail: string
     password: string
+    avatar?: string | null
     phone: string
     birthdate: string
     gender: string
@@ -5966,6 +5995,7 @@ export namespace Prisma {
     email: string
     linkedEmail: string
     password: string
+    avatar?: string | null
     phone: string
     birthdate: string
     gender: string
@@ -6017,6 +6047,7 @@ export namespace Prisma {
     email: string
     linkedEmail: string
     password: string
+    avatar?: string | null
     phone: string
     birthdate: string
     gender: string
@@ -6033,6 +6064,7 @@ export namespace Prisma {
     email: string
     linkedEmail: string
     password: string
+    avatar?: string | null
     phone: string
     birthdate: string
     gender: string
@@ -6073,6 +6105,7 @@ export namespace Prisma {
     email?: StringFilter<"User"> | string
     linkedEmail?: StringFilter<"User"> | string
     password?: StringFilter<"User"> | string
+    avatar?: StringNullableFilter<"User"> | string | null
     phone?: StringFilter<"User"> | string
     birthdate?: StringFilter<"User"> | string
     gender?: StringFilter<"User"> | string
@@ -6114,6 +6147,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     linkedEmail?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
     birthdate?: StringFieldUpdateOperationsInput | string
     gender?: StringFieldUpdateOperationsInput | string
@@ -6130,6 +6164,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     linkedEmail?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
     birthdate?: StringFieldUpdateOperationsInput | string
     gender?: StringFieldUpdateOperationsInput | string
@@ -6181,6 +6216,7 @@ export namespace Prisma {
     email: string
     linkedEmail: string
     password: string
+    avatar?: string | null
     phone: string
     birthdate: string
     gender: string
@@ -6197,6 +6233,7 @@ export namespace Prisma {
     email: string
     linkedEmail: string
     password: string
+    avatar?: string | null
     phone: string
     birthdate: string
     gender: string
@@ -6270,6 +6307,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     linkedEmail?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
     birthdate?: StringFieldUpdateOperationsInput | string
     gender?: StringFieldUpdateOperationsInput | string
@@ -6286,6 +6324,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     linkedEmail?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
     birthdate?: StringFieldUpdateOperationsInput | string
     gender?: StringFieldUpdateOperationsInput | string
@@ -6452,6 +6491,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     linkedEmail?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
     birthdate?: StringFieldUpdateOperationsInput | string
     gender?: StringFieldUpdateOperationsInput | string
@@ -6468,6 +6508,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     linkedEmail?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
     birthdate?: StringFieldUpdateOperationsInput | string
     gender?: StringFieldUpdateOperationsInput | string
@@ -6484,6 +6525,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     linkedEmail?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
     birthdate?: StringFieldUpdateOperationsInput | string
     gender?: StringFieldUpdateOperationsInput | string

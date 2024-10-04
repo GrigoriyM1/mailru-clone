@@ -17,6 +17,14 @@ export class AnswerService {
       },
       select: {
         answers: true,
+        user: {
+          select: {
+            id: true,
+            name: true,
+            lastName: true,
+            avatar: true,
+          }
+        }
       }
     });
   }

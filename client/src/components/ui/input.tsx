@@ -42,7 +42,17 @@ export interface InputProps
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
 	(
-		{ type, label, onChange, labelProps = {}, className, size, error, helperText, ...props },
+		{
+			type,
+			label,
+			onChange,
+			labelProps = {},
+			className,
+			size,
+			error,
+			helperText,
+			...props
+		},
 		ref
 	) => {
 		const [showPassword, setShowPassword] = React.useState(false);
@@ -89,6 +99,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 							}
 						}}
 					/>
+
 					{type === 'password' && (
 						<button
 							type='button'
@@ -103,11 +114,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 						</button>
 					)}
 				</div>
-				{helperText && (
-					<ErrorText>
-						{helperText}
-					</ErrorText>
-				)}
+				{helperText && <ErrorText>{helperText}</ErrorText>}
 			</div>
 		);
 	}

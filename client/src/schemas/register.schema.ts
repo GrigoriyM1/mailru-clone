@@ -40,7 +40,6 @@ export const RegisterSchema = z.object({
 				},
 				{ message: 'Некорректный формат email' }
 			),
-		// todo: ЭТО И ДЛЯ ЛОГИНА может потом в отдельную функцию вынесу
 		domain: z.enum(EMAIL_DOMAINS as [string, ...string[]], {
 			message: 'Укажите домен',
 		}),

@@ -19,7 +19,18 @@ export class QuestionService {
       take,
       include: {
         answers: true,
-      }
+        user: {
+          select: {
+            id: true,
+            name: true,
+            lastName: true,
+            avatar: true,
+          }
+        },
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
     });
   }
 
@@ -28,6 +39,44 @@ export class QuestionService {
       where: {
         id,
       },
+      include: {
+        likedBy: {
+          select: {
+            id: true,
+            name: true,
+            lastName: true,
+            avatar: true,
+          }
+        },
+        answers: {
+          select: {
+            createdAt: true, 
+            id: true, 
+            isBestAnswer: true, 
+            likes: true, 
+            questionId: true, 
+            text: true, 
+            updatedAt: true, 
+            user: {
+              select: {
+                id: true,
+                name: true,
+                lastName: true,
+                avatar: true,
+              }
+            }, 
+            userId: true
+          }
+        },
+        user: {
+          select: {
+            id: true,
+            name: true,
+            lastName: true,
+            avatar: true,
+          }
+        },
+      }
     });
   }
 
@@ -96,6 +145,10 @@ export class QuestionService {
               id: userId,
             },
           }
+        },
+        select: {
+          likedBy: true,
+          likes: true
         }
       });
     } else {
@@ -108,6 +161,10 @@ export class QuestionService {
               id: userId,
             },
           }
+        },
+        select: {
+          likedBy: true,
+          likes: true
         }
       });
     }

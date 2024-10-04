@@ -23,10 +23,11 @@ const Questions = () => {
 						id={question.id}
 						category={question.category}
 						createdAt={question.createdAt}
-						text={question.text}
+						userAvatar={question.user.avatar}
+						theme={question.themeText}
 						userId={question.userId}
-						userName='Gregory'
-						userLastName='Mmmm'
+						userName={question.user.name}
+						userLastName={question.user.lastName}
 						repliesCount={question.answers.length}
 					/>
 				))

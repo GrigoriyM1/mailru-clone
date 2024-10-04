@@ -16,9 +16,10 @@ model User {
   name     String
   lastName String
 
-  email       String @unique
-  linkedEmail String @unique // TODO: привязанная почта к gmail например и другая, по ней confirm
+  email       String  @unique
+  linkedEmail String  @unique // TODO: привязанная почта к gmail например и другая, по ней confirm
   password    String
+  avatar      String?
 
   phone     String
   birthdate String

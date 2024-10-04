@@ -38,7 +38,7 @@ export interface ILoginData {
 }
 
 export interface IUser {
-	id: number;
+	id: string;
 	name: string;
 	lastName: string;
 
@@ -55,11 +55,16 @@ export interface IUser {
 	updatedAt: string;
 }
 
+export interface IMinUser {
+	id: string;
+	name: string;
+	lastName: string;
+	avatar: string;
+}
+
 export interface IAuthResponse {
 	accessToken: string;
 	user: IUser;
 }
-
-
 
 // export type TypeUserForm = Omit<IUser, 'id'> & { password?: string }

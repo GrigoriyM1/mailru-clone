@@ -47,7 +47,7 @@ const HeaderBottom = () => {
 				<div className='flex items-center gap-2'>
 					{/* TODO: ПОТОМ СДЕЛАТЬ PROFILE PAGE ЕЩЕ */}
 					<Link
-						href='/profile'
+						href={`/profile/${user?.id}`}
 						className='transition hover:bg-slate-100 py-[7px] px-2'
 					>
 						<Avatar>

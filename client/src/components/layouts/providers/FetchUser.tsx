@@ -14,7 +14,7 @@ const FetchUser = ({ children }: React.PropsWithChildren) => {
 		onSuccess(data) {
 			setIsAuth(true);
 			setUser(data.data.user);
-			console.log('DATA USER  ', data.data.user);
+			// console.log('DATA USER  ', data.data.user);
 		},
 		onError(error) {
 			setIsAuth(false);

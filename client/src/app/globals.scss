@@ -70,7 +70,8 @@
   }
 }
 
-html, body {
+html,
+body {
   min-height: 100vh;
 }
 
@@ -78,13 +79,22 @@ body {
   background-color: rgb(235, 235, 235);
 }
 
-html > body[data-scroll-locked] {
-  margin-right: 0 !important; 
+html>body[data-scroll-locked] {
+  margin-right: 0 !important;
 }
 
 button {
   outline: none;
   border: none;
+}
+
+pre {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: normal;
+  color: inherit;
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
 }
 
 .transition {
