@@ -41,7 +41,10 @@ const Answer: React.FC<IAnswer> = ({
 
 					<div className='text-gray-400 text-[13px]'>Ученик</div>
 
-					<div className='my-3 text-[15px]'>{text}</div>
+					<pre
+						className='my-3 text-[15px]'
+						dangerouslySetInnerHTML={{ __html: text }}
+					></pre>
 
 					<div className='flex'>
 						<Button

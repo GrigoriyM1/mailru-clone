@@ -13,15 +13,21 @@ export class QuestionController {
   @Get()
   async getAll(
     @Query('skip') skip: string = '0', 
-    @Query('take') take: string = '20'
+    @Query('take') take: string = '20',
+    @Query('skipAnswer') skipAnswer: string = '0', 
+    @Query('takeAnswer') takeAnswer: string = '20',
   ) {
-    return this.questionService.getAll(Number(skip), Number(take));
+    return this.questionService.getAll(Number(skip), Number(take), Number(skipAnswer), Number(takeAnswer));
   }
 
   @Auth()
   @Get('get-one/:id')
-  async getOne(@Param('id') id: string) {
-    return this.questionService.getOne(id);
+  async getOne(
+    @Param('id') id: string,
+    @Query('skipAnswer') skipAnswer: string = '0', 
+    @Query('takeAnswer') takeAnswer: string = '20',
+  ) {
+    return this.questionService.getOne(id, Number(skipAnswer), Number(takeAnswer));
   }
   
   @UsePipes(new ValidationPipe())

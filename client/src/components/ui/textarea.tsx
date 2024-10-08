@@ -9,6 +9,7 @@ export interface TextareaProps
 	divProps?: React.HTMLAttributes<HTMLDivElement>;
 	error?: boolean; // Булевый флаг для ошибки
 	helperText?: string; // Текст ошибки или вспомогательный текст
+	setIsError?: (isError: boolean) => void;
 }
 
 const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
@@ -22,12 +23,19 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
 			onChange,
 			error,
 			helperText,
+			setIsError,
 			...props
 		},
 		ref
 	) => {
 		const [lengthLeft, setLengthLeft] = React.useState(maxLength);
 		const hasError = error || lengthLeft < 0; // Определяем, есть ли ошибка
+
+		React.useEffect(() => {
+			if (setIsError) {
+				setIsError(hasError);
+			}
+		}, [lengthLeft, error, setIsError]);
 
 		return (
 			<div {...divProps}>

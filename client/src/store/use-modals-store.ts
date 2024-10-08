@@ -6,8 +6,12 @@ type UseModalsStoreState = {
 	setIsLoginModalOpen: (isOpen: boolean) => void;
 	isLikedByModalOpen: boolean;
 	setIsLikedByModalOpen: (isOpen: boolean) => void;
-	likedBy: IMinUser[] | null
-	setLikedBy: (likedBy: IMinUser[]) => void
+	likedBy: IMinUser[] | null;
+	setLikedBy: (likedBy: IMinUser[]) => void;
+	isAdditionalModalOpen: boolean;
+	setIsAdditionalModalOpen: (isOpen: boolean) => void;
+	additionalQuestionId: string | null;
+	setAdditionalQuestionId: (id: string) => void;
 };
 
 export const useModalsStore = create<UseModalsStoreState>(set => ({
@@ -15,7 +19,14 @@ export const useModalsStore = create<UseModalsStoreState>(set => ({
 	setIsLoginModalOpen: (isOpen: boolean) => set({ isLoginModalOpen: isOpen }),
 
 	isLikedByModalOpen: false,
-	setIsLikedByModalOpen: (isOpen: boolean) => set({ isLikedByModalOpen: isOpen }),
+	setIsLikedByModalOpen: (isOpen: boolean) =>
+		set({ isLikedByModalOpen: isOpen }),
 	likedBy: null,
-	setLikedBy: (likedBy: IMinUser[]) => set({ likedBy})
+	setLikedBy: (likedBy: IMinUser[]) => set({ likedBy }),
+
+	isAdditionalModalOpen: false,
+	setIsAdditionalModalOpen: (isOpen: boolean) =>
+		set({ isAdditionalModalOpen: isOpen }),
+	additionalQuestionId: null,
+	setAdditionalQuestionId: (id: string) => set({ additionalQuestionId: id }),
 }));

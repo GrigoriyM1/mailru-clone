@@ -34,7 +34,7 @@ export class AnswerService {
 
     return this.prisma.answer.create({
       data: {
-        text: dto.text,        
+        text: dto.text.trim(),        
         questionId,
         userId,
       },
@@ -47,7 +47,7 @@ export class AnswerService {
         id,
         userId,
       },
-      data: { text: dto.text },
+      data: { text: dto.text.trim() },
     });
   }
 

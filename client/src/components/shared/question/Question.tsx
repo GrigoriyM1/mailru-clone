@@ -10,13 +10,15 @@ import {
 } from 'lucide-react';
 import { useUserStore } from '@/store/use-user-store';
 import { IQuestion } from '@/types/questions.types';
-import Answer from './Answer';
 import { useMutation } from '@tanstack/react-query';
 import { questionsService } from '@/services/questions.service';
 import cn from 'clsx';
 import { useEffect, useState } from 'react';
 import { Spinner } from '@/components/ui/spinner';
 import { useModalsStore } from '@/store/use-modals-store';
+import AddAnswer from './AddAnswer';
+import Answers from './Answers';
+import QuestionDropdown from './QuestionDropdown';
 
 interface IQuestionProps {
 	data: IQuestion | undefined;
@@ -25,8 +27,20 @@ interface IQuestionProps {
 const Question: React.FC<IQuestionProps> = ({ data }) => {
 	const { user } = useUserStore();
 	const [likes, setLikes] = useState(data?.likes);
-	const { isLikedByModalOpen, setIsLikedByModalOpen, likedBy, setLikedBy } =
-		useModalsStore();
+	const {
+		isLikedByModalOpen,
+		setIsLikedByModalOpen,
+		likedBy,
+		setLikedBy,
+		setAdditionalQuestionId,
+	} = useModalsStore();
+	const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+	const isMyQuestion = data?.user.id === user?.id;
+
+	useEffect(() => {
+		setAdditionalQuestionId(data?.id!);
+	}, []);
 
 	const { mutate, isPending } = useMutation({
 		mutationKey: ['like-question'],
@@ -50,7 +64,7 @@ const Question: React.FC<IQuestionProps> = ({ data }) => {
 	}, [data?.likedBy]);
 
 	return (
-		<div>
+		<div className='w-full'>
 			<div className='bg-white p-10 w-full mb-4'>
 				<div className='flex gap-4'>
 					<Link href={`/profile/${data?.user?.id}`}>
@@ -60,9 +74,9 @@ const Question: React.FC<IQuestionProps> = ({ data }) => {
 						</Avatar>
 					</Link>
 
-					<div>
-						<div>
-							<div className='flex justify-between'>
+					<div className='w-full'>
+						<div className='w-full'>
+							<div className='flex justify-between w-full'>
 								<div className='flex mb-4 items-center'>
 									<Link
 										href={`/profile/${data?.user?.id}`}
@@ -76,27 +90,43 @@ const Question: React.FC<IQuestionProps> = ({ data }) => {
 								</div>
 
 								{/* TODO: ТУТ ОБЯЗАТЕЛЬНО ДОБАВИТЬ СДЕЛАТЬ ЛИДЕРОМ, ПОЖАЛОВАТЬСЯ */}
-								<div className='cursor-pointer'>
-									<EllipsisVertical />
+								<div className='relative'>
+									<div
+										className='cursor-pointer'
+										onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+										id='question-dropdown-open'
+									>
+										<EllipsisVertical />
+									</div>
+
+									<QuestionDropdown
+										isOpen={isDropdownOpen}
+										setIsOpen={setIsDropdownOpen}
+										isMyQuestion={isMyQuestion}
+									/>
 								</div>
 							</div>
 
 							<h1 className='text-[25px] mb-8'>{data?.themeText}</h1>
-							<pre className='mb-8'>{data?.text}</pre>
+							<pre
+								className='mb-8'
+								dangerouslySetInnerHTML={{ __html: data?.text! }}
+							/>
 						</div>
 
 						<div className='flex justify-between'>
 							<div className='flex gap-3 items-center'>
-								{user?.id !== data?.user?.id && (
-									<Button size='lg' className='flex items-center gap-2'>
-										<MessageSquareMore
-											size={23}
-											className='stroke-primary'
-											fill='white'
-										/>
-										Ответить
-									</Button>
-								)}
+								{!isMyQuestion &&
+									!data?.answers?.find(a => a?.user?.id === user?.id) && (
+										<Button size='lg' className='flex items-center gap-2'>
+											<MessageSquareMore
+												size={23}
+												className='stroke-primary'
+												fill='white'
+											/>
+											Ответить
+										</Button>
+									)}
 
 								<div className='flex gap-2 items-center'>
 									<Button
@@ -144,19 +174,11 @@ const Question: React.FC<IQuestionProps> = ({ data }) => {
 				</div>
 			</div>
 
-			<div className='bg-white w-full'>
-				<div>
-					<h2 className='text-[20px] border-b border-solid border-b-gray-200 p-10'>
-						{data?.answers?.length} ответов
-					</h2>
-				</div>
+			<Answers answers={data?.answers} />
 
-				<div>
-					{data?.answers?.map(answer => (
-						<Answer {...answer} key={answer.id} />
-					))}
-				</div>
-			</div>
+			{!isMyQuestion && !data?.answers?.find(a => a?.user?.id === user?.id) && (
+				<AddAnswer questionData={data!} />
+			)}
 		</div>
 	);
 };

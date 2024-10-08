@@ -9,7 +9,7 @@ const HeaderSearch = () => {
 	const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 
-    console.log('searchValue  ', searchValue);
+    // console.log('searchValue  ', searchValue);
 	};
 
 	return (

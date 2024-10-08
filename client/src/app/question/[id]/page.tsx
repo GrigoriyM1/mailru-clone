@@ -14,7 +14,7 @@ const QuestionPage = () => {
 		queryKey: ['get-one-question', id],
 		queryFn: () => questionsService.getOne(id as string),
 	});
-	console.log('DATA  ', data);
+	// console.log('DATA  ', data);
 
 	return (
 		<div className='flex'>

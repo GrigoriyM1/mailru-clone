@@ -10,7 +10,7 @@ const Questions = () => {
 			return questionsService.getAll();
 		},
 	});
-	console.log('questions  ', questions);
+	// console.log('questions  ', questions);
 
 	return (
 		<div>

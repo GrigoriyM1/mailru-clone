@@ -39,4 +39,12 @@ export const questionsService = {
 		);
 		return response.data;
 	},
+
+	addAdditional: async (id: string, additional: string) => {
+		const response = await axiosWithAuth.patch<IQuestion>(
+			`/question/add-additional/${id}`,
+			{ additional }
+		);
+		return response.data;
+	},
 };

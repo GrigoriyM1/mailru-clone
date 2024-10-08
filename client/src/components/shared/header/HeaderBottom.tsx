@@ -25,15 +25,18 @@ const HeaderBottom = () => {
 							Категории
 						</li>
 
-						<li className='cursor-pointer hover:bg-slate-100 transition h-full px-3 py-[15px]'>
-							<Link href='/ask' className='flex gap-2'>
+						<li>
+							<Link
+								href='/ask'
+								className='flex gap-2 cursor-pointer hover:bg-slate-100 transition h-full px-3 py-[15px]'
+							>
 								{/* потом категории сделать */}
 								<Plus className='text-primary' />
 								Спросить
 							</Link>
 						</li>
-						<li className='cursor-pointer hover:bg-slate-100 transition h-full px-3 py-[15px]'>
-							<Link href='/ask' className='flex gap-2'>
+						<li>
+							<Link href='/ask' className='flex gap-2 cursor-pointer hover:bg-slate-100 transition h-full px-3 py-[15px]'>
 								{/* потом категории сделать */}
 								<ChartNoAxesColumn className='text-primary' />
 								Лидеры

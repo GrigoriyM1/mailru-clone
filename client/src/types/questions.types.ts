@@ -35,7 +35,6 @@ export interface IAnswer {
 	userId: string;
 
 	user: IMinUser;
-	// TODO: тут остановился
 }
 
 export interface ICategories {
@@ -55,4 +54,8 @@ export interface IQuestionForm {
 export interface IUpdatedLikes {
 	likes: number;
 	likedBy: IMinUser[];
+}
+
+export interface IAnswerForm {
+	text: string;
 }

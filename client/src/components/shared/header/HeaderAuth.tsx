@@ -93,7 +93,7 @@ const HeaderAuth = () => {
 						<CopyIcon
 							className='w-4 h-4 text-slate-400 hover:text-black transition cursor-pointer'
 							onClick={() =>
-								navigator.clipboard.writeText(user?.email as string)
+								navigator.clipboard.writeText(user?.email!)
 							}
 						/>
 					</div>

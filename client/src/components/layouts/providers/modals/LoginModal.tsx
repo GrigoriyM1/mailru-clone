@@ -55,7 +55,7 @@ const LoginModal = () => {
 		onSuccess: data => {
 			push('/');
 			toast.success('Вы успешно вошли в аккаунт');
-			// setIsLoginModalOpen(false);
+			setIsLoginModalOpen(false);
 			setIsPasswordInput(false);
 			setEmail('');
 			reset();

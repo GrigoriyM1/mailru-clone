@@ -95,6 +95,7 @@ pre {
   color: inherit;
   overflow-wrap: break-word;
   white-space: pre-wrap;
+  word-break: break-all
 }
 
 .transition {
@@ -103,4 +104,7 @@ pre {
 
 .shadow {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+.shadow-big {
+  box-shadow: 0 4px 32px 0 rgba(0, 0, 0, .32);
 }

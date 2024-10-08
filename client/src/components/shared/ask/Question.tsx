@@ -14,7 +14,7 @@ import cn from 'clsx';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { questionsService } from '@/services/questions.service';
 import { Spinner } from '@/components/ui/spinner';
-import { useForm, useWatch } from 'react-hook-form';
+import { Controller, useForm, useWatch } from 'react-hook-form';
 import { IQuestionForm } from '@/types/questions.types';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -23,6 +23,7 @@ import { askQuestionSchema } from '@/schemas/ask-question.schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import QuilEditor from '@/components/ui/quil-editor/quil-editor';
 
 const Question = () => {
 	const {
@@ -30,6 +31,7 @@ const Question = () => {
 		control,
 		handleSubmit,
 		setValue,
+		watch,
 		formState: { errors },
 	} = useForm<IQuestionForm>({
 		resolver: zodResolver(askQuestionSchema),
@@ -38,6 +40,8 @@ const Question = () => {
 	const { text, themeText, category, subcategory } = useWatch({ control });
 	const { push } = useRouter();
 	const [isLoading, setIsLoading] = useState(false);
+	const [isThemeError, setIsThemeError] = useState(false);
+	const [isTextError, setIsTextError] = useState(false);
 
 	const { data: categories, isPending } = useQuery({
 		queryKey: ['categories'],
@@ -60,6 +64,10 @@ const Question = () => {
 		console.log('data  ', createdQuestion);
 	};
 
+	const handleInputsChange = (type: keyof IQuestionForm, e: any) => {
+		register(type).onChange(e);
+	};
+
 	return (
 		<div>
 			{isPending ? (
@@ -79,19 +87,31 @@ const Question = () => {
 						}}
 						error={!!errors?.themeText}
 						helperText={errors?.themeText?.message}
+						setIsError={setIsThemeError}
 						{...register('themeText')}
 						onChange={e => {
 							e.target.value = upperFirstLetter(e.target.value);
-							register('themeText').onChange(e);
+							// register('themeText').onChange(e);
+							handleInputsChange('themeText', e);
 						}}
 					/>
 
-					<Textarea
-						id='question-text'
-						label='Текст вопроса'
-						className='text-[15px]'
-						maxLength={3800}
-						{...register('text')}
+					<Controller
+						name='text'
+						control={control}
+						render={({ field }) => (
+							<QuilEditor
+								id='question-text'
+								label='Текст вопроса'
+								className='text-[15px]'
+								maxLength={3800}
+								setIsError={setIsTextError}
+								onChange={(value, delta, source, editor) => {
+									field.onChange(value, delta, source, editor);
+								}}
+								value={field.value}
+							/>
+						)}
 					/>
 
 					<div className={'flex justify-between gap-4 mt-6'}>
@@ -183,7 +203,9 @@ const Question = () => {
 							!themeText ||
 							!category ||
 							!subcategory ||
-							!!Object.keys(errors).length
+							!!Object.keys(errors).length ||
+							isThemeError ||
+							isTextError
 						}
 						isLoading={isLoading}
 					>

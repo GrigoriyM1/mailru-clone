@@ -1,0 +1,38 @@
+.react-quil {
+  background: white;
+  position: relative;
+  border-radius: 6px;
+  min-height: 90px;
+  width: 100%;
+  max-width: 100%;
+  word-break: break-all;
+  
+  > * {
+    word-break: break-all;
+  }
+
+  .ql-toolbar.ql-snow,
+  .ql-container {
+    width: 100%;
+    max-width: 100%;
+
+    &.ql-snow {
+      border: none;
+    }
+  }
+
+  .ql-editor {
+    font-size: 15px;
+    min-height: 70px;
+    width: 100%;
+
+    &::before {
+      font-style: normal;
+    }
+
+    img {
+      width: 140px;
+      height: 140px;
+    }
+  }
+}

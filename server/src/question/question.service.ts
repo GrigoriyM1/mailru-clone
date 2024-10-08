@@ -13,12 +13,15 @@ export class QuestionService {
     private prisma: PrismaService,
   ) {}
 
-  async getAll(skip: number, take: number) { 
+  async getAll(skip: number, take: number, skipAnswer: number, takeAnswer: number) { 
     return this.prisma.question.findMany({
       skip,
       take,
       include: {
-        answers: true,
+        answers: {
+          skip: skipAnswer,
+          take: takeAnswer,
+        },
         user: {
           select: {
             id: true,
@@ -34,7 +37,7 @@ export class QuestionService {
     });
   }
 
-  async getOne(id: string) {
+  async getOne(id: string, skipAnswer: number, takeAnswer: number) {
     return this.prisma.question.findUnique({
       where: {
         id,
@@ -49,6 +52,8 @@ export class QuestionService {
           }
         },
         answers: {
+          skip: skipAnswer,
+          take: takeAnswer,
           select: {
             createdAt: true, 
             id: true, 
@@ -83,7 +88,10 @@ export class QuestionService {
   async create(dto: QuestionDto, userId: string) {
 		return this.prisma.question.create({
 			data: {
-				...dto,
+				themeText: dto.themeText.trim(),
+        text: dto.text.trim(),
+        category: dto.category.trim(),
+        subcategory: dto.subcategory.trim(),
 				user: {
 					connect: {
 						id: userId,
@@ -115,7 +123,12 @@ export class QuestionService {
         userId,
         id: questionId,
       },
-      data: dto,
+      data: {
+        themeText: dto.themeText.trim(),
+        text: dto.text.trim(),
+        category: dto.category.trim(),
+        subcategory: dto.subcategory.trim(),
+      },
     });
   }
 
