@@ -2,7 +2,6 @@ import { IMinUser } from './auth.types';
 
 export interface IQuestion {
 	id: string;
-	additionals: string[];
 	createdAt: string;
 	isLeader: boolean;
 	likes: number;
@@ -15,6 +14,7 @@ export interface IQuestion {
 	answers: IAnswer[];
 	user: IMinUser;
 	likedBy: IMinUser[];
+	additionals: IAdditional[];
 }
 
 export interface ICreateQuestion {
@@ -57,5 +57,12 @@ export interface IUpdatedLikes {
 }
 
 export interface IAnswerForm {
+	text: string;
+}
+
+export interface IAdditional {
+	id: string;
+	createdAt: string;
+	questionId: string;
 	text: string;
 }

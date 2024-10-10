@@ -20,7 +20,6 @@ export const questionsService = {
 		return response.data;
 	},
 
-	// TODO: ТУТ ОСТАНОВИЛСЯ
 	create: async (data: IQuestionForm) => {
 		const response = await axiosWithAuth.post<IQuestion>('/question', data);
 		return response.data;

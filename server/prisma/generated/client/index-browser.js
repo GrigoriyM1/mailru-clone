@@ -147,8 +147,14 @@ exports.Prisma.QuestionScalarFieldEnum = {
   subcategory: 'subcategory',
   likes: 'likes',
   isLeader: 'isLeader',
-  additionals: 'additionals',
   userId: 'userId'
+};
+
+exports.Prisma.AdditionalScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  questionId: 'questionId',
+  text: 'text'
 };
 
 exports.Prisma.AnswerScalarFieldEnum = {
@@ -181,6 +187,7 @@ exports.Prisma.NullsOrder = {
 exports.Prisma.ModelName = {
   User: 'User',
   Question: 'Question',
+  Additional: 'Additional',
   Answer: 'Answer'
 };
 

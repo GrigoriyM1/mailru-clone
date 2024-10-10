@@ -9,12 +9,10 @@ import { IAnswerForm, IQuestion } from '@/types/questions.types';
 import { useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { answerService } from '@/services/answer.service';
+import { useQuestionStore } from '@/store/use-question-store';
 
-interface IAddAnswerProps {
-	questionData: IQuestion;
-}
-
-const AddAnswer: React.FC<IAddAnswerProps> = ({questionData}) => {
+const AddAnswer = () => {
+	const { question: questionData } = useQuestionStore();
 	const {
 		control,
 		handleSubmit,
@@ -27,10 +25,11 @@ const AddAnswer: React.FC<IAddAnswerProps> = ({questionData}) => {
 	const [text, setText] = useState('');
 
 	const { mutate, data } = useMutation({
-		mutationFn: () => answerService.create({ text }, questionData?.id),
+		mutationFn: () =>
+			answerService.create({ text }, questionData?.id as string),
 		onSuccess(data) {
 			console.log('data  ', data);
-		}
+		},
 	});
 
 	const onSubmit = () => {

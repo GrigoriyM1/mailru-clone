@@ -9,7 +9,6 @@ import {
 	Share2,
 } from 'lucide-react';
 import { useUserStore } from '@/store/use-user-store';
-import { IQuestion } from '@/types/questions.types';
 import { useMutation } from '@tanstack/react-query';
 import { questionsService } from '@/services/questions.service';
 import cn from 'clsx';
@@ -19,14 +18,13 @@ import { useModalsStore } from '@/store/use-modals-store';
 import AddAnswer from './AddAnswer';
 import Answers from './Answers';
 import QuestionDropdown from './QuestionDropdown';
+import { useQuestionStore } from '@/store/use-question-store';
 
-interface IQuestionProps {
-	data: IQuestion | undefined;
-}
-
-const Question: React.FC<IQuestionProps> = ({ data }) => {
+const Question: React.FC = () => {
+	const { question: data } = useQuestionStore();
 	const { user } = useUserStore();
-	const [likes, setLikes] = useState(data?.likes);
+
+	const [likes, setLikes] = useState(data?.likes || 0);
 	const {
 		isLikedByModalOpen,
 		setIsLikedByModalOpen,
@@ -36,7 +34,7 @@ const Question: React.FC<IQuestionProps> = ({ data }) => {
 	} = useModalsStore();
 	const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-	const isMyQuestion = data?.user.id === user?.id;
+	const isMyQuestion = data?.user?.id === user?.id;
 
 	useEffect(() => {
 		setAdditionalQuestionId(data?.id!);
@@ -112,6 +110,22 @@ const Question: React.FC<IQuestionProps> = ({ data }) => {
 								className='mb-8'
 								dangerouslySetInnerHTML={{ __html: data?.text! }}
 							/>
+
+							{data?.additionals?.length! > 0 && (
+								<div className='mb-6'>
+									{data?.additionals?.map(a => (
+										<div className='mb-2' key={a.id}>
+											<div className='text-[13px] text-gray-500 mb-1'>
+												Дополнен {formatCreatedAt(a?.createdAt!)}
+											</div>
+											<div
+												className='text-[15px] border-l-4 border-l-gray-300 pl-3 py-1'
+												dangerouslySetInnerHTML={{ __html: a?.text! }}
+											/>
+										</div>
+									))}
+								</div>
+							)}
 						</div>
 
 						<div className='flex justify-between'>
@@ -177,7 +191,7 @@ const Question: React.FC<IQuestionProps> = ({ data }) => {
 			<Answers answers={data?.answers} />
 
 			{!isMyQuestion && !data?.answers?.find(a => a?.user?.id === user?.id) && (
-				<AddAnswer questionData={data!} />
+				<AddAnswer />
 			)}
 		</div>
 	);

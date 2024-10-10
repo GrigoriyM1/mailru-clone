@@ -3,7 +3,7 @@ import Modal from '@/components/ui/modal';
 import QuilEditor from '@/components/ui/quil-editor/quil-editor';
 import { questionsService } from '@/services/questions.service';
 import { useModalsStore } from '@/store/use-modals-store';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { X } from 'lucide-react';
 import { useState } from 'react';
 
@@ -18,13 +18,21 @@ const AdditionalModal = () => {
 		text: '',
 		html: '',
 	});
+	const queryClient = useQueryClient();
 
-	const { mutate } = useMutation({
+	const { mutate, isPending } = useMutation({
 		mutationFn: (variables: { id: string; additional: string }) =>
 			questionsService.addAdditional(variables.id, variables.additional),
 		onSuccess(data) {
 			console.log(data);
 			setIsAdditionalModalOpen(false);
+			setText({
+				html: '',
+				text: '',
+			});
+			setIsError(false);
+
+			queryClient.invalidateQueries({ queryKey: ['get-one-question'] });
 		},
 	});
 	// TODO: ДОПОЛНИТЬ ТОЖЕ ТАМ SOCKET IO НАВЕРНОЕ
@@ -70,7 +78,7 @@ const AdditionalModal = () => {
 
 				<div className='flex gap-2'>
 					<Button
-						disabled={!text || isError || text.text.length < 6}
+						disabled={!text || isError || text.text.length < 6 || isPending}
 						size='lg'
 						onClick={handleAddAdditional}
 					>

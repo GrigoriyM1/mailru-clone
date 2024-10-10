@@ -1,13 +1,16 @@
-import HeaderBottom from "./HeaderBottom";
-import HeaderTop from "./HeaderTop";
+import { useUserStore } from '@/store/use-user-store';
+import HeaderBottom from './HeaderBottom';
+import HeaderTop from './HeaderTop';
 
 const Header = () => {
-  return (
-    <header className="bg-white shadow-bottom">
-      <HeaderTop />
-      <HeaderBottom />
-    </header>
-  );
+	const { isAuth } = useUserStore();
+
+	return (
+		<header className='bg-white shadow-bottom'>
+			<HeaderTop />
+			{isAuth && <HeaderBottom />}
+		</header>
+	);
 };
 
 export default Header;

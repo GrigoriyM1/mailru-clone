@@ -24,6 +24,11 @@ export type User = $Result.DefaultSelection<Prisma.$UserPayload>
  */
 export type Question = $Result.DefaultSelection<Prisma.$QuestionPayload>
 /**
+ * Model Additional
+ * 
+ */
+export type Additional = $Result.DefaultSelection<Prisma.$AdditionalPayload>
+/**
  * Model Answer
  * 
  */
@@ -171,6 +176,16 @@ export class PrismaClient<
     * ```
     */
   get question(): Prisma.QuestionDelegate<ExtArgs>;
+
+  /**
+   * `prisma.additional`: Exposes CRUD operations for the **Additional** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Additionals
+    * const additionals = await prisma.additional.findMany()
+    * ```
+    */
+  get additional(): Prisma.AdditionalDelegate<ExtArgs>;
 
   /**
    * `prisma.answer`: Exposes CRUD operations for the **Answer** model.
@@ -624,6 +639,7 @@ export namespace Prisma {
   export const ModelName: {
     User: 'User',
     Question: 'Question',
+    Additional: 'Additional',
     Answer: 'Answer'
   };
 
@@ -640,7 +656,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "user" | "question" | "answer"
+      modelProps: "user" | "question" | "additional" | "answer"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -781,6 +797,76 @@ export namespace Prisma {
           count: {
             args: Prisma.QuestionCountArgs<ExtArgs>
             result: $Utils.Optional<QuestionCountAggregateOutputType> | number
+          }
+        }
+      }
+      Additional: {
+        payload: Prisma.$AdditionalPayload<ExtArgs>
+        fields: Prisma.AdditionalFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.AdditionalFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdditionalPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.AdditionalFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdditionalPayload>
+          }
+          findFirst: {
+            args: Prisma.AdditionalFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdditionalPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.AdditionalFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdditionalPayload>
+          }
+          findMany: {
+            args: Prisma.AdditionalFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdditionalPayload>[]
+          }
+          create: {
+            args: Prisma.AdditionalCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdditionalPayload>
+          }
+          createMany: {
+            args: Prisma.AdditionalCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.AdditionalCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdditionalPayload>[]
+          }
+          delete: {
+            args: Prisma.AdditionalDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdditionalPayload>
+          }
+          update: {
+            args: Prisma.AdditionalUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdditionalPayload>
+          }
+          deleteMany: {
+            args: Prisma.AdditionalDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.AdditionalUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.AdditionalUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdditionalPayload>
+          }
+          aggregate: {
+            args: Prisma.AdditionalAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateAdditional>
+          }
+          groupBy: {
+            args: Prisma.AdditionalGroupByArgs<ExtArgs>
+            result: $Utils.Optional<AdditionalGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.AdditionalCountArgs<ExtArgs>
+            result: $Utils.Optional<AdditionalCountAggregateOutputType> | number
           }
         }
       }
@@ -1065,11 +1151,13 @@ export namespace Prisma {
 
   export type QuestionCountOutputType = {
     likedBy: number
+    additionals: number
     answers: number
   }
 
   export type QuestionCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     likedBy?: boolean | QuestionCountOutputTypeCountLikedByArgs
+    additionals?: boolean | QuestionCountOutputTypeCountAdditionalsArgs
     answers?: boolean | QuestionCountOutputTypeCountAnswersArgs
   }
 
@@ -1089,6 +1177,13 @@ export namespace Prisma {
    */
   export type QuestionCountOutputTypeCountLikedByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: UserWhereInput
+  }
+
+  /**
+   * QuestionCountOutputType without action
+   */
+  export type QuestionCountOutputTypeCountAdditionalsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AdditionalWhereInput
   }
 
   /**
@@ -2239,7 +2334,6 @@ export namespace Prisma {
     subcategory: number
     likes: number
     isLeader: number
-    additionals: number
     userId: number
     _all: number
   }
@@ -2289,7 +2383,6 @@ export namespace Prisma {
     subcategory?: true
     likes?: true
     isLeader?: true
-    additionals?: true
     userId?: true
     _all?: true
   }
@@ -2390,7 +2483,6 @@ export namespace Prisma {
     subcategory: string
     likes: number | null
     isLeader: boolean | null
-    additionals: string[]
     userId: string | null
     _count: QuestionCountAggregateOutputType | null
     _avg: QuestionAvgAggregateOutputType | null
@@ -2423,9 +2515,9 @@ export namespace Prisma {
     subcategory?: boolean
     likes?: boolean
     isLeader?: boolean
-    additionals?: boolean
     userId?: boolean
     likedBy?: boolean | Question$likedByArgs<ExtArgs>
+    additionals?: boolean | Question$additionalsArgs<ExtArgs>
     answers?: boolean | Question$answersArgs<ExtArgs>
     user?: boolean | Question$userArgs<ExtArgs>
     _count?: boolean | QuestionCountOutputTypeDefaultArgs<ExtArgs>
@@ -2441,7 +2533,6 @@ export namespace Prisma {
     subcategory?: boolean
     likes?: boolean
     isLeader?: boolean
-    additionals?: boolean
     userId?: boolean
     user?: boolean | Question$userArgs<ExtArgs>
   }, ExtArgs["result"]["question"]>
@@ -2456,12 +2547,12 @@ export namespace Prisma {
     subcategory?: boolean
     likes?: boolean
     isLeader?: boolean
-    additionals?: boolean
     userId?: boolean
   }
 
   export type QuestionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     likedBy?: boolean | Question$likedByArgs<ExtArgs>
+    additionals?: boolean | Question$additionalsArgs<ExtArgs>
     answers?: boolean | Question$answersArgs<ExtArgs>
     user?: boolean | Question$userArgs<ExtArgs>
     _count?: boolean | QuestionCountOutputTypeDefaultArgs<ExtArgs>
@@ -2474,6 +2565,7 @@ export namespace Prisma {
     name: "Question"
     objects: {
       likedBy: Prisma.$UserPayload<ExtArgs>[]
+      additionals: Prisma.$AdditionalPayload<ExtArgs>[]
       answers: Prisma.$AnswerPayload<ExtArgs>[]
       user: Prisma.$UserPayload<ExtArgs> | null
     }
@@ -2487,7 +2579,6 @@ export namespace Prisma {
       subcategory: string
       likes: number | null
       isLeader: boolean | null
-      additionals: string[]
       userId: string | null
     }, ExtArgs["result"]["question"]>
     composites: {}
@@ -2854,6 +2945,7 @@ export namespace Prisma {
   export interface Prisma__QuestionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     likedBy<T extends Question$likedByArgs<ExtArgs> = {}>(args?: Subset<T, Question$likedByArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany"> | Null>
+    additionals<T extends Question$additionalsArgs<ExtArgs> = {}>(args?: Subset<T, Question$additionalsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdditionalPayload<ExtArgs>, T, "findMany"> | Null>
     answers<T extends Question$answersArgs<ExtArgs> = {}>(args?: Subset<T, Question$answersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AnswerPayload<ExtArgs>, T, "findMany"> | Null>
     user<T extends Question$userArgs<ExtArgs> = {}>(args?: Subset<T, Question$userArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
     /**
@@ -2894,7 +2986,6 @@ export namespace Prisma {
     readonly subcategory: FieldRef<"Question", 'String'>
     readonly likes: FieldRef<"Question", 'Int'>
     readonly isLeader: FieldRef<"Question", 'Boolean'>
-    readonly additionals: FieldRef<"Question", 'String[]'>
     readonly userId: FieldRef<"Question", 'String'>
   }
     
@@ -3234,6 +3325,26 @@ export namespace Prisma {
   }
 
   /**
+   * Question.additionals
+   */
+  export type Question$additionalsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Additional
+     */
+    select?: AdditionalSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdditionalInclude<ExtArgs> | null
+    where?: AdditionalWhereInput
+    orderBy?: AdditionalOrderByWithRelationInput | AdditionalOrderByWithRelationInput[]
+    cursor?: AdditionalWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: AdditionalScalarFieldEnum | AdditionalScalarFieldEnum[]
+  }
+
+  /**
    * Question.answers
    */
   export type Question$answersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3280,6 +3391,927 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: QuestionInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Additional
+   */
+
+  export type AggregateAdditional = {
+    _count: AdditionalCountAggregateOutputType | null
+    _min: AdditionalMinAggregateOutputType | null
+    _max: AdditionalMaxAggregateOutputType | null
+  }
+
+  export type AdditionalMinAggregateOutputType = {
+    id: string | null
+    createdAt: Date | null
+    questionId: string | null
+    text: string | null
+  }
+
+  export type AdditionalMaxAggregateOutputType = {
+    id: string | null
+    createdAt: Date | null
+    questionId: string | null
+    text: string | null
+  }
+
+  export type AdditionalCountAggregateOutputType = {
+    id: number
+    createdAt: number
+    questionId: number
+    text: number
+    _all: number
+  }
+
+
+  export type AdditionalMinAggregateInputType = {
+    id?: true
+    createdAt?: true
+    questionId?: true
+    text?: true
+  }
+
+  export type AdditionalMaxAggregateInputType = {
+    id?: true
+    createdAt?: true
+    questionId?: true
+    text?: true
+  }
+
+  export type AdditionalCountAggregateInputType = {
+    id?: true
+    createdAt?: true
+    questionId?: true
+    text?: true
+    _all?: true
+  }
+
+  export type AdditionalAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Additional to aggregate.
+     */
+    where?: AdditionalWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Additionals to fetch.
+     */
+    orderBy?: AdditionalOrderByWithRelationInput | AdditionalOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: AdditionalWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Additionals from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Additionals.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Additionals
+    **/
+    _count?: true | AdditionalCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: AdditionalMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: AdditionalMaxAggregateInputType
+  }
+
+  export type GetAdditionalAggregateType<T extends AdditionalAggregateArgs> = {
+        [P in keyof T & keyof AggregateAdditional]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateAdditional[P]>
+      : GetScalarType<T[P], AggregateAdditional[P]>
+  }
+
+
+
+
+  export type AdditionalGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AdditionalWhereInput
+    orderBy?: AdditionalOrderByWithAggregationInput | AdditionalOrderByWithAggregationInput[]
+    by: AdditionalScalarFieldEnum[] | AdditionalScalarFieldEnum
+    having?: AdditionalScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: AdditionalCountAggregateInputType | true
+    _min?: AdditionalMinAggregateInputType
+    _max?: AdditionalMaxAggregateInputType
+  }
+
+  export type AdditionalGroupByOutputType = {
+    id: string
+    createdAt: Date
+    questionId: string
+    text: string
+    _count: AdditionalCountAggregateOutputType | null
+    _min: AdditionalMinAggregateOutputType | null
+    _max: AdditionalMaxAggregateOutputType | null
+  }
+
+  type GetAdditionalGroupByPayload<T extends AdditionalGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<AdditionalGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof AdditionalGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], AdditionalGroupByOutputType[P]>
+            : GetScalarType<T[P], AdditionalGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type AdditionalSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    createdAt?: boolean
+    questionId?: boolean
+    text?: boolean
+    question?: boolean | QuestionDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["additional"]>
+
+  export type AdditionalSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    createdAt?: boolean
+    questionId?: boolean
+    text?: boolean
+    question?: boolean | QuestionDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["additional"]>
+
+  export type AdditionalSelectScalar = {
+    id?: boolean
+    createdAt?: boolean
+    questionId?: boolean
+    text?: boolean
+  }
+
+  export type AdditionalInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    question?: boolean | QuestionDefaultArgs<ExtArgs>
+  }
+  export type AdditionalIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    question?: boolean | QuestionDefaultArgs<ExtArgs>
+  }
+
+  export type $AdditionalPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Additional"
+    objects: {
+      question: Prisma.$QuestionPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      createdAt: Date
+      questionId: string
+      text: string
+    }, ExtArgs["result"]["additional"]>
+    composites: {}
+  }
+
+  type AdditionalGetPayload<S extends boolean | null | undefined | AdditionalDefaultArgs> = $Result.GetResult<Prisma.$AdditionalPayload, S>
+
+  type AdditionalCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<AdditionalFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: AdditionalCountAggregateInputType | true
+    }
+
+  export interface AdditionalDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Additional'], meta: { name: 'Additional' } }
+    /**
+     * Find zero or one Additional that matches the filter.
+     * @param {AdditionalFindUniqueArgs} args - Arguments to find a Additional
+     * @example
+     * // Get one Additional
+     * const additional = await prisma.additional.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends AdditionalFindUniqueArgs>(args: SelectSubset<T, AdditionalFindUniqueArgs<ExtArgs>>): Prisma__AdditionalClient<$Result.GetResult<Prisma.$AdditionalPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one Additional that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {AdditionalFindUniqueOrThrowArgs} args - Arguments to find a Additional
+     * @example
+     * // Get one Additional
+     * const additional = await prisma.additional.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends AdditionalFindUniqueOrThrowArgs>(args: SelectSubset<T, AdditionalFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AdditionalClient<$Result.GetResult<Prisma.$AdditionalPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first Additional that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdditionalFindFirstArgs} args - Arguments to find a Additional
+     * @example
+     * // Get one Additional
+     * const additional = await prisma.additional.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends AdditionalFindFirstArgs>(args?: SelectSubset<T, AdditionalFindFirstArgs<ExtArgs>>): Prisma__AdditionalClient<$Result.GetResult<Prisma.$AdditionalPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first Additional that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdditionalFindFirstOrThrowArgs} args - Arguments to find a Additional
+     * @example
+     * // Get one Additional
+     * const additional = await prisma.additional.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends AdditionalFindFirstOrThrowArgs>(args?: SelectSubset<T, AdditionalFindFirstOrThrowArgs<ExtArgs>>): Prisma__AdditionalClient<$Result.GetResult<Prisma.$AdditionalPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more Additionals that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdditionalFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Additionals
+     * const additionals = await prisma.additional.findMany()
+     * 
+     * // Get first 10 Additionals
+     * const additionals = await prisma.additional.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const additionalWithIdOnly = await prisma.additional.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends AdditionalFindManyArgs>(args?: SelectSubset<T, AdditionalFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdditionalPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a Additional.
+     * @param {AdditionalCreateArgs} args - Arguments to create a Additional.
+     * @example
+     * // Create one Additional
+     * const Additional = await prisma.additional.create({
+     *   data: {
+     *     // ... data to create a Additional
+     *   }
+     * })
+     * 
+     */
+    create<T extends AdditionalCreateArgs>(args: SelectSubset<T, AdditionalCreateArgs<ExtArgs>>): Prisma__AdditionalClient<$Result.GetResult<Prisma.$AdditionalPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many Additionals.
+     * @param {AdditionalCreateManyArgs} args - Arguments to create many Additionals.
+     * @example
+     * // Create many Additionals
+     * const additional = await prisma.additional.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends AdditionalCreateManyArgs>(args?: SelectSubset<T, AdditionalCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Additionals and returns the data saved in the database.
+     * @param {AdditionalCreateManyAndReturnArgs} args - Arguments to create many Additionals.
+     * @example
+     * // Create many Additionals
+     * const additional = await prisma.additional.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Additionals and only return the `id`
+     * const additionalWithIdOnly = await prisma.additional.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends AdditionalCreateManyAndReturnArgs>(args?: SelectSubset<T, AdditionalCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdditionalPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a Additional.
+     * @param {AdditionalDeleteArgs} args - Arguments to delete one Additional.
+     * @example
+     * // Delete one Additional
+     * const Additional = await prisma.additional.delete({
+     *   where: {
+     *     // ... filter to delete one Additional
+     *   }
+     * })
+     * 
+     */
+    delete<T extends AdditionalDeleteArgs>(args: SelectSubset<T, AdditionalDeleteArgs<ExtArgs>>): Prisma__AdditionalClient<$Result.GetResult<Prisma.$AdditionalPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one Additional.
+     * @param {AdditionalUpdateArgs} args - Arguments to update one Additional.
+     * @example
+     * // Update one Additional
+     * const additional = await prisma.additional.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends AdditionalUpdateArgs>(args: SelectSubset<T, AdditionalUpdateArgs<ExtArgs>>): Prisma__AdditionalClient<$Result.GetResult<Prisma.$AdditionalPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more Additionals.
+     * @param {AdditionalDeleteManyArgs} args - Arguments to filter Additionals to delete.
+     * @example
+     * // Delete a few Additionals
+     * const { count } = await prisma.additional.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends AdditionalDeleteManyArgs>(args?: SelectSubset<T, AdditionalDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Additionals.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdditionalUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Additionals
+     * const additional = await prisma.additional.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends AdditionalUpdateManyArgs>(args: SelectSubset<T, AdditionalUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one Additional.
+     * @param {AdditionalUpsertArgs} args - Arguments to update or create a Additional.
+     * @example
+     * // Update or create a Additional
+     * const additional = await prisma.additional.upsert({
+     *   create: {
+     *     // ... data to create a Additional
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Additional we want to update
+     *   }
+     * })
+     */
+    upsert<T extends AdditionalUpsertArgs>(args: SelectSubset<T, AdditionalUpsertArgs<ExtArgs>>): Prisma__AdditionalClient<$Result.GetResult<Prisma.$AdditionalPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of Additionals.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdditionalCountArgs} args - Arguments to filter Additionals to count.
+     * @example
+     * // Count the number of Additionals
+     * const count = await prisma.additional.count({
+     *   where: {
+     *     // ... the filter for the Additionals we want to count
+     *   }
+     * })
+    **/
+    count<T extends AdditionalCountArgs>(
+      args?: Subset<T, AdditionalCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], AdditionalCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Additional.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdditionalAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends AdditionalAggregateArgs>(args: Subset<T, AdditionalAggregateArgs>): Prisma.PrismaPromise<GetAdditionalAggregateType<T>>
+
+    /**
+     * Group by Additional.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdditionalGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends AdditionalGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: AdditionalGroupByArgs['orderBy'] }
+        : { orderBy?: AdditionalGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, AdditionalGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAdditionalGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Additional model
+   */
+  readonly fields: AdditionalFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Additional.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__AdditionalClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    question<T extends QuestionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, QuestionDefaultArgs<ExtArgs>>): Prisma__QuestionClient<$Result.GetResult<Prisma.$QuestionPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Additional model
+   */ 
+  interface AdditionalFieldRefs {
+    readonly id: FieldRef<"Additional", 'String'>
+    readonly createdAt: FieldRef<"Additional", 'DateTime'>
+    readonly questionId: FieldRef<"Additional", 'String'>
+    readonly text: FieldRef<"Additional", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Additional findUnique
+   */
+  export type AdditionalFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Additional
+     */
+    select?: AdditionalSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdditionalInclude<ExtArgs> | null
+    /**
+     * Filter, which Additional to fetch.
+     */
+    where: AdditionalWhereUniqueInput
+  }
+
+  /**
+   * Additional findUniqueOrThrow
+   */
+  export type AdditionalFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Additional
+     */
+    select?: AdditionalSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdditionalInclude<ExtArgs> | null
+    /**
+     * Filter, which Additional to fetch.
+     */
+    where: AdditionalWhereUniqueInput
+  }
+
+  /**
+   * Additional findFirst
+   */
+  export type AdditionalFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Additional
+     */
+    select?: AdditionalSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdditionalInclude<ExtArgs> | null
+    /**
+     * Filter, which Additional to fetch.
+     */
+    where?: AdditionalWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Additionals to fetch.
+     */
+    orderBy?: AdditionalOrderByWithRelationInput | AdditionalOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Additionals.
+     */
+    cursor?: AdditionalWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Additionals from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Additionals.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Additionals.
+     */
+    distinct?: AdditionalScalarFieldEnum | AdditionalScalarFieldEnum[]
+  }
+
+  /**
+   * Additional findFirstOrThrow
+   */
+  export type AdditionalFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Additional
+     */
+    select?: AdditionalSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdditionalInclude<ExtArgs> | null
+    /**
+     * Filter, which Additional to fetch.
+     */
+    where?: AdditionalWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Additionals to fetch.
+     */
+    orderBy?: AdditionalOrderByWithRelationInput | AdditionalOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Additionals.
+     */
+    cursor?: AdditionalWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Additionals from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Additionals.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Additionals.
+     */
+    distinct?: AdditionalScalarFieldEnum | AdditionalScalarFieldEnum[]
+  }
+
+  /**
+   * Additional findMany
+   */
+  export type AdditionalFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Additional
+     */
+    select?: AdditionalSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdditionalInclude<ExtArgs> | null
+    /**
+     * Filter, which Additionals to fetch.
+     */
+    where?: AdditionalWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Additionals to fetch.
+     */
+    orderBy?: AdditionalOrderByWithRelationInput | AdditionalOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Additionals.
+     */
+    cursor?: AdditionalWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Additionals from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Additionals.
+     */
+    skip?: number
+    distinct?: AdditionalScalarFieldEnum | AdditionalScalarFieldEnum[]
+  }
+
+  /**
+   * Additional create
+   */
+  export type AdditionalCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Additional
+     */
+    select?: AdditionalSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdditionalInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Additional.
+     */
+    data: XOR<AdditionalCreateInput, AdditionalUncheckedCreateInput>
+  }
+
+  /**
+   * Additional createMany
+   */
+  export type AdditionalCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Additionals.
+     */
+    data: AdditionalCreateManyInput | AdditionalCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Additional createManyAndReturn
+   */
+  export type AdditionalCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Additional
+     */
+    select?: AdditionalSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many Additionals.
+     */
+    data: AdditionalCreateManyInput | AdditionalCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdditionalIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Additional update
+   */
+  export type AdditionalUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Additional
+     */
+    select?: AdditionalSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdditionalInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Additional.
+     */
+    data: XOR<AdditionalUpdateInput, AdditionalUncheckedUpdateInput>
+    /**
+     * Choose, which Additional to update.
+     */
+    where: AdditionalWhereUniqueInput
+  }
+
+  /**
+   * Additional updateMany
+   */
+  export type AdditionalUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Additionals.
+     */
+    data: XOR<AdditionalUpdateManyMutationInput, AdditionalUncheckedUpdateManyInput>
+    /**
+     * Filter which Additionals to update
+     */
+    where?: AdditionalWhereInput
+  }
+
+  /**
+   * Additional upsert
+   */
+  export type AdditionalUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Additional
+     */
+    select?: AdditionalSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdditionalInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Additional to update in case it exists.
+     */
+    where: AdditionalWhereUniqueInput
+    /**
+     * In case the Additional found by the `where` argument doesn't exist, create a new Additional with this data.
+     */
+    create: XOR<AdditionalCreateInput, AdditionalUncheckedCreateInput>
+    /**
+     * In case the Additional was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<AdditionalUpdateInput, AdditionalUncheckedUpdateInput>
+  }
+
+  /**
+   * Additional delete
+   */
+  export type AdditionalDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Additional
+     */
+    select?: AdditionalSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdditionalInclude<ExtArgs> | null
+    /**
+     * Filter which Additional to delete.
+     */
+    where: AdditionalWhereUniqueInput
+  }
+
+  /**
+   * Additional deleteMany
+   */
+  export type AdditionalDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Additionals to delete
+     */
+    where?: AdditionalWhereInput
+  }
+
+  /**
+   * Additional without action
+   */
+  export type AdditionalDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Additional
+     */
+    select?: AdditionalSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdditionalInclude<ExtArgs> | null
   }
 
 
@@ -4349,11 +5381,20 @@ export namespace Prisma {
     subcategory: 'subcategory',
     likes: 'likes',
     isLeader: 'isLeader',
-    additionals: 'additionals',
     userId: 'userId'
   };
 
   export type QuestionScalarFieldEnum = (typeof QuestionScalarFieldEnum)[keyof typeof QuestionScalarFieldEnum]
+
+
+  export const AdditionalScalarFieldEnum: {
+    id: 'id',
+    createdAt: 'createdAt',
+    questionId: 'questionId',
+    text: 'text'
+  };
+
+  export type AdditionalScalarFieldEnum = (typeof AdditionalScalarFieldEnum)[keyof typeof AdditionalScalarFieldEnum]
 
 
   export const AnswerScalarFieldEnum: {
@@ -4574,9 +5615,9 @@ export namespace Prisma {
     subcategory?: StringFilter<"Question"> | string
     likes?: IntNullableFilter<"Question"> | number | null
     isLeader?: BoolNullableFilter<"Question"> | boolean | null
-    additionals?: StringNullableListFilter<"Question">
     userId?: StringNullableFilter<"Question"> | string | null
     likedBy?: UserListRelationFilter
+    additionals?: AdditionalListRelationFilter
     answers?: AnswerListRelationFilter
     user?: XOR<UserNullableRelationFilter, UserWhereInput> | null
   }
@@ -4591,9 +5632,9 @@ export namespace Prisma {
     subcategory?: SortOrder
     likes?: SortOrderInput | SortOrder
     isLeader?: SortOrderInput | SortOrder
-    additionals?: SortOrder
     userId?: SortOrderInput | SortOrder
     likedBy?: UserOrderByRelationAggregateInput
+    additionals?: AdditionalOrderByRelationAggregateInput
     answers?: AnswerOrderByRelationAggregateInput
     user?: UserOrderByWithRelationInput
   }
@@ -4611,9 +5652,9 @@ export namespace Prisma {
     subcategory?: StringFilter<"Question"> | string
     likes?: IntNullableFilter<"Question"> | number | null
     isLeader?: BoolNullableFilter<"Question"> | boolean | null
-    additionals?: StringNullableListFilter<"Question">
     userId?: StringNullableFilter<"Question"> | string | null
     likedBy?: UserListRelationFilter
+    additionals?: AdditionalListRelationFilter
     answers?: AnswerListRelationFilter
     user?: XOR<UserNullableRelationFilter, UserWhereInput> | null
   }, "id">
@@ -4628,7 +5669,6 @@ export namespace Prisma {
     subcategory?: SortOrder
     likes?: SortOrderInput | SortOrder
     isLeader?: SortOrderInput | SortOrder
-    additionals?: SortOrder
     userId?: SortOrderInput | SortOrder
     _count?: QuestionCountOrderByAggregateInput
     _avg?: QuestionAvgOrderByAggregateInput
@@ -4650,8 +5690,57 @@ export namespace Prisma {
     subcategory?: StringWithAggregatesFilter<"Question"> | string
     likes?: IntNullableWithAggregatesFilter<"Question"> | number | null
     isLeader?: BoolNullableWithAggregatesFilter<"Question"> | boolean | null
-    additionals?: StringNullableListFilter<"Question">
     userId?: StringNullableWithAggregatesFilter<"Question"> | string | null
+  }
+
+  export type AdditionalWhereInput = {
+    AND?: AdditionalWhereInput | AdditionalWhereInput[]
+    OR?: AdditionalWhereInput[]
+    NOT?: AdditionalWhereInput | AdditionalWhereInput[]
+    id?: StringFilter<"Additional"> | string
+    createdAt?: DateTimeFilter<"Additional"> | Date | string
+    questionId?: StringFilter<"Additional"> | string
+    text?: StringFilter<"Additional"> | string
+    question?: XOR<QuestionRelationFilter, QuestionWhereInput>
+  }
+
+  export type AdditionalOrderByWithRelationInput = {
+    id?: SortOrder
+    createdAt?: SortOrder
+    questionId?: SortOrder
+    text?: SortOrder
+    question?: QuestionOrderByWithRelationInput
+  }
+
+  export type AdditionalWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: AdditionalWhereInput | AdditionalWhereInput[]
+    OR?: AdditionalWhereInput[]
+    NOT?: AdditionalWhereInput | AdditionalWhereInput[]
+    createdAt?: DateTimeFilter<"Additional"> | Date | string
+    questionId?: StringFilter<"Additional"> | string
+    text?: StringFilter<"Additional"> | string
+    question?: XOR<QuestionRelationFilter, QuestionWhereInput>
+  }, "id">
+
+  export type AdditionalOrderByWithAggregationInput = {
+    id?: SortOrder
+    createdAt?: SortOrder
+    questionId?: SortOrder
+    text?: SortOrder
+    _count?: AdditionalCountOrderByAggregateInput
+    _max?: AdditionalMaxOrderByAggregateInput
+    _min?: AdditionalMinOrderByAggregateInput
+  }
+
+  export type AdditionalScalarWhereWithAggregatesInput = {
+    AND?: AdditionalScalarWhereWithAggregatesInput | AdditionalScalarWhereWithAggregatesInput[]
+    OR?: AdditionalScalarWhereWithAggregatesInput[]
+    NOT?: AdditionalScalarWhereWithAggregatesInput | AdditionalScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Additional"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"Additional"> | Date | string
+    questionId?: StringWithAggregatesFilter<"Additional"> | string
+    text?: StringWithAggregatesFilter<"Additional"> | string
   }
 
   export type AnswerWhereInput = {
@@ -4857,8 +5946,8 @@ export namespace Prisma {
     subcategory: string
     likes?: number | null
     isLeader?: boolean | null
-    additionals?: QuestionCreateadditionalsInput | string[]
     likedBy?: UserCreateNestedManyWithoutLikedQuestionsInput
+    additionals?: AdditionalCreateNestedManyWithoutQuestionInput
     answers?: AnswerCreateNestedManyWithoutQuestionInput
     user?: UserCreateNestedOneWithoutQuestionsInput
   }
@@ -4873,9 +5962,9 @@ export namespace Prisma {
     subcategory: string
     likes?: number | null
     isLeader?: boolean | null
-    additionals?: QuestionCreateadditionalsInput | string[]
     userId?: string | null
     likedBy?: UserUncheckedCreateNestedManyWithoutLikedQuestionsInput
+    additionals?: AdditionalUncheckedCreateNestedManyWithoutQuestionInput
     answers?: AnswerUncheckedCreateNestedManyWithoutQuestionInput
   }
 
@@ -4889,8 +5978,8 @@ export namespace Prisma {
     subcategory?: StringFieldUpdateOperationsInput | string
     likes?: NullableIntFieldUpdateOperationsInput | number | null
     isLeader?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    additionals?: QuestionUpdateadditionalsInput | string[]
     likedBy?: UserUpdateManyWithoutLikedQuestionsNestedInput
+    additionals?: AdditionalUpdateManyWithoutQuestionNestedInput
     answers?: AnswerUpdateManyWithoutQuestionNestedInput
     user?: UserUpdateOneWithoutQuestionsNestedInput
   }
@@ -4905,9 +5994,9 @@ export namespace Prisma {
     subcategory?: StringFieldUpdateOperationsInput | string
     likes?: NullableIntFieldUpdateOperationsInput | number | null
     isLeader?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    additionals?: QuestionUpdateadditionalsInput | string[]
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     likedBy?: UserUncheckedUpdateManyWithoutLikedQuestionsNestedInput
+    additionals?: AdditionalUncheckedUpdateManyWithoutQuestionNestedInput
     answers?: AnswerUncheckedUpdateManyWithoutQuestionNestedInput
   }
 
@@ -4921,7 +6010,6 @@ export namespace Prisma {
     subcategory: string
     likes?: number | null
     isLeader?: boolean | null
-    additionals?: QuestionCreateadditionalsInput | string[]
     userId?: string | null
   }
 
@@ -4935,7 +6023,6 @@ export namespace Prisma {
     subcategory?: StringFieldUpdateOperationsInput | string
     likes?: NullableIntFieldUpdateOperationsInput | number | null
     isLeader?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    additionals?: QuestionUpdateadditionalsInput | string[]
   }
 
   export type QuestionUncheckedUpdateManyInput = {
@@ -4948,8 +6035,55 @@ export namespace Prisma {
     subcategory?: StringFieldUpdateOperationsInput | string
     likes?: NullableIntFieldUpdateOperationsInput | number | null
     isLeader?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    additionals?: QuestionUpdateadditionalsInput | string[]
     userId?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type AdditionalCreateInput = {
+    id?: string
+    createdAt?: Date | string
+    text: string
+    question: QuestionCreateNestedOneWithoutAdditionalsInput
+  }
+
+  export type AdditionalUncheckedCreateInput = {
+    id?: string
+    createdAt?: Date | string
+    questionId: string
+    text: string
+  }
+
+  export type AdditionalUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    text?: StringFieldUpdateOperationsInput | string
+    question?: QuestionUpdateOneRequiredWithoutAdditionalsNestedInput
+  }
+
+  export type AdditionalUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    questionId?: StringFieldUpdateOperationsInput | string
+    text?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type AdditionalCreateManyInput = {
+    id?: string
+    createdAt?: Date | string
+    questionId: string
+    text: string
+  }
+
+  export type AdditionalUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    text?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type AdditionalUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    questionId?: StringFieldUpdateOperationsInput | string
+    text?: StringFieldUpdateOperationsInput | string
   }
 
   export type AnswerCreateInput = {
@@ -5204,18 +6338,16 @@ export namespace Prisma {
     not?: NestedBoolNullableFilter<$PrismaModel> | boolean | null
   }
 
-  export type StringNullableListFilter<$PrismaModel = never> = {
-    equals?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    has?: string | StringFieldRefInput<$PrismaModel> | null
-    hasEvery?: string[] | ListStringFieldRefInput<$PrismaModel>
-    hasSome?: string[] | ListStringFieldRefInput<$PrismaModel>
-    isEmpty?: boolean
-  }
-
   export type UserListRelationFilter = {
     every?: UserWhereInput
     some?: UserWhereInput
     none?: UserWhereInput
+  }
+
+  export type AdditionalListRelationFilter = {
+    every?: AdditionalWhereInput
+    some?: AdditionalWhereInput
+    none?: AdditionalWhereInput
   }
 
   export type UserNullableRelationFilter = {
@@ -5224,6 +6356,10 @@ export namespace Prisma {
   }
 
   export type UserOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type AdditionalOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -5237,7 +6373,6 @@ export namespace Prisma {
     subcategory?: SortOrder
     likes?: SortOrder
     isLeader?: SortOrder
-    additionals?: SortOrder
     userId?: SortOrder
   }
 
@@ -5297,6 +6432,32 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedBoolNullableFilter<$PrismaModel>
     _max?: NestedBoolNullableFilter<$PrismaModel>
+  }
+
+  export type QuestionRelationFilter = {
+    is?: QuestionWhereInput
+    isNot?: QuestionWhereInput
+  }
+
+  export type AdditionalCountOrderByAggregateInput = {
+    id?: SortOrder
+    createdAt?: SortOrder
+    questionId?: SortOrder
+    text?: SortOrder
+  }
+
+  export type AdditionalMaxOrderByAggregateInput = {
+    id?: SortOrder
+    createdAt?: SortOrder
+    questionId?: SortOrder
+    text?: SortOrder
+  }
+
+  export type AdditionalMinOrderByAggregateInput = {
+    id?: SortOrder
+    createdAt?: SortOrder
+    questionId?: SortOrder
+    text?: SortOrder
   }
 
   export type QuestionNullableRelationFilter = {
@@ -5489,14 +6650,17 @@ export namespace Prisma {
     deleteMany?: AnswerScalarWhereInput | AnswerScalarWhereInput[]
   }
 
-  export type QuestionCreateadditionalsInput = {
-    set: string[]
-  }
-
   export type UserCreateNestedManyWithoutLikedQuestionsInput = {
     create?: XOR<UserCreateWithoutLikedQuestionsInput, UserUncheckedCreateWithoutLikedQuestionsInput> | UserCreateWithoutLikedQuestionsInput[] | UserUncheckedCreateWithoutLikedQuestionsInput[]
     connectOrCreate?: UserCreateOrConnectWithoutLikedQuestionsInput | UserCreateOrConnectWithoutLikedQuestionsInput[]
     connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+  }
+
+  export type AdditionalCreateNestedManyWithoutQuestionInput = {
+    create?: XOR<AdditionalCreateWithoutQuestionInput, AdditionalUncheckedCreateWithoutQuestionInput> | AdditionalCreateWithoutQuestionInput[] | AdditionalUncheckedCreateWithoutQuestionInput[]
+    connectOrCreate?: AdditionalCreateOrConnectWithoutQuestionInput | AdditionalCreateOrConnectWithoutQuestionInput[]
+    createMany?: AdditionalCreateManyQuestionInputEnvelope
+    connect?: AdditionalWhereUniqueInput | AdditionalWhereUniqueInput[]
   }
 
   export type AnswerCreateNestedManyWithoutQuestionInput = {
@@ -5518,6 +6682,13 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
   }
 
+  export type AdditionalUncheckedCreateNestedManyWithoutQuestionInput = {
+    create?: XOR<AdditionalCreateWithoutQuestionInput, AdditionalUncheckedCreateWithoutQuestionInput> | AdditionalCreateWithoutQuestionInput[] | AdditionalUncheckedCreateWithoutQuestionInput[]
+    connectOrCreate?: AdditionalCreateOrConnectWithoutQuestionInput | AdditionalCreateOrConnectWithoutQuestionInput[]
+    createMany?: AdditionalCreateManyQuestionInputEnvelope
+    connect?: AdditionalWhereUniqueInput | AdditionalWhereUniqueInput[]
+  }
+
   export type AnswerUncheckedCreateNestedManyWithoutQuestionInput = {
     create?: XOR<AnswerCreateWithoutQuestionInput, AnswerUncheckedCreateWithoutQuestionInput> | AnswerCreateWithoutQuestionInput[] | AnswerUncheckedCreateWithoutQuestionInput[]
     connectOrCreate?: AnswerCreateOrConnectWithoutQuestionInput | AnswerCreateOrConnectWithoutQuestionInput[]
@@ -5537,11 +6708,6 @@ export namespace Prisma {
     set?: boolean | null
   }
 
-  export type QuestionUpdateadditionalsInput = {
-    set?: string[]
-    push?: string | string[]
-  }
-
   export type UserUpdateManyWithoutLikedQuestionsNestedInput = {
     create?: XOR<UserCreateWithoutLikedQuestionsInput, UserUncheckedCreateWithoutLikedQuestionsInput> | UserCreateWithoutLikedQuestionsInput[] | UserUncheckedCreateWithoutLikedQuestionsInput[]
     connectOrCreate?: UserCreateOrConnectWithoutLikedQuestionsInput | UserCreateOrConnectWithoutLikedQuestionsInput[]
@@ -5553,6 +6719,20 @@ export namespace Prisma {
     update?: UserUpdateWithWhereUniqueWithoutLikedQuestionsInput | UserUpdateWithWhereUniqueWithoutLikedQuestionsInput[]
     updateMany?: UserUpdateManyWithWhereWithoutLikedQuestionsInput | UserUpdateManyWithWhereWithoutLikedQuestionsInput[]
     deleteMany?: UserScalarWhereInput | UserScalarWhereInput[]
+  }
+
+  export type AdditionalUpdateManyWithoutQuestionNestedInput = {
+    create?: XOR<AdditionalCreateWithoutQuestionInput, AdditionalUncheckedCreateWithoutQuestionInput> | AdditionalCreateWithoutQuestionInput[] | AdditionalUncheckedCreateWithoutQuestionInput[]
+    connectOrCreate?: AdditionalCreateOrConnectWithoutQuestionInput | AdditionalCreateOrConnectWithoutQuestionInput[]
+    upsert?: AdditionalUpsertWithWhereUniqueWithoutQuestionInput | AdditionalUpsertWithWhereUniqueWithoutQuestionInput[]
+    createMany?: AdditionalCreateManyQuestionInputEnvelope
+    set?: AdditionalWhereUniqueInput | AdditionalWhereUniqueInput[]
+    disconnect?: AdditionalWhereUniqueInput | AdditionalWhereUniqueInput[]
+    delete?: AdditionalWhereUniqueInput | AdditionalWhereUniqueInput[]
+    connect?: AdditionalWhereUniqueInput | AdditionalWhereUniqueInput[]
+    update?: AdditionalUpdateWithWhereUniqueWithoutQuestionInput | AdditionalUpdateWithWhereUniqueWithoutQuestionInput[]
+    updateMany?: AdditionalUpdateManyWithWhereWithoutQuestionInput | AdditionalUpdateManyWithWhereWithoutQuestionInput[]
+    deleteMany?: AdditionalScalarWhereInput | AdditionalScalarWhereInput[]
   }
 
   export type AnswerUpdateManyWithoutQuestionNestedInput = {
@@ -5592,6 +6772,20 @@ export namespace Prisma {
     deleteMany?: UserScalarWhereInput | UserScalarWhereInput[]
   }
 
+  export type AdditionalUncheckedUpdateManyWithoutQuestionNestedInput = {
+    create?: XOR<AdditionalCreateWithoutQuestionInput, AdditionalUncheckedCreateWithoutQuestionInput> | AdditionalCreateWithoutQuestionInput[] | AdditionalUncheckedCreateWithoutQuestionInput[]
+    connectOrCreate?: AdditionalCreateOrConnectWithoutQuestionInput | AdditionalCreateOrConnectWithoutQuestionInput[]
+    upsert?: AdditionalUpsertWithWhereUniqueWithoutQuestionInput | AdditionalUpsertWithWhereUniqueWithoutQuestionInput[]
+    createMany?: AdditionalCreateManyQuestionInputEnvelope
+    set?: AdditionalWhereUniqueInput | AdditionalWhereUniqueInput[]
+    disconnect?: AdditionalWhereUniqueInput | AdditionalWhereUniqueInput[]
+    delete?: AdditionalWhereUniqueInput | AdditionalWhereUniqueInput[]
+    connect?: AdditionalWhereUniqueInput | AdditionalWhereUniqueInput[]
+    update?: AdditionalUpdateWithWhereUniqueWithoutQuestionInput | AdditionalUpdateWithWhereUniqueWithoutQuestionInput[]
+    updateMany?: AdditionalUpdateManyWithWhereWithoutQuestionInput | AdditionalUpdateManyWithWhereWithoutQuestionInput[]
+    deleteMany?: AdditionalScalarWhereInput | AdditionalScalarWhereInput[]
+  }
+
   export type AnswerUncheckedUpdateManyWithoutQuestionNestedInput = {
     create?: XOR<AnswerCreateWithoutQuestionInput, AnswerUncheckedCreateWithoutQuestionInput> | AnswerCreateWithoutQuestionInput[] | AnswerUncheckedCreateWithoutQuestionInput[]
     connectOrCreate?: AnswerCreateOrConnectWithoutQuestionInput | AnswerCreateOrConnectWithoutQuestionInput[]
@@ -5604,6 +6798,20 @@ export namespace Prisma {
     update?: AnswerUpdateWithWhereUniqueWithoutQuestionInput | AnswerUpdateWithWhereUniqueWithoutQuestionInput[]
     updateMany?: AnswerUpdateManyWithWhereWithoutQuestionInput | AnswerUpdateManyWithWhereWithoutQuestionInput[]
     deleteMany?: AnswerScalarWhereInput | AnswerScalarWhereInput[]
+  }
+
+  export type QuestionCreateNestedOneWithoutAdditionalsInput = {
+    create?: XOR<QuestionCreateWithoutAdditionalsInput, QuestionUncheckedCreateWithoutAdditionalsInput>
+    connectOrCreate?: QuestionCreateOrConnectWithoutAdditionalsInput
+    connect?: QuestionWhereUniqueInput
+  }
+
+  export type QuestionUpdateOneRequiredWithoutAdditionalsNestedInput = {
+    create?: XOR<QuestionCreateWithoutAdditionalsInput, QuestionUncheckedCreateWithoutAdditionalsInput>
+    connectOrCreate?: QuestionCreateOrConnectWithoutAdditionalsInput
+    upsert?: QuestionUpsertWithoutAdditionalsInput
+    connect?: QuestionWhereUniqueInput
+    update?: XOR<XOR<QuestionUpdateToOneWithWhereWithoutAdditionalsInput, QuestionUpdateWithoutAdditionalsInput>, QuestionUncheckedUpdateWithoutAdditionalsInput>
   }
 
   export type QuestionCreateNestedOneWithoutAnswersInput = {
@@ -5795,8 +7003,8 @@ export namespace Prisma {
     subcategory: string
     likes?: number | null
     isLeader?: boolean | null
-    additionals?: QuestionCreateadditionalsInput | string[]
     likedBy?: UserCreateNestedManyWithoutLikedQuestionsInput
+    additionals?: AdditionalCreateNestedManyWithoutQuestionInput
     answers?: AnswerCreateNestedManyWithoutQuestionInput
   }
 
@@ -5810,8 +7018,8 @@ export namespace Prisma {
     subcategory: string
     likes?: number | null
     isLeader?: boolean | null
-    additionals?: QuestionCreateadditionalsInput | string[]
     likedBy?: UserUncheckedCreateNestedManyWithoutLikedQuestionsInput
+    additionals?: AdditionalUncheckedCreateNestedManyWithoutQuestionInput
     answers?: AnswerUncheckedCreateNestedManyWithoutQuestionInput
   }
 
@@ -5835,7 +7043,7 @@ export namespace Prisma {
     subcategory: string
     likes?: number | null
     isLeader?: boolean | null
-    additionals?: QuestionCreateadditionalsInput | string[]
+    additionals?: AdditionalCreateNestedManyWithoutQuestionInput
     answers?: AnswerCreateNestedManyWithoutQuestionInput
     user?: UserCreateNestedOneWithoutQuestionsInput
   }
@@ -5850,8 +7058,8 @@ export namespace Prisma {
     subcategory: string
     likes?: number | null
     isLeader?: boolean | null
-    additionals?: QuestionCreateadditionalsInput | string[]
     userId?: string | null
+    additionals?: AdditionalUncheckedCreateNestedManyWithoutQuestionInput
     answers?: AnswerUncheckedCreateNestedManyWithoutQuestionInput
   }
 
@@ -5919,7 +7127,6 @@ export namespace Prisma {
     subcategory?: StringFilter<"Question"> | string
     likes?: IntNullableFilter<"Question"> | number | null
     isLeader?: BoolNullableFilter<"Question"> | boolean | null
-    additionals?: StringNullableListFilter<"Question">
     userId?: StringNullableFilter<"Question"> | string | null
   }
 
@@ -6006,6 +7213,28 @@ export namespace Prisma {
   export type UserCreateOrConnectWithoutLikedQuestionsInput = {
     where: UserWhereUniqueInput
     create: XOR<UserCreateWithoutLikedQuestionsInput, UserUncheckedCreateWithoutLikedQuestionsInput>
+  }
+
+  export type AdditionalCreateWithoutQuestionInput = {
+    id?: string
+    createdAt?: Date | string
+    text: string
+  }
+
+  export type AdditionalUncheckedCreateWithoutQuestionInput = {
+    id?: string
+    createdAt?: Date | string
+    text: string
+  }
+
+  export type AdditionalCreateOrConnectWithoutQuestionInput = {
+    where: AdditionalWhereUniqueInput
+    create: XOR<AdditionalCreateWithoutQuestionInput, AdditionalUncheckedCreateWithoutQuestionInput>
+  }
+
+  export type AdditionalCreateManyQuestionInputEnvelope = {
+    data: AdditionalCreateManyQuestionInput | AdditionalCreateManyQuestionInput[]
+    skipDuplicates?: boolean
   }
 
   export type AnswerCreateWithoutQuestionInput = {
@@ -6111,6 +7340,32 @@ export namespace Prisma {
     gender?: StringFilter<"User"> | string
   }
 
+  export type AdditionalUpsertWithWhereUniqueWithoutQuestionInput = {
+    where: AdditionalWhereUniqueInput
+    update: XOR<AdditionalUpdateWithoutQuestionInput, AdditionalUncheckedUpdateWithoutQuestionInput>
+    create: XOR<AdditionalCreateWithoutQuestionInput, AdditionalUncheckedCreateWithoutQuestionInput>
+  }
+
+  export type AdditionalUpdateWithWhereUniqueWithoutQuestionInput = {
+    where: AdditionalWhereUniqueInput
+    data: XOR<AdditionalUpdateWithoutQuestionInput, AdditionalUncheckedUpdateWithoutQuestionInput>
+  }
+
+  export type AdditionalUpdateManyWithWhereWithoutQuestionInput = {
+    where: AdditionalScalarWhereInput
+    data: XOR<AdditionalUpdateManyMutationInput, AdditionalUncheckedUpdateManyWithoutQuestionInput>
+  }
+
+  export type AdditionalScalarWhereInput = {
+    AND?: AdditionalScalarWhereInput | AdditionalScalarWhereInput[]
+    OR?: AdditionalScalarWhereInput[]
+    NOT?: AdditionalScalarWhereInput | AdditionalScalarWhereInput[]
+    id?: StringFilter<"Additional"> | string
+    createdAt?: DateTimeFilter<"Additional"> | Date | string
+    questionId?: StringFilter<"Additional"> | string
+    text?: StringFilter<"Additional"> | string
+  }
+
   export type AnswerUpsertWithWhereUniqueWithoutQuestionInput = {
     where: AnswerWhereUniqueInput
     update: XOR<AnswerUpdateWithoutQuestionInput, AnswerUncheckedUpdateWithoutQuestionInput>
@@ -6172,6 +7427,82 @@ export namespace Prisma {
     answers?: AnswerUncheckedUpdateManyWithoutUserNestedInput
   }
 
+  export type QuestionCreateWithoutAdditionalsInput = {
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    themeText: string
+    text?: string | null
+    category: string
+    subcategory: string
+    likes?: number | null
+    isLeader?: boolean | null
+    likedBy?: UserCreateNestedManyWithoutLikedQuestionsInput
+    answers?: AnswerCreateNestedManyWithoutQuestionInput
+    user?: UserCreateNestedOneWithoutQuestionsInput
+  }
+
+  export type QuestionUncheckedCreateWithoutAdditionalsInput = {
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    themeText: string
+    text?: string | null
+    category: string
+    subcategory: string
+    likes?: number | null
+    isLeader?: boolean | null
+    userId?: string | null
+    likedBy?: UserUncheckedCreateNestedManyWithoutLikedQuestionsInput
+    answers?: AnswerUncheckedCreateNestedManyWithoutQuestionInput
+  }
+
+  export type QuestionCreateOrConnectWithoutAdditionalsInput = {
+    where: QuestionWhereUniqueInput
+    create: XOR<QuestionCreateWithoutAdditionalsInput, QuestionUncheckedCreateWithoutAdditionalsInput>
+  }
+
+  export type QuestionUpsertWithoutAdditionalsInput = {
+    update: XOR<QuestionUpdateWithoutAdditionalsInput, QuestionUncheckedUpdateWithoutAdditionalsInput>
+    create: XOR<QuestionCreateWithoutAdditionalsInput, QuestionUncheckedCreateWithoutAdditionalsInput>
+    where?: QuestionWhereInput
+  }
+
+  export type QuestionUpdateToOneWithWhereWithoutAdditionalsInput = {
+    where?: QuestionWhereInput
+    data: XOR<QuestionUpdateWithoutAdditionalsInput, QuestionUncheckedUpdateWithoutAdditionalsInput>
+  }
+
+  export type QuestionUpdateWithoutAdditionalsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    themeText?: StringFieldUpdateOperationsInput | string
+    text?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: StringFieldUpdateOperationsInput | string
+    subcategory?: StringFieldUpdateOperationsInput | string
+    likes?: NullableIntFieldUpdateOperationsInput | number | null
+    isLeader?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    likedBy?: UserUpdateManyWithoutLikedQuestionsNestedInput
+    answers?: AnswerUpdateManyWithoutQuestionNestedInput
+    user?: UserUpdateOneWithoutQuestionsNestedInput
+  }
+
+  export type QuestionUncheckedUpdateWithoutAdditionalsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    themeText?: StringFieldUpdateOperationsInput | string
+    text?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: StringFieldUpdateOperationsInput | string
+    subcategory?: StringFieldUpdateOperationsInput | string
+    likes?: NullableIntFieldUpdateOperationsInput | number | null
+    isLeader?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    likedBy?: UserUncheckedUpdateManyWithoutLikedQuestionsNestedInput
+    answers?: AnswerUncheckedUpdateManyWithoutQuestionNestedInput
+  }
+
   export type QuestionCreateWithoutAnswersInput = {
     id?: string
     createdAt?: Date | string
@@ -6182,8 +7513,8 @@ export namespace Prisma {
     subcategory: string
     likes?: number | null
     isLeader?: boolean | null
-    additionals?: QuestionCreateadditionalsInput | string[]
     likedBy?: UserCreateNestedManyWithoutLikedQuestionsInput
+    additionals?: AdditionalCreateNestedManyWithoutQuestionInput
     user?: UserCreateNestedOneWithoutQuestionsInput
   }
 
@@ -6197,9 +7528,9 @@ export namespace Prisma {
     subcategory: string
     likes?: number | null
     isLeader?: boolean | null
-    additionals?: QuestionCreateadditionalsInput | string[]
     userId?: string | null
     likedBy?: UserUncheckedCreateNestedManyWithoutLikedQuestionsInput
+    additionals?: AdditionalUncheckedCreateNestedManyWithoutQuestionInput
   }
 
   export type QuestionCreateOrConnectWithoutAnswersInput = {
@@ -6267,8 +7598,8 @@ export namespace Prisma {
     subcategory?: StringFieldUpdateOperationsInput | string
     likes?: NullableIntFieldUpdateOperationsInput | number | null
     isLeader?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    additionals?: QuestionUpdateadditionalsInput | string[]
     likedBy?: UserUpdateManyWithoutLikedQuestionsNestedInput
+    additionals?: AdditionalUpdateManyWithoutQuestionNestedInput
     user?: UserUpdateOneWithoutQuestionsNestedInput
   }
 
@@ -6282,9 +7613,9 @@ export namespace Prisma {
     subcategory?: StringFieldUpdateOperationsInput | string
     likes?: NullableIntFieldUpdateOperationsInput | number | null
     isLeader?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    additionals?: QuestionUpdateadditionalsInput | string[]
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     likedBy?: UserUncheckedUpdateManyWithoutLikedQuestionsNestedInput
+    additionals?: AdditionalUncheckedUpdateManyWithoutQuestionNestedInput
   }
 
   export type UserUpsertWithoutAnswersInput = {
@@ -6342,7 +7673,6 @@ export namespace Prisma {
     subcategory: string
     likes?: number | null
     isLeader?: boolean | null
-    additionals?: QuestionCreateadditionalsInput | string[]
   }
 
   export type AnswerCreateManyUserInput = {
@@ -6365,8 +7695,8 @@ export namespace Prisma {
     subcategory?: StringFieldUpdateOperationsInput | string
     likes?: NullableIntFieldUpdateOperationsInput | number | null
     isLeader?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    additionals?: QuestionUpdateadditionalsInput | string[]
     likedBy?: UserUpdateManyWithoutLikedQuestionsNestedInput
+    additionals?: AdditionalUpdateManyWithoutQuestionNestedInput
     answers?: AnswerUpdateManyWithoutQuestionNestedInput
   }
 
@@ -6380,8 +7710,8 @@ export namespace Prisma {
     subcategory?: StringFieldUpdateOperationsInput | string
     likes?: NullableIntFieldUpdateOperationsInput | number | null
     isLeader?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    additionals?: QuestionUpdateadditionalsInput | string[]
     likedBy?: UserUncheckedUpdateManyWithoutLikedQuestionsNestedInput
+    additionals?: AdditionalUncheckedUpdateManyWithoutQuestionNestedInput
     answers?: AnswerUncheckedUpdateManyWithoutQuestionNestedInput
   }
 
@@ -6395,7 +7725,6 @@ export namespace Prisma {
     subcategory?: StringFieldUpdateOperationsInput | string
     likes?: NullableIntFieldUpdateOperationsInput | number | null
     isLeader?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    additionals?: QuestionUpdateadditionalsInput | string[]
   }
 
   export type QuestionUpdateWithoutLikedByInput = {
@@ -6408,7 +7737,7 @@ export namespace Prisma {
     subcategory?: StringFieldUpdateOperationsInput | string
     likes?: NullableIntFieldUpdateOperationsInput | number | null
     isLeader?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    additionals?: QuestionUpdateadditionalsInput | string[]
+    additionals?: AdditionalUpdateManyWithoutQuestionNestedInput
     answers?: AnswerUpdateManyWithoutQuestionNestedInput
     user?: UserUpdateOneWithoutQuestionsNestedInput
   }
@@ -6423,8 +7752,8 @@ export namespace Prisma {
     subcategory?: StringFieldUpdateOperationsInput | string
     likes?: NullableIntFieldUpdateOperationsInput | number | null
     isLeader?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    additionals?: QuestionUpdateadditionalsInput | string[]
     userId?: NullableStringFieldUpdateOperationsInput | string | null
+    additionals?: AdditionalUncheckedUpdateManyWithoutQuestionNestedInput
     answers?: AnswerUncheckedUpdateManyWithoutQuestionNestedInput
   }
 
@@ -6438,7 +7767,6 @@ export namespace Prisma {
     subcategory?: StringFieldUpdateOperationsInput | string
     likes?: NullableIntFieldUpdateOperationsInput | number | null
     isLeader?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    additionals?: QuestionUpdateadditionalsInput | string[]
     userId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
@@ -6470,6 +7798,12 @@ export namespace Prisma {
     likes?: NullableIntFieldUpdateOperationsInput | number | null
     isBestAnswer?: NullableBoolFieldUpdateOperationsInput | boolean | null
     questionId?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type AdditionalCreateManyQuestionInput = {
+    id?: string
+    createdAt?: Date | string
+    text: string
   }
 
   export type AnswerCreateManyQuestionInput = {
@@ -6531,6 +7865,24 @@ export namespace Prisma {
     gender?: StringFieldUpdateOperationsInput | string
   }
 
+  export type AdditionalUpdateWithoutQuestionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    text?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type AdditionalUncheckedUpdateWithoutQuestionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    text?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type AdditionalUncheckedUpdateManyWithoutQuestionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    text?: StringFieldUpdateOperationsInput | string
+  }
+
   export type AnswerUpdateWithoutQuestionInput = {
     id?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -6582,6 +7934,10 @@ export namespace Prisma {
      * @deprecated Use QuestionDefaultArgs instead
      */
     export type QuestionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = QuestionDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use AdditionalDefaultArgs instead
+     */
+    export type AdditionalArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = AdditionalDefaultArgs<ExtArgs>
     /**
      * @deprecated Use AnswerDefaultArgs instead
      */

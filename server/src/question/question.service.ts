@@ -43,6 +43,7 @@ export class QuestionService {
         id,
       },
       include: {
+        additionals: true,
         likedBy: {
           select: {
             id: true,
@@ -81,7 +82,7 @@ export class QuestionService {
             avatar: true,
           }
         },
-      }
+      },
     });
   }
 
@@ -185,16 +186,20 @@ export class QuestionService {
 
   async addAdditional(dto: AddAdditionalDto, questionId: string, userId: string) {
     return this.prisma.question.update({
-      where: {
-        id: questionId
-      },
+      where: { id: questionId },
       data: {
         additionals: {
-          push: dto.additional
-        }
+          create: { 
+            text: dto.additional.trim(),
+          },
+        },
+      },
+      include: {
+        additionals: true,
       }
-    })
-  }
+    });
+}
+
 
   async getCategories() {
     return CATEGORIES

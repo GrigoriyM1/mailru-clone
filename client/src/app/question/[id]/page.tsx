@@ -3,18 +3,35 @@
 import { questionsService } from '@/services/questions.service';
 import { useUserStore } from '@/store/use-user-store';
 import { useQuery } from '@tanstack/react-query';
-import { useParams } from 'next/navigation';
+import { useParams, usePathname } from 'next/navigation';
 import Question from '@/components/shared/question/Question';
+import { useEffect } from 'react';
+import { useQuestionStore } from '@/store/use-question-store';
 
 const QuestionPage = () => {
 	const { id } = useParams();
 	const { isLoading } = useUserStore();
+	const { setQuestion } = useQuestionStore();
+	const pathname = usePathname();
 
-	const { data, isPending } = useQuery({
-		queryKey: ['get-one-question', id],
+	const {
+		data,
+		isLoading: queryLoading,
+		refetch,
+	} = useQuery({
+		queryKey: ['get-one-question'],
 		queryFn: () => questionsService.getOne(id as string),
+		// Убедитесь, что мы запрашиваем данные только если есть id
+		enabled: !!id,
 	});
-	// console.log('DATA  ', data);
+
+	useEffect(() => {
+		if (data) setQuestion(data);
+	}, [data, setQuestion]);
+
+	useEffect(() => {
+		if (id) refetch();
+	}, [id, pathname, refetch]);
 
 	return (
 		<div className='flex'>
@@ -24,12 +41,11 @@ const QuestionPage = () => {
 				</div>
 			</div>
 
-			
-				{isPending || isLoading ? (
-					<div className='bg-white p-10 w-full'>loading...</div>
-				) : (
-					<Question data={data} />
-				)}
+			{queryLoading || isLoading || !data ? (
+				<div className='bg-white p-10 w-full'>loading...</div>
+			) : (
+				<Question />
+			)}
 		</div>
 	);
 };
