@@ -14,7 +14,7 @@ export const questionsService = {
 	},
 
 	getOne: async (id: string) => {
-		const response = await axiosWithAuth.get<IQuestion>(
+		const response = await axiosWithAuth.get<IQuestion | string>(
 			`/question/get-one/${id}`
 		);
 		return response.data;
@@ -22,6 +22,14 @@ export const questionsService = {
 
 	create: async (data: IQuestionForm) => {
 		const response = await axiosWithAuth.post<IQuestion>('/question', data);
+		return response.data;
+	},
+
+	update: async (id: string, data: Partial<IQuestionForm>) => {
+		const response = await axiosWithAuth.put<IQuestion>(
+			`/question/${id}`,
+			data
+		);
 		return response.data;
 	},
 
@@ -44,6 +52,16 @@ export const questionsService = {
 			`/question/add-additional/${id}`,
 			{ additional }
 		);
+		return response.data;
+	},
+
+	getLeaders: async ({ take, skip }: { take?: number; skip?: number }) => {
+		const response = await axiosWithAuth.get<IQuestion[]>('/question/leaders', {
+			params: {
+				take,
+				skip,
+			},
+		});
 		return response.data;
 	},
 };

@@ -1,4 +1,3 @@
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import {
 	Triangle as TriangleIcon,
@@ -17,6 +16,8 @@ import { useMutation } from '@tanstack/react-query';
 import { authService } from '@/services/auth.service';
 import { useRouter } from 'next/navigation';
 import { useUserStore } from '@/store/use-user-store';
+import Avatar from '@/components/modules/Avatar';
+import { IMinUser } from '@/types/auth.types';
 
 const HeaderAuth = () => {
 	const { isLoading, user, setUser, setIsAuth } = useUserStore();
@@ -51,10 +52,7 @@ const HeaderAuth = () => {
 				onClick={() => setIsProfileOpen(prev => !prev)}
 				id='open-auth-dropdown'
 			>
-				<Avatar size='sm'>
-					<AvatarImage src={user?.avatar} alt={user?.name} />
-					<AvatarFallback>{user?.name[0]}</AvatarFallback>
-				</Avatar>
+				<Avatar user={user as IMinUser} isLink={false} size='sm' />
 
 				<span>{user?.email}</span>
 
@@ -76,10 +74,7 @@ const HeaderAuth = () => {
 			>
 				<div className='flex justify-between items-end mb-7'>
 					<div className='flex gap-3'>
-						<Avatar size='normal'>
-							<AvatarImage src={user?.avatar} alt={user?.name} />
-							<AvatarFallback>{user?.name[0]}</AvatarFallback>
-						</Avatar>
+						<Avatar user={user as IMinUser} isLink={false} />
 
 						<div>
 							<div className='text-[15px]'>
@@ -92,9 +87,7 @@ const HeaderAuth = () => {
 					<div>
 						<CopyIcon
 							className='w-4 h-4 text-slate-400 hover:text-black transition cursor-pointer'
-							onClick={() =>
-								navigator.clipboard.writeText(user?.email!)
-							}
+							onClick={() => navigator.clipboard.writeText(user?.email!)}
 						/>
 					</div>
 				</div>

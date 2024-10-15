@@ -59,7 +59,7 @@ export interface IMinUser {
 	id: string;
 	name: string;
 	lastName: string;
-	avatar: string;
+	avatar?: string;
 }
 
 export interface IAuthResponse {

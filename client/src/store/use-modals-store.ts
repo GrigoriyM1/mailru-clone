@@ -12,6 +12,8 @@ type UseModalsStoreState = {
 	setIsAdditionalModalOpen: (isOpen: boolean) => void;
 	additionalQuestionId: string | null;
 	setAdditionalQuestionId: (id: string) => void;
+	isEditQuestionModalOpen: boolean;
+	setIsEditQuestionModalOpen: (isOpen: boolean) => void;
 };
 
 export const useModalsStore = create<UseModalsStoreState>(set => ({
@@ -29,4 +31,8 @@ export const useModalsStore = create<UseModalsStoreState>(set => ({
 		set({ isAdditionalModalOpen: isOpen }),
 	additionalQuestionId: null,
 	setAdditionalQuestionId: (id: string) => set({ additionalQuestionId: id }),
+
+	isEditQuestionModalOpen: false,
+	setIsEditQuestionModalOpen: (isOpen: boolean) =>
+		set({ isEditQuestionModalOpen: isOpen }),
 }));

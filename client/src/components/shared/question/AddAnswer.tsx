@@ -1,15 +1,15 @@
 import QuilEditor from '@/components/ui/quil-editor/quil-editor';
 import { useUserStore } from '@/store/use-user-store';
-import Link from 'next/link';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { MessageSquareMore } from 'lucide-react';
 import { Controller, useForm } from 'react-hook-form';
 import { IAnswerForm, IQuestion } from '@/types/questions.types';
 import { useState } from 'react';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { answerService } from '@/services/answer.service';
 import { useQuestionStore } from '@/store/use-question-store';
+import Avatar from '@/components/modules/Avatar';
+import { IMinUser } from '@/types/auth.types';
 
 const AddAnswer = () => {
 	const { question: questionData } = useQuestionStore();
@@ -23,12 +23,14 @@ const AddAnswer = () => {
 	});
 	const { user } = useUserStore();
 	const [text, setText] = useState('');
+	const queryClient = useQueryClient();
 
 	const { mutate, data } = useMutation({
 		mutationFn: () =>
 			answerService.create({ text }, questionData?.id as string),
-		onSuccess(data) {
-			console.log('data  ', data);
+		onSuccess() {
+			// console.log('data  ', data);
+			queryClient.invalidateQueries({ queryKey: [`get-one-question`] });
 		},
 	});
 
@@ -51,12 +53,7 @@ const AddAnswer = () => {
 			<div className='text-[24px] mb-7'>Ответить на вопрос</div>
 
 			<div className='flex gap-5'>
-				<Link href={`/profile/${user?.id}`}>
-					<Avatar size='normal'>
-						<AvatarImage src={user?.avatar} alt={user?.name} />
-						<AvatarFallback>{user?.name?.[0]}</AvatarFallback>
-					</Avatar>
-				</Link>
+				<Avatar user={user as IMinUser} />
 
 				<form className='w-full' onSubmit={handleSubmit(onSubmit)}>
 					<Controller

@@ -1,4 +1,3 @@
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
 	DropdownMenuTrigger,
 	DropdownMenu,
@@ -13,6 +12,7 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import { formatCreatedAt } from '@/lib/format-created-at';
+import Avatar from '@/components/modules/Avatar';
 
 interface IQuestionProps {
 	id: string;
@@ -45,17 +45,19 @@ const Question: React.FC<IQuestionProps> = ({
 			}}
 		>
 			<div className='flex gap-4'>
-				<Link href={`/profile/${userId}`}>
-					<Avatar>
-						<AvatarImage src={userAvatar} alt={userName} />
-						<AvatarFallback>{userName[0]}</AvatarFallback>
-					</Avatar>
-				</Link>
+				<Avatar
+					user={{
+						avatar: userAvatar,
+						name: userName,
+						lastName: userLastName,
+						id: userId,
+					}}
+				/>
 
 				<div>
 					<Link
 						href={`/question/${id}`}
-						className='block text-[17px] mb-2 hover:underline'
+						className='block text-[17px] mb-2 hover:underline word-break'
 					>
 						{theme}
 					</Link>

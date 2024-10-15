@@ -24,15 +24,28 @@ export interface ICreateQuestion {
 	subcategory: string;
 }
 
+export interface IComment {
+	id: string;
+	createdAt: string;
+	updatedAt: string;
+	text: string;
+	userId: string;
+	user: IMinUser;
+}
+
 export interface IAnswer {
 	id: string;
 	createdAt: string;
 	updatedAt: string;
 	isBestAnswer: boolean;
-	likes: number;
 	questionId: string;
 	text: string;
 	userId: string;
+
+	likes: number;
+	likedBy: IMinUser[];
+
+	comments: IComment[];
 
 	user: IMinUser;
 }

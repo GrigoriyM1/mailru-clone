@@ -1,9 +1,10 @@
 import Logo from '@/components/modules/Logo';
 import { Bell, ChartNoAxesColumn, Plus, Rows4 } from 'lucide-react';
 import Link from 'next/link';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useUserStore } from '@/store/use-user-store';
 import HeaderSearch from './HeaderSearch';
+import Avatar from '@/components/modules/Avatar';
+import { IMinUser } from '@/types/auth.types';
 
 const HeaderBottom = () => {
 	const { user } = useUserStore();
@@ -36,7 +37,10 @@ const HeaderBottom = () => {
 							</Link>
 						</li>
 						<li>
-							<Link href='/ask' className='flex gap-2 cursor-pointer hover:bg-slate-100 transition h-full px-3 py-[15px]'>
+							<Link
+								href='/ask'
+								className='flex gap-2 cursor-pointer hover:bg-slate-100 transition h-full px-3 py-[15px]'
+							>
 								{/* потом категории сделать */}
 								<ChartNoAxesColumn className='text-primary' />
 								Лидеры
@@ -53,10 +57,7 @@ const HeaderBottom = () => {
 						href={`/profile/${user?.id}`}
 						className='transition hover:bg-slate-100 py-[7px] px-2'
 					>
-						<Avatar>
-							<AvatarImage src={user?.avatar} alt={user?.name} />
-							<AvatarFallback>{user?.name[0]}</AvatarFallback>
-						</Avatar>
+						<Avatar user={user as IMinUser} isLink={false} />
 					</Link>
 					<div className='transition hover:bg-slate-100 py-[17px] px-2 cursor-pointer'>
 						<Bell className='text-primary w-5 h-5' />

@@ -71,7 +71,31 @@ export class QuestionService {
                 avatar: true,
               }
             }, 
-            userId: true
+            userId: true,
+            likedBy: {
+              select: {
+                id: true,
+                name: true,
+                lastName: true,
+                avatar: true,
+              }
+            },
+            comments: {
+              select: {
+                id: true,
+                text: true,
+                createdAt: true,
+                updatedAt: true,
+                user: {
+                  select: {
+                    id: true,
+                    name: true,
+                    lastName: true,
+                    avatar: true,
+                  }
+                },
+              }
+            },
           }
         },
         user: {
@@ -203,5 +227,25 @@ export class QuestionService {
 
   async getCategories() {
     return CATEGORIES
+  }
+
+  async getLeaders(skip: number, take: number) {
+    return this.prisma.question.findMany({
+      where: {
+        isLeader: true,
+      },
+      include: {
+        user: {
+          select: {
+            id: true,
+            name: true,
+            lastName: true,
+            avatar: true,
+          }
+        }
+      },
+      skip,
+      take
+    })
   }
 }

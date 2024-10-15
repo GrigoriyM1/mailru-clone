@@ -1,6 +1,11 @@
-'use client'
+'use client';
 
-import React, { useState, forwardRef } from 'react';
+import React, {
+	useState,
+	forwardRef,
+	useImperativeHandle,
+	useMemo,
+} from 'react';
 import ReactQuill, { ReactQuillProps } from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import './quil-editor.scss';
@@ -8,6 +13,7 @@ import cn from 'clsx';
 import { Label } from '../label';
 import { Sources } from 'quill';
 import { convertLengthLeft } from './convert-length-left';
+import { axiosWithAuth } from '@/api/interceptors';
 
 interface IQuilEditorProps extends ReactQuillProps {
 	label?: string;
@@ -35,11 +41,14 @@ const QuilEditor = forwardRef<ReactQuill, IQuilEditorProps>(
 	) => {
 		const [editorText, setEditorText] = useState('');
 		const [isFocused, setIsFocused] = useState(false);
-		const [isError, setIsError] = useState(error || false); // Устанавливаем начальное состояние ошибки
+		const [isError, setIsError] = useState(error || false);
 		const [lengthError, setLengthError] = useState('');
 		const lengthLeft = props.maxLength
 			? convertLengthLeft(props.maxLength, editorText)
 			: undefined;
+
+		// Local ref to access the ReactQuill instance
+		const quillRef = React.useRef<ReactQuill | null>(null);
 
 		const handleChange = (
 			html: string,
@@ -69,19 +78,66 @@ const QuilEditor = forwardRef<ReactQuill, IQuilEditorProps>(
 			onChange?.(html, delta, source, editor);
 		};
 
-		const modules = {
-			toolbar: [
-				[
-					'image',
-					'video',
-					'link',
-					'code',
-					'blockquote',
-					{ list: 'ordered' },
-					{ list: 'bullet' },
-				],
-			],
+		const handleImageUpload = () => {
+			const input = document.createElement('input');
+			input.setAttribute('type', 'file');
+			input.setAttribute('accept', 'image/*');
+			input.click();
+
+			input.onchange = async () => {
+				if (input.files && input.files[0]) {
+					const file = input.files[0];
+
+					const maxSizeInMB = 5;
+					if (file.size > maxSizeInMB * 1024 * 1024) {
+						alert(`Размер файла должен быть не более ${maxSizeInMB} МБ`);
+						return;
+					}
+
+					const formData = new FormData();
+					formData.append('file', file);
+
+					const { data } = await axiosWithAuth.post('/files/upload', formData, {
+						headers: {
+							'Content-Type': 'multipart/form-data',
+						},
+					});
+					console.log(data);
+
+					const imageUrl = data.filePath; // Assuming the server returns the uploaded image URL
+
+					const quill = quillRef.current?.getEditor();
+					if (quill) {
+						const range = quill.getSelection();
+						if (range) {
+							quill.insertEmbed(range.index, 'image', imageUrl);
+						}
+					}
+				}
+			};
 		};
+
+		const modules = useMemo(
+			() => ({
+				toolbar: {
+					container: [
+						[
+							'image',
+							'video',
+							'link',
+							'code',
+							'blockquote',
+							{ list: 'ordered' },
+							{ list: 'bullet' },
+						],
+					],
+					handlers: {
+						image: handleImageUpload,
+					},
+				},
+			}),
+			[]
+		);
 
 		return (
 			<div {...divProps} className={cn('w-full', divProps?.className)}>
@@ -110,7 +166,7 @@ const QuilEditor = forwardRef<ReactQuill, IQuilEditorProps>(
 					modules={modules}
 					onFocus={() => setIsFocused(true)}
 					onBlur={() => setIsFocused(false)}
-					ref={ref}
+					ref={quillRef}
 					{...props}
 				/>
 				{isError && lengthError && (

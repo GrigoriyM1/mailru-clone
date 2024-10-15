@@ -1,4 +1,3 @@
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { formatCreatedAt } from '@/lib/format-created-at';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -9,7 +8,7 @@ import {
 	Share2,
 } from 'lucide-react';
 import { useUserStore } from '@/store/use-user-store';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { questionsService } from '@/services/questions.service';
 import cn from 'clsx';
 import { useEffect, useState } from 'react';
@@ -19,12 +18,14 @@ import AddAnswer from './AddAnswer';
 import Answers from './Answers';
 import QuestionDropdown from './QuestionDropdown';
 import { useQuestionStore } from '@/store/use-question-store';
+import { IMinUser } from '@/types/auth.types';
+import Avatar from '@/components/modules/Avatar';
 
 const Question: React.FC = () => {
 	const { question: data } = useQuestionStore();
 	const { user } = useUserStore();
+	const queryClient = useQueryClient();
 
-	const [likes, setLikes] = useState(data?.likes || 0);
 	const {
 		isLikedByModalOpen,
 		setIsLikedByModalOpen,
@@ -43,9 +44,8 @@ const Question: React.FC = () => {
 	const { mutate, isPending } = useMutation({
 		mutationKey: ['like-question'],
 		mutationFn: (id: string) => questionsService.like(id),
-		onSuccess(successData) {
-			setLikes(successData?.likes);
-			setLikedBy(successData?.likedBy);
+		onSuccess() {
+			queryClient.invalidateQueries({ queryKey: ['get-one-question'] });
 		},
 	});
 
@@ -65,12 +65,7 @@ const Question: React.FC = () => {
 		<div className='w-full'>
 			<div className='bg-white p-10 w-full mb-4'>
 				<div className='flex gap-4'>
-					<Link href={`/profile/${data?.user?.id}`}>
-						<Avatar size='normal'>
-							<AvatarImage src={data?.user?.avatar} alt={data?.user?.name} />
-							<AvatarFallback>{data?.user?.name?.[0]}</AvatarFallback>
-						</Avatar>
-					</Link>
+					<Avatar user={data?.user as IMinUser} />
 
 					<div className='w-full'>
 						<div className='w-full'>
@@ -105,7 +100,7 @@ const Question: React.FC = () => {
 								</div>
 							</div>
 
-							<h1 className='text-[25px] mb-8'>{data?.themeText}</h1>
+							<h1 className='text-[25px] mb-8 word-break'>{data?.themeText}</h1>
 							<pre
 								className='mb-8'
 								dangerouslySetInnerHTML={{ __html: data?.text! }}
@@ -164,15 +159,12 @@ const Question: React.FC = () => {
 										className='cursor-pointer flex items-center gap-1'
 										onClick={handleLikedByModalOpen}
 									>
-										{likes! > 0 && (
+										{data?.likes! > 0 && (
 											<>
 												{likedBy?.slice(0, 3).map(u => (
-													<Avatar size='normal' className='w-8 h-8' key={u?.id}>
-														<AvatarImage src={u?.avatar} alt={u?.name} />
-														<AvatarFallback>{u?.name?.[0]}</AvatarFallback>
-													</Avatar>
+													<Avatar user={u} isLink={false} key={u.id} />
 												))}
-												<div className='ml-1'>+ {likes}</div>
+												<div className='ml-1'>+ {data?.likes}</div>
 											</>
 										)}
 									</div>

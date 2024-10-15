@@ -1,22 +1,24 @@
 import { Controller, Get, Post, Body, Param, Delete, ValidationPipe, UsePipes, Query, Put } from '@nestjs/common';
 import { AnswerService } from './answer.service';
 import { Auth } from 'src/auth/decorators/auth.decorator';
-import { AnswerDto } from './dto/create-answer.dto';
+import { AnswerDto } from './dto/answer.dto';
 import { CurrentUser } from 'src/auth/decorators/user.decorator';
+import { CommentDto } from './dto/comment.dto';
+import { BestAnswerDto } from './dto/best-answer.dto';
 
 @Controller('answer')
 export class AnswerController {
   constructor(private readonly answerService: AnswerService) {}
 
-  @Get(':id')
-  @Auth()
-  async getAll(
-    @Param('id') questionId: string,
-    @Query('skip') skip: string = '0',
-    @Query('take') take: string = '20',
-  ) {
-    return this.answerService.getAll(questionId, Number(skip), Number(take));
-  }
+  // @Get(':id')
+  // @Auth()
+  // async getAll(
+  //   @Param('id') questionId: string,
+  //   @Query('skip') skip: string = '0',
+  //   @Query('take') take: string = '20',
+  // ) {
+  //   return this.answerService.getAll(questionId, Number(skip), Number(take));
+  // }
 
   @UsePipes(new ValidationPipe())
   @Auth()
@@ -49,6 +51,36 @@ export class AnswerController {
   ) {
     return this.answerService.delete(id, userId);
   }
+  
+  @UsePipes(new ValidationPipe())
+  @Auth()
+  @Put('/like/:id')
+  async like(
+    @Param('id') id: string,
+    @CurrentUser('id') userId: string,
+  ) {
+    return this.answerService.like(id, userId);
+  }
 
-  // TODO: like, comment  
+  @UsePipes(new ValidationPipe())
+  @Auth()
+  @Put('/comment/:id')
+  async comment(
+    @Body() dto: CommentDto,
+    @Param('id') id: string,
+    @CurrentUser('id') userId: string,
+  ) {
+    return this.answerService.comment(dto, id, userId);
+  }
+
+  @UsePipes(new ValidationPipe())
+  @Auth()
+  @Put('/best-answer/:id')
+  async bestAnswer(
+    @Body() dto: BestAnswerDto,
+    @Param('id') id: string,
+    @CurrentUser('id') userId: string,
+  ) {
+    return this.answerService.bestAnswer(dto, id, userId);
+  }
 }

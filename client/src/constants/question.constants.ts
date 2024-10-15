@@ -1,0 +1,1 @@
+export const QUESTION_EDIT_MINUTES_INTERVAL = 30;

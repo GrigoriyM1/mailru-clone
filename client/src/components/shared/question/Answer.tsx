@@ -1,74 +1,142 @@
 import { IAnswer } from '@/types/questions.types';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { formatCreatedAt } from '@/lib/format-created-at';
 import { EllipsisVertical, Heart, MessageSquareMore } from 'lucide-react';
+import AnswerDropdown from './AnswerDropdown';
+import { useQuestionStore } from '@/store/use-question-store';
+import { useUserStore } from '@/store/use-user-store';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import cn from 'clsx';
+import { answerService } from '@/services/answer.service';
+import { toast } from 'sonner';
+import { useState } from 'react';
+import EditAnswer from './EditAnswer';
+import Avatar from '@/components/modules/Avatar';
+import Comments from './Comments';
 
-const Answer: React.FC<IAnswer> = ({
-	createdAt,
-	id,
-	isBestAnswer,
-	likes,
-	questionId,
-	text,
-	updatedAt,
-	user,
-	userId,
-}) => {
+const Answer: React.FC<IAnswer> = props => {
+	const { user: currentUser } = useUserStore();
+	const { question } = useQuestionStore();
+
+	const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+	const [isEdit, setIsEdit] = useState(false);
+	const [isComment, setIsComment] = useState(false);
+
+	const queryClient = useQueryClient();
+
+	const isMyQuestion = currentUser?.id === question?.user.id;
+
+	const likeMutation = useMutation({
+		mutationKey: ['like-answer'],
+		mutationFn: () => answerService.like(props.id),
+		onSuccess() {
+			queryClient.invalidateQueries({ queryKey: [`get-one-question`] });
+		},
+	});
+
+	const isLiked = props.likedBy.find(item => item.id === currentUser?.id);
+	const handleLike = () => {
+		if (isMyQuestion && isLiked) {
+			console.log('NO');
+			return toast.error('Вы уже поблагодарили автора за ответ');
+		}
+		likeMutation.mutate();
+	};
+
+	const handleComment = () => {
+		setIsComment(!isComment);
+		console.log('isComment  ', isComment);
+
+		if (!isComment) {
+			
+		}
+	};
+
 	return (
 		<div className='px-10 py-6 flex justify-between'>
-			<div className='flex gap-4'>
-				<Link href={`/profile/${user?.id}`}>
-					<Avatar size='normal'>
-						<AvatarImage src={user?.avatar} alt={user?.name} />
-						<AvatarFallback>{user?.name?.[0]}</AvatarFallback>
-					</Avatar>
-				</Link>
+			<div className='flex gap-4 w-full'>
+				<Avatar user={props.user} />
 
-				<div>
-					<div className='flex items-center'>
-						<Link
-							href={`/profile/${user?.id}`}
-							className='text-[13px] font-semibold hover:underline'
-						>
-							{user?.name} {user?.lastName},
-						</Link>
-						<div className='ml-2 text-gray-400 text-[13px]'>
-							{formatCreatedAt(createdAt!)}
+				{isEdit ? (
+					<EditAnswer
+						setIsEdit={setIsEdit}
+						text={props.text}
+						answerId={props.id}
+					/>
+				) : (
+					<div className='w-full'>
+						<div className='flex items-center'>
+							<Link
+								href={`/profile/${props.user?.id}`}
+								className='text-[13px] font-semibold hover:underline'
+							>
+								{props.user?.name} {props.user?.lastName},
+							</Link>
+							<div className='ml-2 text-gray-400 text-[13px]'>
+								{formatCreatedAt(props.createdAt!)}
+							</div>
 						</div>
+
+						<div className='text-gray-400 text-[13px]'>Ученик</div>
+
+						<pre
+							className='my-3 text-[15px]'
+							dangerouslySetInnerHTML={{ __html: props.text }}
+						></pre>
+
+						<div className='flex'>
+							<Button
+								variant='outline'
+								className='flex items-center text-gray-500 gap-1'
+								onClick={handleLike}
+							>
+								<Heart
+									className={cn('min-w-4 min-h-4 max-w-4 max-h-4 text-black', {
+										'fill-black': isLiked,
+									})}
+								/>
+								<div className='ml-1'>{props.likes > 0 && props.likes}</div>
+								Нравится
+							</Button>
+							<Button
+								variant='outline'
+								className='flex items-center text-gray-500 gap-1'
+								onClick={handleComment}
+							>
+								<MessageSquareMore className='min-w-4 min-h-4 max-w-4 max-h-4 text-black' />
+								{props.comments.length > 0
+									? `${props.comments.length} Комментариев`
+									: 'Комментировать'}
+							</Button>
+						</div>
+
+						{isComment && (
+							<>
+								<Comments answer={props} />
+							</>
+						)}
 					</div>
+				)}
+			</div>
 
-					<div className='text-gray-400 text-[13px]'>Ученик</div>
-
-					<pre
-						className='my-3 text-[15px]'
-						dangerouslySetInnerHTML={{ __html: text }}
-					></pre>
-
-					<div className='flex'>
-						<Button
-							variant='outline'
-							className='flex items-center text-gray-500 gap-1'
-						>
-							<Heart className='min-w-4 min-h-4 max-w-4 max-h-4 text-black' />
-							<div className='ml-1'>{likes > 0 && likes}</div>
-							Нравится
-						</Button>
-						<Button
-							variant='outline'
-							className='flex items-center text-gray-500 gap-1'
-						>
-							<MessageSquareMore className='min-w-4 min-h-4 max-w-4 max-h-4 text-black' />
-							Комментировать
-						</Button>
-					</div>
+			{!isEdit && (
+				<div
+					onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+					id={`question-dropdown-open-${props.id}`}
+					className='relative'
+				>
+					<EllipsisVertical className='cursor-pointer' />
+					<AnswerDropdown
+						isOpen={isDropdownOpen}
+						setIsOpen={setIsDropdownOpen}
+						handleId={props.id}
+						answerUser={props.user}
+						isEdit={isEdit}
+						setIsEdit={setIsEdit}
+					/>
 				</div>
-			</div>
-
-			<div>
-				<EllipsisVertical className='cursor-pointer' />
-			</div>
+			)}
 		</div>
 	);
 };

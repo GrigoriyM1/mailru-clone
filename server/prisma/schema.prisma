@@ -29,6 +29,10 @@ model User {
   likedQuestions Question[] @relation("LikedQuestions")
   answers        Answer[]
 
+  likedAnswers Answer[] @relation("LikedAnswers") // Поле для связи с лайками ответов
+
+  comments Comment[] // Поле для связи с комментариями
+
   @@map("user")
 }
 
@@ -44,7 +48,7 @@ model Question {
   // TODO: может потом сделать получать уведомления, разрешить комменты
 
   likes       Int?         @default(0)
-  likedBy     User[]       @relation("LikedQuestions")
+  likedBy     User[]       @relation("LikedQuestions") // Поле для пользователей, которые лайкнули вопрос
   isLeader    Boolean?     @default(false) @map("is_leader")
   additionals Additional[] @relation("Additional")
 
@@ -72,15 +76,34 @@ model Answer {
   updatedAt DateTime @updatedAt @map("updated_at")
 
   text         String
-  likes        Int?     @default(0)
   isBestAnswer Boolean? @default(false) @map("is_best_answer") // TODO: потом сделать чтоб 1 ток такой был 
 
-  Question   Question? @relation(fields: [questionId], references: [id])
+  question   Question? @relation(fields: [questionId], references: [id])
   questionId String?
 
   user   User   @relation(fields: [userId], references: [id])
   userId String
 
+  likes   Int?   @default(0)
+  likedBy User[] @relation("LikedAnswers") // Поле для пользователей, которые лайкнули ответ
+
+  comments Comment[]
+
   @@unique([userId, questionId])
   @@map("answer")
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  text   String
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+
+  answer   Answer? @relation(fields: [answerId], references: [id])
+  answerId String?
+
+  @@map("comment")
 }

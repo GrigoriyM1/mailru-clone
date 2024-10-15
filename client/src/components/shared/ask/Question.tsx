@@ -31,7 +31,6 @@ const Question = () => {
 		control,
 		handleSubmit,
 		setValue,
-		watch,
 		formState: { errors },
 	} = useForm<IQuestionForm>({
 		resolver: zodResolver(askQuestionSchema),

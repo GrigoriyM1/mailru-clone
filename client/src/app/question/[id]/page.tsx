@@ -7,31 +7,30 @@ import { useParams, usePathname } from 'next/navigation';
 import Question from '@/components/shared/question/Question';
 import { useEffect } from 'react';
 import { useQuestionStore } from '@/store/use-question-store';
+import QuestionLoading from '@/components/shared/question/QuestionLoading';
+import { IQuestion } from '@/types/questions.types';
+import Question404 from '@/components/shared/question/Question404';
 
 const QuestionPage = () => {
 	const { id } = useParams();
 	const { isLoading } = useUserStore();
-	const { setQuestion } = useQuestionStore();
+	const { question, setQuestion } = useQuestionStore();
 	const pathname = usePathname();
 
 	const {
 		data,
-		isLoading: queryLoading,
-		refetch,
+		isPending,
+		isLoading: isQuestionLoading,
+		isSuccess,
 	} = useQuery({
-		queryKey: ['get-one-question'],
+		queryKey: [`get-one-question`],
 		queryFn: () => questionsService.getOne(id as string),
-		// Убедитесь, что мы запрашиваем данные только если есть id
-		enabled: !!id,
+		refetchOnWindowFocus: true,
 	});
 
 	useEffect(() => {
-		if (data) setQuestion(data);
-	}, [data, setQuestion]);
-
-	useEffect(() => {
-		if (id) refetch();
-	}, [id, pathname, refetch]);
+		if (data) setQuestion(data as IQuestion | null);
+	}, [isSuccess, data, pathname, id, isQuestionLoading, isPending]);
 
 	return (
 		<div className='flex'>
@@ -41,11 +40,15 @@ const QuestionPage = () => {
 				</div>
 			</div>
 
-			{queryLoading || isLoading || !data ? (
-				<div className='bg-white p-10 w-full'>loading...</div>
+			{typeof data === 'string' && data?.length === 0 ? (
+				<Question404 />
+			) : isPending || isQuestionLoading || isLoading || !data || !question ? (
+				<QuestionLoading />
 			) : (
 				<Question />
 			)}
+
+			{/* <QuestionLoading /> */}
 		</div>
 	);
 };

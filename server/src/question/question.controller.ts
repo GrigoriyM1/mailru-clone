@@ -80,4 +80,13 @@ export class QuestionController {
   async getCategories() {
     return this.questionService.getCategories();
   }
+
+  @Auth()
+  @Get('leaders')
+  async getLeaders(
+    @Query('skip') skip: string = '0',
+    @Query('take') take: string = '20',
+  ) {
+    return this.questionService.getLeaders(Number(skip), Number(take))
+  }
 }

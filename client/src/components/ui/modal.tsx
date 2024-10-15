@@ -3,7 +3,7 @@ import cn from 'clsx';
 interface IModalProps extends React.HTMLAttributes<HTMLDivElement> {
 	isOpen: boolean;
 	onClose: () => void;
-	children: React.ReactNode;
+	children?: React.ReactNode;
 	divProps?: React.HTMLAttributes<HTMLDivElement>;
 }
 

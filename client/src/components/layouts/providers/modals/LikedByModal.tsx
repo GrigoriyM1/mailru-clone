@@ -1,8 +1,8 @@
 import Modal from '@/components/ui/modal';
 import { useModalsStore } from '@/store/use-modals-store';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import Link from 'next/link';
 import { X } from 'lucide-react';
+import Avatar from '@/components/modules/Avatar';
 
 const LikedByModal = () => {
 	const { isLikedByModalOpen, setIsLikedByModalOpen, likedBy } =
@@ -29,12 +29,7 @@ const LikedByModal = () => {
 			<div className='grid grid-cols-2'>
 				{likedBy?.map(u => (
 					<div key={u?.id} className='flex gap-2 p-5 border-b border-gray-200'>
-						<Link href={`/profile/${u?.id}`}>
-							<Avatar size='normal'>
-								<AvatarImage src={u?.avatar} alt={u?.name} />
-								<AvatarFallback>{u?.name[0]}</AvatarFallback>
-							</Avatar>
-						</Link>
+						<Avatar user={u} />
 
 						<div>
 							<Link href={`/profile/${u?.id}`} className='hover:underline'>
