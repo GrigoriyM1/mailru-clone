@@ -16,9 +16,15 @@ const Answers: React.FC<IAnswersProps> = ({ answers }) => {
 				</div>
 
 				<div>
-					{answers?.map(answer => (
-						<Answer {...answer} key={answer.id} />
-					))}
+					{answers
+						?.sort((a, b) => Number(b.isBestAnswer) - Number(a.isBestAnswer))
+						?.map(answer => (
+							<Answer
+								{...answer}
+								key={answer.id}
+								isBestAnswerAllowed={!answers?.find(a => a.isBestAnswer)}
+							/>
+						))}
 				</div>
 			</div>
 		)

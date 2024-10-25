@@ -69,7 +69,6 @@ const EditQuestionModal = () => {
 		mutationFn: (data: IQuestionForm) =>
 			questionsService.update(question?.id!, data),
 		onSuccess(data) {
-			console.log('data  ', data);
 			onClose();
 			queryClient.invalidateQueries({ queryKey: [`get-one-question`] });
 		},

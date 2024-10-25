@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { hash } from 'argon2';
 import { RegisterDto } from 'src/auth/dto/register.dto';
 import { PrismaService } from 'src/prisma.service';
+import { EditProfileDto } from './dto/edit-profile.dto';
+import { EditProfilePageDto } from './dto/edit-profile-page.dto';
 
 @Injectable()
 export class UserService {
@@ -12,10 +14,6 @@ export class UserService {
       where: {
         id,
       },
-      // include: {
-      //   // весь user вместо с его tasks
-      //   tasks: true,
-      // },
     });
   }
 
@@ -42,6 +40,31 @@ export class UserService {
 
     return this.prisma.user.create({
       data: user
+    })
+  }
+
+  async editProfile(dto: EditProfileDto, userId: string) {
+    return this.prisma.user.update({
+      where: {
+        id: userId
+      },
+      data: {
+        description: dto.description.trim()
+      }
+    })
+  }
+
+  async editProfilePage(dto: EditProfilePageDto, userId: string) {
+    return this.prisma.user.update({
+      where: {
+        id: userId
+      },
+      data: {
+        name: dto.name.trim(),
+        lastName: dto.lastName.trim(),
+        birthdate: dto.birthdate.trim(),
+        gender: dto.gender.trim()
+      }
     })
   }
 }

@@ -23,10 +23,11 @@ const AskPage = () => {
 	return (
 		<div className='flex'>
 			<div className='max-w-[280px] w-full p-4'>
-				<div>
+				{/* <div>
 					<Link href='/smstop'>Вопросы-лидеры</Link>
-				</div>
+				</div> */}
 			</div>
+			{/* TODO: ТУТ ДРУГОЙ SIDEBAR */}
 
 			<div className='bg-white p-10 w-full'>
 				<h1 className='text-[25px] mb-3'>Задать вопрос</h1>

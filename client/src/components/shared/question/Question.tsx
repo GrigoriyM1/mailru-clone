@@ -6,6 +6,7 @@ import {
 	Heart,
 	MessageSquareMore,
 	Share2,
+	Star,
 } from 'lucide-react';
 import { useUserStore } from '@/store/use-user-store';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -46,6 +47,7 @@ const Question: React.FC = () => {
 		mutationFn: (id: string) => questionsService.like(id),
 		onSuccess() {
 			queryClient.invalidateQueries({ queryKey: ['get-one-question'] });
+			queryClient.invalidateQueries({ queryKey: ['questions'] });
 		},
 	});
 
@@ -99,6 +101,13 @@ const Question: React.FC = () => {
 									/>
 								</div>
 							</div>
+
+							{data?.isLeader && (
+								<div className='mb-4 flex gap-1 items-center'>
+									<Star className='fill-orange-400 stroke-orange-400 text-orange-400 w-5 h-5' />
+									Вопрос-лидер
+								</div>
+							)}
 
 							<h1 className='text-[25px] mb-8 word-break'>{data?.themeText}</h1>
 							<pre

@@ -96,9 +96,9 @@ const HeaderAuth = () => {
 					<MenuItem href='#' icon={UserIcon}>
 						Личные Данные
 					</MenuItem>
-					<MenuItem href='#' icon={LockKeyholeIcon}>
+					{/* <MenuItem href='#' icon={LockKeyholeIcon}>
 						Пароль и безопасность
-					</MenuItem>
+					</MenuItem> */}
 					<MenuItem
 						component='button'
 						icon={LogOutIcon}

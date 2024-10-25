@@ -19,16 +19,20 @@ const Avatar: React.FC<IAvatarProps> = ({
 	...props
 }) => {
 	return isLink ? (
-		<Link href={`/profile/${user.id}`}>
+		<Link href={`/profile/${user?.id}`}>
 			<AvatarUi {...props}>
-				<AvatarImage src={user.avatar} alt={user.name} />
-				<AvatarFallback {...avatarFallbackProps}>{user.name.toUpperCase()[0]}</AvatarFallback>
+				<AvatarImage src={user?.avatar} alt={user?.name} />
+				<AvatarFallback {...avatarFallbackProps}>
+					{user?.name?.toUpperCase()[0]}
+				</AvatarFallback>
 			</AvatarUi>
 		</Link>
 	) : (
 		<AvatarUi {...props}>
-			<AvatarImage src={user.avatar} alt={user.name} />
-			<AvatarFallback {...avatarFallbackProps}>{user.name.toUpperCase()[0]}</AvatarFallback>
+			<AvatarImage src={user?.avatar} alt={user?.name} />
+			<AvatarFallback {...avatarFallbackProps}>
+				{user?.name?.toUpperCase()[0]}
+			</AvatarFallback>
 		</AvatarUi>
 	);
 };

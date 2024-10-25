@@ -79,3 +79,12 @@ export interface IAdditional {
 	questionId: string;
 	text: string;
 }
+
+export type QuestionCategories = 'all' | 'resolve';
+
+export interface IQuestionsWithLength {
+	questions: IQuestion[];
+	questionsLength: number;
+	resolveQuestionsLength: number;
+	answersLength: number;
+}

@@ -106,6 +106,13 @@ pre {
   transition: .4s all;
 }
 
+.disabled {
+  pointer-events: none;
+  opacity: .5;
+  cursor: not-allowed;
+  user-select: none;
+}
+
 .shadow {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }

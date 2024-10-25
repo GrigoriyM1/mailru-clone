@@ -12,7 +12,7 @@ import { IQuestion } from '@/types/questions.types';
 import Question404 from '@/components/shared/question/Question404';
 
 const QuestionPage = () => {
-	const { id } = useParams();
+	const { id, category, type } = useParams();
 	const { isLoading } = useUserStore();
 	const { question, setQuestion } = useQuestionStore();
 	const pathname = usePathname();
@@ -25,7 +25,7 @@ const QuestionPage = () => {
 	} = useQuery({
 		queryKey: [`get-one-question`],
 		queryFn: () => questionsService.getOne(id as string),
-		refetchOnWindowFocus: true,
+		// refetchOnWindowFocus: true,
 	});
 
 	useEffect(() => {
@@ -33,13 +33,7 @@ const QuestionPage = () => {
 	}, [isSuccess, data, pathname, id, isQuestionLoading, isPending]);
 
 	return (
-		<div className='flex'>
-			<div className='max-w-[280px] w-full p-4'>
-				<div>
-					<a href='/smstop'>Вопросы-лидеры</a>
-				</div>
-			</div>
-
+		<>
 			{typeof data === 'string' && data?.length === 0 ? (
 				<Question404 />
 			) : isPending || isQuestionLoading || isLoading || !data || !question ? (
@@ -49,7 +43,7 @@ const QuestionPage = () => {
 			)}
 
 			{/* <QuestionLoading /> */}
-		</div>
+		</>
 	);
 };
 

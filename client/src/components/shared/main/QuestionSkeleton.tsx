@@ -1,5 +1,4 @@
 import { Skeleton } from '@/components/ui/skeleton';
-import Question from './Question';
 
 const QuestionSkeleton = () => {
 	return (

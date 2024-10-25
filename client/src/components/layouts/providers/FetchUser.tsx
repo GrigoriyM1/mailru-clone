@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation';
 import { useEffect } from 'react';
 
 const FetchUser = ({ children }: React.PropsWithChildren) => {
-	const { setIsAuth, setUser, setIsLoading } = useUserStore();
+	const { setIsAuth, setUser, setIsLoading, setMutate } = useUserStore();
 	const pathname = usePathname();
 
 	const { mutate } = useMutation({
@@ -14,7 +14,6 @@ const FetchUser = ({ children }: React.PropsWithChildren) => {
 		onSuccess(data) {
 			setIsAuth(true);
 			setUser(data.data.user);
-			// console.log('DATA USER  ', data.data.user);
 		},
 		onError(error) {
 			setIsAuth(false);
@@ -31,9 +30,12 @@ const FetchUser = ({ children }: React.PropsWithChildren) => {
 
 	useEffect(() => {
 		mutate();
+		setMutate(mutate);
 	}, [pathname]);
 
 	return <>{children}</>;
 };
 
 export default FetchUser;
+
+// TODO: ТУТ ОСТАНОВИЛСЯ

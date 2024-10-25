@@ -3,13 +3,23 @@ import {
 	ICategories,
 	IQuestion,
 	IQuestionForm,
+	IQuestionsWithLength,
 	IUpdatedLikes,
 } from '@/types/questions.types';
 
 export const questionsService = {
-	// TODO: потом может skip take
-	getAll: async () => {
-		const response = await axiosWithAuth.get<IQuestion[]>('/question');
+	getAll: async (
+		category?: string | undefined,
+		skip?: number,
+		take?: number
+	) => {
+		const response = await axiosWithAuth.get<IQuestion[]>('/question', {
+			params: {
+				skip,
+				take,
+				category,
+			},
+		});
 		return response.data;
 	},
 
@@ -55,13 +65,41 @@ export const questionsService = {
 		return response.data;
 	},
 
-	getLeaders: async ({ take, skip }: { take?: number; skip?: number }) => {
+	getLeaders: async ({
+		category,
+		take,
+		skip,
+	}: {
+		category?: string;
+		take?: number;
+		skip?: number;
+	}) => {
 		const response = await axiosWithAuth.get<IQuestion[]>('/question/leaders', {
 			params: {
 				take,
 				skip,
+				category,
 			},
 		});
+		return response.data;
+	},
+
+	getFromUser: async (
+		userId: string,
+		category: string,
+		take?: number, // тут 
+		skip?: number,
+	) => {
+		console.log('GET FORM USER  ', userId, category, take, skip);
+		const response = await axiosWithAuth.get<IQuestionsWithLength>(
+			`/question/user/${userId}/${category}`,
+			{
+				params: {
+					take,
+					skip,
+				},
+			}
+		);
 		return response.data;
 	},
 };

@@ -51,6 +51,10 @@ export interface IUser {
 	phone: string;
 	avatar?: string;
 
+	points: number;
+	level: string;
+	description?: string;
+
 	createdAt: string;
 	updatedAt: string;
 }
@@ -65,6 +69,22 @@ export interface IMinUser {
 export interface IAuthResponse {
 	accessToken: string;
 	user: IUser;
+}
+
+export interface IEditProfileForm {
+	description: string;
+}
+export interface IEditProfilePageForm {
+	name: string;
+	lastName: string;
+	birthdate: IBirthdate;
+	gender: string;
+}
+export interface IEditProfilePageData {
+	name: string;
+	lastName: string;
+	birthdate: string;
+	gender: string;
 }
 
 // export type TypeUserForm = Omit<IUser, 'id'> & { password?: string }

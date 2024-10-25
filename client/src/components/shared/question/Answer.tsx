@@ -2,7 +2,7 @@ import { IAnswer } from '@/types/questions.types';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { formatCreatedAt } from '@/lib/format-created-at';
-import { EllipsisVertical, Heart, MessageSquareMore } from 'lucide-react';
+import { EllipsisVertical, Heart, MessageSquareMore, Star } from 'lucide-react';
 import AnswerDropdown from './AnswerDropdown';
 import { useQuestionStore } from '@/store/use-question-store';
 import { useUserStore } from '@/store/use-user-store';
@@ -15,7 +15,11 @@ import EditAnswer from './EditAnswer';
 import Avatar from '@/components/modules/Avatar';
 import Comments from './Comments';
 
-const Answer: React.FC<IAnswer> = props => {
+interface IAnswerProps {
+	isBestAnswerAllowed: boolean;
+}
+
+const Answer: React.FC<IAnswer & IAnswerProps> = props => {
 	const { user: currentUser } = useUserStore();
 	const { question } = useQuestionStore();
 
@@ -35,6 +39,14 @@ const Answer: React.FC<IAnswer> = props => {
 		},
 	});
 
+	const bestAnswerMutation = useMutation({
+		mutationKey: ['best-answer'],
+		mutationFn: () => answerService.bestAnswer(props.id, question?.id!),
+		onSuccess() {
+			queryClient.invalidateQueries({ queryKey: [`get-one-question`] });
+		},
+	});
+
 	const isLiked = props.likedBy.find(item => item.id === currentUser?.id);
 	const handleLike = () => {
 		if (isMyQuestion && isLiked) {
@@ -46,16 +58,22 @@ const Answer: React.FC<IAnswer> = props => {
 
 	const handleComment = () => {
 		setIsComment(!isComment);
-		console.log('isComment  ', isComment);
+		// console.log('isComment  ', isComment);
 
-		if (!isComment) {
-			
-		}
+		// if (!isComment) {
+		// }
+	};
+
+	const handleBestAnswer = () => {
+		console.log('best answer');
+		bestAnswerMutation.mutate();
 	};
 
 	return (
 		<div className='px-10 py-6 flex justify-between'>
-			<div className='flex gap-4 w-full'>
+			<div className={cn('flex gap-4 w-full',
+				props.isBestAnswer && 'border-l-4 border-solid border-green-600 pl-4'
+			)}>
 				<Avatar user={props.user} />
 
 				{isEdit ? (
@@ -119,6 +137,13 @@ const Answer: React.FC<IAnswer> = props => {
 					</div>
 				)}
 			</div>
+
+			{isMyQuestion && props.isBestAnswerAllowed && (
+				<Button variant='ghost' onClick={handleBestAnswer}>
+					Лучший ответ
+					<Star className='ml-1 w-4 h-4' />
+				</Button>
+			)}
 
 			{!isEdit && (
 				<div

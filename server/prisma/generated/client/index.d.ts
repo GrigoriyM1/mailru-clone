@@ -270,8 +270,8 @@ export namespace Prisma {
   export import Exact = $Public.Exact
 
   /**
-   * Prisma Client JS version: 5.20.0
-   * Query Engine version: 06fc58a368dc7be9fbbbe894adf8d445d208c284
+   * Prisma Client JS version: 5.21.0
+   * Query Engine version: 08713a93b99d58f31485621c634b04983ae01d95
    */
   export type PrismaVersion = {
     client: string
@@ -1348,8 +1348,18 @@ export namespace Prisma {
 
   export type AggregateUser = {
     _count: UserCountAggregateOutputType | null
+    _avg: UserAvgAggregateOutputType | null
+    _sum: UserSumAggregateOutputType | null
     _min: UserMinAggregateOutputType | null
     _max: UserMaxAggregateOutputType | null
+  }
+
+  export type UserAvgAggregateOutputType = {
+    points: number | null
+  }
+
+  export type UserSumAggregateOutputType = {
+    points: number | null
   }
 
   export type UserMinAggregateOutputType = {
@@ -1365,6 +1375,9 @@ export namespace Prisma {
     phone: string | null
     birthdate: string | null
     gender: string | null
+    points: number | null
+    level: string | null
+    description: string | null
   }
 
   export type UserMaxAggregateOutputType = {
@@ -1380,6 +1393,9 @@ export namespace Prisma {
     phone: string | null
     birthdate: string | null
     gender: string | null
+    points: number | null
+    level: string | null
+    description: string | null
   }
 
   export type UserCountAggregateOutputType = {
@@ -1395,9 +1411,20 @@ export namespace Prisma {
     phone: number
     birthdate: number
     gender: number
+    points: number
+    level: number
+    description: number
     _all: number
   }
 
+
+  export type UserAvgAggregateInputType = {
+    points?: true
+  }
+
+  export type UserSumAggregateInputType = {
+    points?: true
+  }
 
   export type UserMinAggregateInputType = {
     id?: true
@@ -1412,6 +1439,9 @@ export namespace Prisma {
     phone?: true
     birthdate?: true
     gender?: true
+    points?: true
+    level?: true
+    description?: true
   }
 
   export type UserMaxAggregateInputType = {
@@ -1427,6 +1457,9 @@ export namespace Prisma {
     phone?: true
     birthdate?: true
     gender?: true
+    points?: true
+    level?: true
+    description?: true
   }
 
   export type UserCountAggregateInputType = {
@@ -1442,6 +1475,9 @@ export namespace Prisma {
     phone?: true
     birthdate?: true
     gender?: true
+    points?: true
+    level?: true
+    description?: true
     _all?: true
   }
 
@@ -1483,6 +1519,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: UserAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: UserSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: UserMinAggregateInputType
@@ -1513,6 +1561,8 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: UserCountAggregateInputType | true
+    _avg?: UserAvgAggregateInputType
+    _sum?: UserSumAggregateInputType
     _min?: UserMinAggregateInputType
     _max?: UserMaxAggregateInputType
   }
@@ -1530,7 +1580,12 @@ export namespace Prisma {
     phone: string
     birthdate: string
     gender: string
+    points: number | null
+    level: string | null
+    description: string | null
     _count: UserCountAggregateOutputType | null
+    _avg: UserAvgAggregateOutputType | null
+    _sum: UserSumAggregateOutputType | null
     _min: UserMinAggregateOutputType | null
     _max: UserMaxAggregateOutputType | null
   }
@@ -1562,6 +1617,9 @@ export namespace Prisma {
     phone?: boolean
     birthdate?: boolean
     gender?: boolean
+    points?: boolean
+    level?: boolean
+    description?: boolean
     questions?: boolean | User$questionsArgs<ExtArgs>
     likedQuestions?: boolean | User$likedQuestionsArgs<ExtArgs>
     answers?: boolean | User$answersArgs<ExtArgs>
@@ -1583,6 +1641,9 @@ export namespace Prisma {
     phone?: boolean
     birthdate?: boolean
     gender?: boolean
+    points?: boolean
+    level?: boolean
+    description?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectScalar = {
@@ -1598,6 +1659,9 @@ export namespace Prisma {
     phone?: boolean
     birthdate?: boolean
     gender?: boolean
+    points?: boolean
+    level?: boolean
+    description?: boolean
   }
 
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -1632,6 +1696,9 @@ export namespace Prisma {
       phone: string
       birthdate: string
       gender: string
+      points: number | null
+      level: string | null
+      description: string | null
     }, ExtArgs["result"]["user"]>
     composites: {}
   }
@@ -2042,6 +2109,9 @@ export namespace Prisma {
     readonly phone: FieldRef<"User", 'String'>
     readonly birthdate: FieldRef<"User", 'String'>
     readonly gender: FieldRef<"User", 'String'>
+    readonly points: FieldRef<"User", 'Int'>
+    readonly level: FieldRef<"User", 'String'>
+    readonly description: FieldRef<"User", 'String'>
   }
     
 
@@ -6573,7 +6643,10 @@ export namespace Prisma {
     avatar: 'avatar',
     phone: 'phone',
     birthdate: 'birthdate',
-    gender: 'gender'
+    gender: 'gender',
+    points: 'points',
+    level: 'level',
+    description: 'description'
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -6742,6 +6815,9 @@ export namespace Prisma {
     phone?: StringFilter<"User"> | string
     birthdate?: StringFilter<"User"> | string
     gender?: StringFilter<"User"> | string
+    points?: IntNullableFilter<"User"> | number | null
+    level?: StringNullableFilter<"User"> | string | null
+    description?: StringNullableFilter<"User"> | string | null
     questions?: QuestionListRelationFilter
     likedQuestions?: QuestionListRelationFilter
     answers?: AnswerListRelationFilter
@@ -6762,6 +6838,9 @@ export namespace Prisma {
     phone?: SortOrder
     birthdate?: SortOrder
     gender?: SortOrder
+    points?: SortOrderInput | SortOrder
+    level?: SortOrderInput | SortOrder
+    description?: SortOrderInput | SortOrder
     questions?: QuestionOrderByRelationAggregateInput
     likedQuestions?: QuestionOrderByRelationAggregateInput
     answers?: AnswerOrderByRelationAggregateInput
@@ -6785,6 +6864,9 @@ export namespace Prisma {
     phone?: StringFilter<"User"> | string
     birthdate?: StringFilter<"User"> | string
     gender?: StringFilter<"User"> | string
+    points?: IntNullableFilter<"User"> | number | null
+    level?: StringNullableFilter<"User"> | string | null
+    description?: StringNullableFilter<"User"> | string | null
     questions?: QuestionListRelationFilter
     likedQuestions?: QuestionListRelationFilter
     answers?: AnswerListRelationFilter
@@ -6805,9 +6887,14 @@ export namespace Prisma {
     phone?: SortOrder
     birthdate?: SortOrder
     gender?: SortOrder
+    points?: SortOrderInput | SortOrder
+    level?: SortOrderInput | SortOrder
+    description?: SortOrderInput | SortOrder
     _count?: UserCountOrderByAggregateInput
+    _avg?: UserAvgOrderByAggregateInput
     _max?: UserMaxOrderByAggregateInput
     _min?: UserMinOrderByAggregateInput
+    _sum?: UserSumOrderByAggregateInput
   }
 
   export type UserScalarWhereWithAggregatesInput = {
@@ -6826,6 +6913,9 @@ export namespace Prisma {
     phone?: StringWithAggregatesFilter<"User"> | string
     birthdate?: StringWithAggregatesFilter<"User"> | string
     gender?: StringWithAggregatesFilter<"User"> | string
+    points?: IntNullableWithAggregatesFilter<"User"> | number | null
+    level?: StringNullableWithAggregatesFilter<"User"> | string | null
+    description?: StringNullableWithAggregatesFilter<"User"> | string | null
   }
 
   export type QuestionWhereInput = {
@@ -7127,6 +7217,9 @@ export namespace Prisma {
     phone: string
     birthdate: string
     gender: string
+    points?: number | null
+    level?: string | null
+    description?: string | null
     questions?: QuestionCreateNestedManyWithoutUserInput
     likedQuestions?: QuestionCreateNestedManyWithoutLikedByInput
     answers?: AnswerCreateNestedManyWithoutUserInput
@@ -7147,6 +7240,9 @@ export namespace Prisma {
     phone: string
     birthdate: string
     gender: string
+    points?: number | null
+    level?: string | null
+    description?: string | null
     questions?: QuestionUncheckedCreateNestedManyWithoutUserInput
     likedQuestions?: QuestionUncheckedCreateNestedManyWithoutLikedByInput
     answers?: AnswerUncheckedCreateNestedManyWithoutUserInput
@@ -7167,6 +7263,9 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     birthdate?: StringFieldUpdateOperationsInput | string
     gender?: StringFieldUpdateOperationsInput | string
+    points?: NullableIntFieldUpdateOperationsInput | number | null
+    level?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     questions?: QuestionUpdateManyWithoutUserNestedInput
     likedQuestions?: QuestionUpdateManyWithoutLikedByNestedInput
     answers?: AnswerUpdateManyWithoutUserNestedInput
@@ -7187,6 +7286,9 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     birthdate?: StringFieldUpdateOperationsInput | string
     gender?: StringFieldUpdateOperationsInput | string
+    points?: NullableIntFieldUpdateOperationsInput | number | null
+    level?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     questions?: QuestionUncheckedUpdateManyWithoutUserNestedInput
     likedQuestions?: QuestionUncheckedUpdateManyWithoutLikedByNestedInput
     answers?: AnswerUncheckedUpdateManyWithoutUserNestedInput
@@ -7207,6 +7309,9 @@ export namespace Prisma {
     phone: string
     birthdate: string
     gender: string
+    points?: number | null
+    level?: string | null
+    description?: string | null
   }
 
   export type UserUpdateManyMutationInput = {
@@ -7222,6 +7327,9 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     birthdate?: StringFieldUpdateOperationsInput | string
     gender?: StringFieldUpdateOperationsInput | string
+    points?: NullableIntFieldUpdateOperationsInput | number | null
+    level?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type UserUncheckedUpdateManyInput = {
@@ -7237,6 +7345,9 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     birthdate?: StringFieldUpdateOperationsInput | string
     gender?: StringFieldUpdateOperationsInput | string
+    points?: NullableIntFieldUpdateOperationsInput | number | null
+    level?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type QuestionCreateInput = {
@@ -7574,6 +7685,17 @@ export namespace Prisma {
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
+  export type IntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
   export type QuestionListRelationFilter = {
     every?: QuestionWhereInput
     some?: QuestionWhereInput
@@ -7622,6 +7744,13 @@ export namespace Prisma {
     phone?: SortOrder
     birthdate?: SortOrder
     gender?: SortOrder
+    points?: SortOrder
+    level?: SortOrder
+    description?: SortOrder
+  }
+
+  export type UserAvgOrderByAggregateInput = {
+    points?: SortOrder
   }
 
   export type UserMaxOrderByAggregateInput = {
@@ -7637,6 +7766,9 @@ export namespace Prisma {
     phone?: SortOrder
     birthdate?: SortOrder
     gender?: SortOrder
+    points?: SortOrder
+    level?: SortOrder
+    description?: SortOrder
   }
 
   export type UserMinOrderByAggregateInput = {
@@ -7652,6 +7784,13 @@ export namespace Prisma {
     phone?: SortOrder
     birthdate?: SortOrder
     gender?: SortOrder
+    points?: SortOrder
+    level?: SortOrder
+    description?: SortOrder
+  }
+
+  export type UserSumOrderByAggregateInput = {
+    points?: SortOrder
   }
 
   export type StringWithAggregatesFilter<$PrismaModel = never> = {
@@ -7704,7 +7843,7 @@ export namespace Prisma {
     _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
-  export type IntNullableFilter<$PrismaModel = never> = {
+  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel> | null
     in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
     notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
@@ -7712,7 +7851,12 @@ export namespace Prisma {
     lte?: number | IntFieldRefInput<$PrismaModel>
     gt?: number | IntFieldRefInput<$PrismaModel>
     gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
   export type BoolNullableFilter<$PrismaModel = never> = {
@@ -7790,22 +7934,6 @@ export namespace Prisma {
 
   export type QuestionSumOrderByAggregateInput = {
     likes?: SortOrder
-  }
-
-  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedIntNullableFilter<$PrismaModel>
-    _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
   export type BoolNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -8008,6 +8136,14 @@ export namespace Prisma {
     set?: string | null
   }
 
+  export type NullableIntFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
   export type QuestionUpdateManyWithoutUserNestedInput = {
     create?: XOR<QuestionCreateWithoutUserInput, QuestionUncheckedCreateWithoutUserInput> | QuestionCreateWithoutUserInput[] | QuestionUncheckedCreateWithoutUserInput[]
     connectOrCreate?: QuestionCreateOrConnectWithoutUserInput | QuestionCreateOrConnectWithoutUserInput[]
@@ -8188,14 +8324,6 @@ export namespace Prisma {
     connectOrCreate?: AnswerCreateOrConnectWithoutQuestionInput | AnswerCreateOrConnectWithoutQuestionInput[]
     createMany?: AnswerCreateManyQuestionInputEnvelope
     connect?: AnswerWhereUniqueInput | AnswerWhereUniqueInput[]
-  }
-
-  export type NullableIntFieldUpdateOperationsInput = {
-    set?: number | null
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
   }
 
   export type NullableBoolFieldUpdateOperationsInput = {
@@ -8487,6 +8615,17 @@ export namespace Prisma {
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
+  export type NestedIntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
   export type NestedStringWithAggregatesFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -8546,22 +8685,6 @@ export namespace Prisma {
     _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
-  export type NestedIntNullableFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
-  }
-
-  export type NestedBoolNullableFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
-    not?: NestedBoolNullableFilter<$PrismaModel> | boolean | null
-  }
-
   export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel> | null
     in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
@@ -8587,6 +8710,11 @@ export namespace Prisma {
     gt?: number | FloatFieldRefInput<$PrismaModel>
     gte?: number | FloatFieldRefInput<$PrismaModel>
     not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type NestedBoolNullableFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
+    not?: NestedBoolNullableFilter<$PrismaModel> | boolean | null
   }
 
   export type NestedBoolNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -8896,6 +9024,9 @@ export namespace Prisma {
     phone: string
     birthdate: string
     gender: string
+    points?: number | null
+    level?: string | null
+    description?: string | null
     questions?: QuestionCreateNestedManyWithoutUserInput
     answers?: AnswerCreateNestedManyWithoutUserInput
     likedAnswers?: AnswerCreateNestedManyWithoutLikedByInput
@@ -8915,6 +9046,9 @@ export namespace Prisma {
     phone: string
     birthdate: string
     gender: string
+    points?: number | null
+    level?: string | null
+    description?: string | null
     questions?: QuestionUncheckedCreateNestedManyWithoutUserInput
     answers?: AnswerUncheckedCreateNestedManyWithoutUserInput
     likedAnswers?: AnswerUncheckedCreateNestedManyWithoutLikedByInput
@@ -8995,6 +9129,9 @@ export namespace Prisma {
     phone: string
     birthdate: string
     gender: string
+    points?: number | null
+    level?: string | null
+    description?: string | null
     likedQuestions?: QuestionCreateNestedManyWithoutLikedByInput
     answers?: AnswerCreateNestedManyWithoutUserInput
     likedAnswers?: AnswerCreateNestedManyWithoutLikedByInput
@@ -9014,6 +9151,9 @@ export namespace Prisma {
     phone: string
     birthdate: string
     gender: string
+    points?: number | null
+    level?: string | null
+    description?: string | null
     likedQuestions?: QuestionUncheckedCreateNestedManyWithoutLikedByInput
     answers?: AnswerUncheckedCreateNestedManyWithoutUserInput
     likedAnswers?: AnswerUncheckedCreateNestedManyWithoutLikedByInput
@@ -9057,6 +9197,9 @@ export namespace Prisma {
     phone?: StringFilter<"User"> | string
     birthdate?: StringFilter<"User"> | string
     gender?: StringFilter<"User"> | string
+    points?: IntNullableFilter<"User"> | number | null
+    level?: StringNullableFilter<"User"> | string | null
+    description?: StringNullableFilter<"User"> | string | null
   }
 
   export type AdditionalUpsertWithWhereUniqueWithoutQuestionInput = {
@@ -9125,6 +9268,9 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     birthdate?: StringFieldUpdateOperationsInput | string
     gender?: StringFieldUpdateOperationsInput | string
+    points?: NullableIntFieldUpdateOperationsInput | number | null
+    level?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     likedQuestions?: QuestionUpdateManyWithoutLikedByNestedInput
     answers?: AnswerUpdateManyWithoutUserNestedInput
     likedAnswers?: AnswerUpdateManyWithoutLikedByNestedInput
@@ -9144,6 +9290,9 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     birthdate?: StringFieldUpdateOperationsInput | string
     gender?: StringFieldUpdateOperationsInput | string
+    points?: NullableIntFieldUpdateOperationsInput | number | null
+    level?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     likedQuestions?: QuestionUncheckedUpdateManyWithoutLikedByNestedInput
     answers?: AnswerUncheckedUpdateManyWithoutUserNestedInput
     likedAnswers?: AnswerUncheckedUpdateManyWithoutLikedByNestedInput
@@ -9274,6 +9423,9 @@ export namespace Prisma {
     phone: string
     birthdate: string
     gender: string
+    points?: number | null
+    level?: string | null
+    description?: string | null
     questions?: QuestionCreateNestedManyWithoutUserInput
     likedQuestions?: QuestionCreateNestedManyWithoutLikedByInput
     likedAnswers?: AnswerCreateNestedManyWithoutLikedByInput
@@ -9293,6 +9445,9 @@ export namespace Prisma {
     phone: string
     birthdate: string
     gender: string
+    points?: number | null
+    level?: string | null
+    description?: string | null
     questions?: QuestionUncheckedCreateNestedManyWithoutUserInput
     likedQuestions?: QuestionUncheckedCreateNestedManyWithoutLikedByInput
     likedAnswers?: AnswerUncheckedCreateNestedManyWithoutLikedByInput
@@ -9317,6 +9472,9 @@ export namespace Prisma {
     phone: string
     birthdate: string
     gender: string
+    points?: number | null
+    level?: string | null
+    description?: string | null
     questions?: QuestionCreateNestedManyWithoutUserInput
     likedQuestions?: QuestionCreateNestedManyWithoutLikedByInput
     answers?: AnswerCreateNestedManyWithoutUserInput
@@ -9336,6 +9494,9 @@ export namespace Prisma {
     phone: string
     birthdate: string
     gender: string
+    points?: number | null
+    level?: string | null
+    description?: string | null
     questions?: QuestionUncheckedCreateNestedManyWithoutUserInput
     likedQuestions?: QuestionUncheckedCreateNestedManyWithoutLikedByInput
     answers?: AnswerUncheckedCreateNestedManyWithoutUserInput
@@ -9438,6 +9599,9 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     birthdate?: StringFieldUpdateOperationsInput | string
     gender?: StringFieldUpdateOperationsInput | string
+    points?: NullableIntFieldUpdateOperationsInput | number | null
+    level?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     questions?: QuestionUpdateManyWithoutUserNestedInput
     likedQuestions?: QuestionUpdateManyWithoutLikedByNestedInput
     likedAnswers?: AnswerUpdateManyWithoutLikedByNestedInput
@@ -9457,6 +9621,9 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     birthdate?: StringFieldUpdateOperationsInput | string
     gender?: StringFieldUpdateOperationsInput | string
+    points?: NullableIntFieldUpdateOperationsInput | number | null
+    level?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     questions?: QuestionUncheckedUpdateManyWithoutUserNestedInput
     likedQuestions?: QuestionUncheckedUpdateManyWithoutLikedByNestedInput
     likedAnswers?: AnswerUncheckedUpdateManyWithoutLikedByNestedInput
@@ -9508,6 +9675,9 @@ export namespace Prisma {
     phone: string
     birthdate: string
     gender: string
+    points?: number | null
+    level?: string | null
+    description?: string | null
     questions?: QuestionCreateNestedManyWithoutUserInput
     likedQuestions?: QuestionCreateNestedManyWithoutLikedByInput
     answers?: AnswerCreateNestedManyWithoutUserInput
@@ -9527,6 +9697,9 @@ export namespace Prisma {
     phone: string
     birthdate: string
     gender: string
+    points?: number | null
+    level?: string | null
+    description?: string | null
     questions?: QuestionUncheckedCreateNestedManyWithoutUserInput
     likedQuestions?: QuestionUncheckedCreateNestedManyWithoutLikedByInput
     answers?: AnswerUncheckedCreateNestedManyWithoutUserInput
@@ -9591,6 +9764,9 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     birthdate?: StringFieldUpdateOperationsInput | string
     gender?: StringFieldUpdateOperationsInput | string
+    points?: NullableIntFieldUpdateOperationsInput | number | null
+    level?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     questions?: QuestionUpdateManyWithoutUserNestedInput
     likedQuestions?: QuestionUpdateManyWithoutLikedByNestedInput
     answers?: AnswerUpdateManyWithoutUserNestedInput
@@ -9610,6 +9786,9 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     birthdate?: StringFieldUpdateOperationsInput | string
     gender?: StringFieldUpdateOperationsInput | string
+    points?: NullableIntFieldUpdateOperationsInput | number | null
+    level?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     questions?: QuestionUncheckedUpdateManyWithoutUserNestedInput
     likedQuestions?: QuestionUncheckedUpdateManyWithoutLikedByNestedInput
     answers?: AnswerUncheckedUpdateManyWithoutUserNestedInput
@@ -9888,6 +10067,9 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     birthdate?: StringFieldUpdateOperationsInput | string
     gender?: StringFieldUpdateOperationsInput | string
+    points?: NullableIntFieldUpdateOperationsInput | number | null
+    level?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     questions?: QuestionUpdateManyWithoutUserNestedInput
     answers?: AnswerUpdateManyWithoutUserNestedInput
     likedAnswers?: AnswerUpdateManyWithoutLikedByNestedInput
@@ -9907,6 +10089,9 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     birthdate?: StringFieldUpdateOperationsInput | string
     gender?: StringFieldUpdateOperationsInput | string
+    points?: NullableIntFieldUpdateOperationsInput | number | null
+    level?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     questions?: QuestionUncheckedUpdateManyWithoutUserNestedInput
     answers?: AnswerUncheckedUpdateManyWithoutUserNestedInput
     likedAnswers?: AnswerUncheckedUpdateManyWithoutLikedByNestedInput
@@ -9926,6 +10111,9 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     birthdate?: StringFieldUpdateOperationsInput | string
     gender?: StringFieldUpdateOperationsInput | string
+    points?: NullableIntFieldUpdateOperationsInput | number | null
+    level?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type AdditionalUpdateWithoutQuestionInput = {
@@ -10001,6 +10189,9 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     birthdate?: StringFieldUpdateOperationsInput | string
     gender?: StringFieldUpdateOperationsInput | string
+    points?: NullableIntFieldUpdateOperationsInput | number | null
+    level?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     questions?: QuestionUpdateManyWithoutUserNestedInput
     likedQuestions?: QuestionUpdateManyWithoutLikedByNestedInput
     answers?: AnswerUpdateManyWithoutUserNestedInput
@@ -10020,6 +10211,9 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     birthdate?: StringFieldUpdateOperationsInput | string
     gender?: StringFieldUpdateOperationsInput | string
+    points?: NullableIntFieldUpdateOperationsInput | number | null
+    level?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     questions?: QuestionUncheckedUpdateManyWithoutUserNestedInput
     likedQuestions?: QuestionUncheckedUpdateManyWithoutLikedByNestedInput
     answers?: AnswerUncheckedUpdateManyWithoutUserNestedInput
@@ -10039,6 +10233,9 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     birthdate?: StringFieldUpdateOperationsInput | string
     gender?: StringFieldUpdateOperationsInput | string
+    points?: NullableIntFieldUpdateOperationsInput | number | null
+    level?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type CommentUpdateWithoutAnswerInput = {

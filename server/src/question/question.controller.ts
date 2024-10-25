@@ -12,12 +12,13 @@ export class QuestionController {
   @Auth()
   @Get()
   async getAll(
+    @Query('category') category: string, 
     @Query('skip') skip: string = '0', 
     @Query('take') take: string = '20',
-    @Query('skipAnswer') skipAnswer: string = '0', 
+    @Query('skipAnswer') skipAnswer: string = '0',
     @Query('takeAnswer') takeAnswer: string = '20',
   ) {
-    return this.questionService.getAll(Number(skip), Number(take), Number(skipAnswer), Number(takeAnswer));
+    return this.questionService.getAll(category, Number(skip), Number(take), Number(skipAnswer), Number(takeAnswer));
   }
 
   @Auth()
@@ -84,9 +85,21 @@ export class QuestionController {
   @Auth()
   @Get('leaders')
   async getLeaders(
+    @Query('category') category: string | undefined,
     @Query('skip') skip: string = '0',
     @Query('take') take: string = '20',
   ) {
-    return this.questionService.getLeaders(Number(skip), Number(take))
+    return this.questionService.getLeaders(category, Number(skip), Number(take))
+  }
+
+  @Auth()
+  @Get('user/:userId/:category')
+  async getFromUser(
+    @Param('userId') userId: string,
+    @Param('category') category: string,
+    @Query('skip') skip: string = '0',
+    @Query('take') take: string = '20',
+  ) {
+    return this.questionService.getFromUser(userId, category, Number(skip), Number(take))
   }
 }

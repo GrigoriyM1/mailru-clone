@@ -29,7 +29,6 @@ const AddAnswer = () => {
 		mutationFn: () =>
 			answerService.create({ text }, questionData?.id as string),
 		onSuccess() {
-			// console.log('data  ', data);
 			queryClient.invalidateQueries({ queryKey: [`get-one-question`] });
 		},
 	});

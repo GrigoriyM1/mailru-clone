@@ -11,10 +11,21 @@ export class QuestionService {
 
   constructor(
     private prisma: PrismaService,
-  ) {}
+  ) { }
 
-  async getAll(skip: number, take: number, skipAnswer: number, takeAnswer: number) { 
+
+  async getAll(category: string, skip: number, take: number, skipAnswer: number, takeAnswer: number) {
+    const whereClause: any = {};
+
+    if (category && category !== 'best' && category !== 'open') {
+      whereClause.OR = [
+        { category: category },
+        { subcategory: category }
+      ];
+    }
+
     return this.prisma.question.findMany({
+      where: whereClause,
       skip,
       take,
       include: {
@@ -28,14 +39,14 @@ export class QuestionService {
             name: true,
             lastName: true,
             avatar: true,
-          }
+          },
         },
       },
-      orderBy: {
-        createdAt: 'desc',
-      },
+      orderBy: category === 'best' ? { likes: 'desc' } : { createdAt: 'desc' },
     });
   }
+
+
 
   async getOne(id: string, skipAnswer: number, takeAnswer: number) {
     return this.prisma.question.findUnique({
@@ -56,13 +67,13 @@ export class QuestionService {
           skip: skipAnswer,
           take: takeAnswer,
           select: {
-            createdAt: true, 
-            id: true, 
-            isBestAnswer: true, 
-            likes: true, 
-            questionId: true, 
-            text: true, 
-            updatedAt: true, 
+            createdAt: true,
+            id: true,
+            isBestAnswer: true,
+            likes: true,
+            questionId: true,
+            text: true,
+            updatedAt: true,
             user: {
               select: {
                 id: true,
@@ -70,7 +81,7 @@ export class QuestionService {
                 lastName: true,
                 avatar: true,
               }
-            }, 
+            },
             userId: true,
             likedBy: {
               select: {
@@ -111,19 +122,19 @@ export class QuestionService {
   }
 
   async create(dto: QuestionDto, userId: string) {
-		return this.prisma.question.create({
-			data: {
-				themeText: dto.themeText.trim(),
+    return this.prisma.question.create({
+      data: {
+        themeText: dto.themeText.trim(),
         text: dto.text.trim(),
         category: dto.category.trim(),
         subcategory: dto.subcategory.trim(),
-				user: {
-					connect: {
-						id: userId,
-					},
-				},
-			},
-		});
+        user: {
+          connect: {
+            id: userId,
+          },
+        },
+      },
+    });
   }
 
   async update(dto: Partial<QuestionDto>, questionId: string, userId: string) {
@@ -213,7 +224,7 @@ export class QuestionService {
       where: { id: questionId },
       data: {
         additionals: {
-          create: { 
+          create: {
             text: dto.additional.trim(),
           },
         },
@@ -222,17 +233,29 @@ export class QuestionService {
         additionals: true,
       }
     });
-}
+  }
 
 
   async getCategories() {
     return CATEGORIES
   }
 
-  async getLeaders(skip: number, take: number) {
+  async getLeaders(category: string | undefined, skip: number, take: number) {
+    console.log('FETCH ', category)
+    let orCase: any = {}
+    if (category) {
+      orCase = {
+        OR: [
+          { subcategory: category },
+          { category: category }
+        ]
+      }
+    }
+
     return this.prisma.question.findMany({
       where: {
         isLeader: true,
+        ...orCase
       },
       include: {
         user: {
@@ -242,10 +265,77 @@ export class QuestionService {
             lastName: true,
             avatar: true,
           }
-        }
+        },
+        answers: true,
       },
       skip,
       take
     })
+  }
+
+  async getFromUser(userId: string, category: string, skip: number, take: number) {
+    let whereClause: any = {};
+    
+    if (category === 'resolve') whereClause = {
+      userId,
+      answers: {
+        some: {
+          isBestAnswer: true,
+        }
+      }
+    }
+    console.log('YES RESOLVE   ', category)
+    if (!Object.keys(whereClause).length) whereClause = {
+      userId,
+    }
+    console.log('TEST  ', whereClause, skip, take)
+    // todo: ТУТ ОСТАНОВИЛСЯ SKIP TAKE БАГ НА ФРОНТЕ И ТУТ 
+    
+    const [questions, questionsLength, answersLength, resolveQuestionsLength] = await Promise.all([
+      this.prisma.question.findMany({
+        where: whereClause,
+        include: {
+          user: {
+            select: {
+              id: true,
+              name: true,
+              lastName: true,
+              avatar: true,
+            },
+          },
+        },
+        skip,
+        take,
+      }),
+      this.prisma.question.count({
+        where: {
+          userId
+        },
+      }),
+      this.prisma.answer.count({
+        where: {
+          userId,
+        },
+      }),
+      this.prisma.question.count({
+        where: {
+          userId,
+          answers: {
+            some: {
+              isBestAnswer: true,
+            },
+          },
+        },
+      })
+    ]);
+
+    // Возвращаем результаты
+    return {
+      questions,
+      questionsLength,
+      answersLength,
+      resolveQuestionsLength,
+    };
+    
   }
 }

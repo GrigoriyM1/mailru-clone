@@ -25,6 +25,10 @@ model User {
   birthdate String
   gender    String
 
+  points Int?    @default(0)
+  level  String? @default("Ученик")
+  description String?
+
   questions      Question[]
   likedQuestions Question[] @relation("LikedQuestions")
   answers        Answer[]

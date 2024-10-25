@@ -1,32 +1,64 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import Question from './Question';
 import { questionsService } from '@/services/questions.service';
 import QuestionSkeleton from './QuestionSkeleton';
-import { useUserStore } from '@/store/use-user-store';
+import { useEffect, useState } from 'react';
+import { MoveDown } from 'lucide-react';
+import { Spinner } from '@/components/ui/spinner';
+import { IQuestion } from '@/types/questions.types'; // Adjust the import path as necessary
+import { useParams } from 'next/navigation';
 
 const Questions = () => {
-	const { user } = useUserStore();
+	const { category } = useParams();
 
-	const { data: questions, isPending } = useQuery({
-		queryKey: ['questions'],
-		queryFn: () => {
-			return questionsService.getAll();
-		},
+	const [skip, setSkip] = useState(0);
+	const take = 20;
+
+	// const queryClient = useQueryClient();
+
+	const {
+		data = [],
+		isPending,
+	} = useQuery({
+		queryKey: ['questions', category, skip], // TODO: убрать из querykey в state
+		queryFn: () =>
+			category === 'smstop'
+				? questionsService.getLeaders({})
+				: questionsService.getAll(category as string | undefined, skip, take),
+		refetchOnWindowFocus: true,
 	});
-	// console.log('questions  ', questions);
+	const [questions, setQuestions] = useState<IQuestion[]>([]);
+
+	const handleShowMore = () => {
+		setSkip(prevSkip => prevSkip + take);
+	};
+
+	useEffect(() => {
+		// Проверяем, что в новых данных есть вопросы и что они не дублируются
+		if (data.length > 0) {
+			const settedQuestionsData = data
+				.map(item => {
+					if (questions.find(i => i.id === item.id)) {
+						return;
+					}
+					return item;
+				})
+				.filter(item => item !== undefined);
+			setQuestions([...questions, ...settedQuestionsData]);
+		}
+	}, [data]);
 
 	return (
 		<div>
 			{isPending ? (
 				<QuestionSkeleton />
 			) : (
-				questions
-					// ?.filter(q => q?.user?.id !== user?.id)    TODO: ПОТОМ ЭТО ВЕРНУТЬ
-					?.map(question => (
+				<div>
+					{questions.map(question => (
 						<Question
 							key={question.id}
 							id={question.id}
-							category={question.category}
+							category={question.subcategory}
 							createdAt={question.createdAt}
 							userAvatar={question.user.avatar}
 							theme={question.themeText}
@@ -34,8 +66,32 @@ const Questions = () => {
 							userName={question.user.name}
 							userLastName={question.user.lastName}
 							repliesCount={question.answers.length}
+							isCategory={
+								category === 'open' || category === 'best' || !category
+							}
+							likes={question.likes}
 						/>
-					))
+					))}
+
+					{/* исправить ошибку при добавлении */}
+					{(data.length === take || isPending) && (
+						<button
+							className='w-full flex items-center justify-center gap-2 text-[17px] p-6 hover:cursor-pointer hover:underline'
+							onClick={handleShowMore}
+							disabled={isPending}
+						>
+							{isPending ? (
+								<>
+									<Spinner size='small' /> Загружаем...
+								</>
+							) : (
+								<>
+									<MoveDown size={14} /> Показать еще{' '}
+								</>
+							)}
+						</button>
+					)}
+				</div>
 			)}
 		</div>
 	);

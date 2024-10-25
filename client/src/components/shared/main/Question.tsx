@@ -7,12 +7,14 @@ import {
 import {
 	CircleAlert,
 	EllipsisVertical,
+	Heart,
 	MessageSquareMore,
 	Star,
 } from 'lucide-react';
 import Link from 'next/link';
 import { formatCreatedAt } from '@/lib/format-created-at';
 import Avatar from '@/components/modules/Avatar';
+import { useParams } from 'next/navigation';
 
 interface IQuestionProps {
 	id: string;
@@ -24,6 +26,8 @@ interface IQuestionProps {
 	userLastName: string;
 	category: string;
 	repliesCount: number;
+	isCategory?: boolean;
+	likes: number;
 }
 
 const Question: React.FC<IQuestionProps> = ({
@@ -36,7 +40,15 @@ const Question: React.FC<IQuestionProps> = ({
 	userLastName,
 	repliesCount,
 	userId,
+	isCategory,
+	likes,
 }) => {
+	const { category: categoryParams, type } = useParams();
+
+	const isBest = categoryParams === 'best' || type === 'best';
+
+	console.log('isBest  ', isBest);
+
 	return (
 		<div
 			className='py-6 px-9 flex justify-between'
@@ -68,15 +80,20 @@ const Question: React.FC<IQuestionProps> = ({
 								{/* TODO: ПОЛУЧАТЬ ССЫЛКУ НА ПРОФИЛЬ ПО ID ЮЗЕРА */}
 								{userName} {userLastName}
 							</Link>
-							,<div>{formatCreatedAt(createdAt)}</div>,
-							<div>
-								в "
-								<Link href='/illness' className='hover:underline'>
-									{category}
-									{/* TODO: ОТФОРМАТИРОВАННЫЕ КАТЕГОРИИ */}
-								</Link>
-								"
-							</div>
+							,<div>{formatCreatedAt(createdAt)}</div>
+							{isCategory && (
+								<div>
+									, в "
+									<Link
+										href={`/category/${category}`}
+										className='hover:underline'
+									>
+										{category}
+										{/* TODO: ОТФОРМАТИРОВАННЫЕ КАТЕГОРИИ */}
+									</Link>
+									"
+								</div>
+							)}
 						</div>
 
 						<Link
@@ -86,6 +103,13 @@ const Question: React.FC<IQuestionProps> = ({
 							<MessageSquareMore className='text-gray-400 w-5 h-5' />
 							{repliesCount} Ответов
 						</Link>
+						{isBest && (
+							<div className='text-gray-600 text-[13px] flex items-center gap-2 ml-4'>
+								<Heart className='text-gray-400 w-5 h-5' />
+								{likes} Нравится
+								{/* ДЕЛАТЬ РЕФЕТЧ ВОПРОСОВ ВСЕХ ПОСЛЕ ЛАЙКА */}
+							</div>
+						)}
 					</div>
 				</div>
 			</div>

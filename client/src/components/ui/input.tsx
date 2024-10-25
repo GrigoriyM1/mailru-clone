@@ -38,6 +38,7 @@ export interface InputProps
 	size?: InputVariantProps['size'];
 	error?: boolean;
 	helperText?: string;
+	divProps?: React.HTMLAttributes<HTMLDivElement>;
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
@@ -51,6 +52,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 			size,
 			error,
 			helperText,
+			divProps,
 			...props
 		},
 		ref
@@ -62,7 +64,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 		};
 
 		return (
-			<div className='w-full'>
+			<div className='w-full' {...divProps}>
 				{label && (
 					<Label
 						{...labelProps}

@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
 import cn from 'clsx';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { questionsService } from '@/services/questions.service';
 import { Spinner } from '@/components/ui/spinner';
 import { Controller, useForm, useWatch } from 'react-hook-form';
@@ -42,6 +42,8 @@ const Question = () => {
 	const [isThemeError, setIsThemeError] = useState(false);
 	const [isTextError, setIsTextError] = useState(false);
 
+	const queryClient = useQueryClient();
+
 	const { data: categories, isPending } = useQuery({
 		queryKey: ['categories'],
 		queryFn: () => {
@@ -54,13 +56,13 @@ const Question = () => {
 		mutationFn: (data: IQuestionForm) => questionsService.create(data),
 		onSuccess(data) {
 			push(`/question/${data?.id}`);
+			queryClient.invalidateQueries({ queryKey: ['questions'] });
 		},
 	});
 
 	const onSubmit = (data: IQuestionForm) => {
 		setIsLoading(true);
 		mutate(data);
-		console.log('data  ', createdQuestion);
 	};
 
 	const handleInputsChange = (type: keyof IQuestionForm, e: any) => {
@@ -207,6 +209,7 @@ const Question = () => {
 							isTextError
 						}
 						isLoading={isLoading}
+						type='submit'
 					>
 						Опубликовать вопрос
 					</Button>
