@@ -10,27 +10,6 @@ export class AnswerService {
     private prisma: PrismaService,
   ) {}
 
-  // async getAll(questionId: string, skip: number, take: number) {  
-  //   return this.prisma.question.findMany({
-  //     skip,
-  //     take, 
-  //     where: {
-  //       id: questionId,
-  //     },
-  //     select: {
-  //       answers: true,
-  //       user: {
-  //         select: {
-  //           id: true,
-  //           name: true,
-  //           lastName: true,
-  //           avatar: true,
-  //         }
-  //       }
-  //     }
-  //   });
-  // }
-
   async create(dto: AnswerDto, questionId: string, userId: string) {
     return this.prisma.answer.create({
       data: {
@@ -177,5 +156,61 @@ export class AnswerService {
         isBestAnswer: true,
       },
     });
+  }
+
+  async getFromUser(id: string, category: string, skip: number, take: number) {
+    let whereCase: any = {
+      userId: id,
+    }
+    
+    if (category === 'resolve') {
+      whereCase = {
+        userId: id,
+        isBestAnswer: true,
+      }
+    }
+
+    const [answers, answersLength, questionsLength, bestAnswersLength] = await Promise.all([
+      this.prisma.answer.findMany({
+        where: whereCase,
+        orderBy: {
+          createdAt: 'desc',
+        },
+        include: {
+          question: true,
+          user: {
+            select: {
+              id: true,
+              name: true,
+              lastName: true,
+              avatar: true,
+            }
+          }
+        },
+        skip,
+        take,
+      }),
+      this.prisma.answer.count({
+        where: { userId: id },
+      }),
+      this.prisma.question.count({
+        where: { userId: id },
+      }),
+      this.prisma.answer.count({
+        where: {
+          userId: id,
+          isBestAnswer: true,
+        },
+      }),
+    ])
+
+    console.log('HI  ', skip, take, answers, answersLength, category)
+
+    return {
+      answers,
+      answersLength,
+      questionsLength,
+      bestAnswersLength,
+    };
   }
 }

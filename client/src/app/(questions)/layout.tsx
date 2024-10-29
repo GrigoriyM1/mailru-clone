@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import QuestionLeadersSidebar from '@/components/shared/QuestionLeaders/QuestionLeadersSidebar';
 import { PropsWithChildren } from 'react';

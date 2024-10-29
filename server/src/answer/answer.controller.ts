@@ -8,17 +8,7 @@ import { BestAnswerDto } from './dto/best-answer.dto';
 
 @Controller('answer')
 export class AnswerController {
-  constructor(private readonly answerService: AnswerService) {}
-
-  // @Get(':id')
-  // @Auth()
-  // async getAll(
-  //   @Param('id') questionId: string,
-  //   @Query('skip') skip: string = '0',
-  //   @Query('take') take: string = '20',
-  // ) {
-  //   return this.answerService.getAll(questionId, Number(skip), Number(take));
-  // }
+  constructor(private readonly answerService: AnswerService) { }
 
   @UsePipes(new ValidationPipe())
   @Auth()
@@ -51,7 +41,7 @@ export class AnswerController {
   ) {
     return this.answerService.delete(id, userId);
   }
-  
+
   @UsePipes(new ValidationPipe())
   @Auth()
   @Put('/like/:id')
@@ -82,5 +72,16 @@ export class AnswerController {
     @CurrentUser('id') userId: string,
   ) {
     return this.answerService.bestAnswer(dto, id, userId);
+  }
+
+  @Get('user/:id/:category')
+  @Auth()
+  async getFromUser(
+    @Param('id') id: string, 
+    @Param('category') category: string, 
+    @Query('skip') skip: string = '0',
+    @Query('take') take: string = '20',
+  ) {
+    return this.answerService.getFromUser(id, category, Number(skip), Number(take));
   }
 }

@@ -67,4 +67,16 @@ export class UserService {
       }
     })
   }
+
+  async editProfileAvatar(file: Express.Multer.File, userId: string) {
+    await this.prisma.user.update({
+      where: {
+        id: userId
+      },
+      data: {
+        avatar: `${process.env.SERVER_URL}/uploads/${file.filename}`
+      }
+    })
+    return true
+  }
 }

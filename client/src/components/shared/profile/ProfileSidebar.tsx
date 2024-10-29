@@ -14,7 +14,7 @@ const ProfileSidebar: React.FC<IProfileSidebarProps> = ({
 	data,
 }) => {
 	const { setIsEditProfileModalOpen } = useModalsStore();
-	const { profileQuestions } = useProfileStore();
+	const { profileQuestions, profileAnswers } = useProfileStore();
 	const QUESTIONS_URL = `/profile/${data?.id}/questions/all`;
 
 	return (
@@ -26,17 +26,18 @@ const ProfileSidebar: React.FC<IProfileSidebarProps> = ({
 				>
 					Вопросы
 					<span className='p-2 py-1 bg-gray-300 rounded-sm text-[13px]'>
-						{profileQuestions?.questionsLength}
+						{profileQuestions?.questionsLength ||
+							profileAnswers?.questionsLength}
 						{/* TODO: СЮДА ДОБАВИТЬ ТУТ ОСТАНОВИЛСЯ */}
 					</span>
 				</Link>
 				<Link
-					href='#'
+					href={`/profile/${data?.id}/answers/all`}
 					className='w-full px-6 py-2 flex justify-between hover:bg-gray-300 transition rounded-sm'
 				>
 					Ответы
 					<span className='p-2 py-1 bg-gray-300 rounded-sm text-[13px]'>
-						{profileQuestions?.answersLength}
+						{profileQuestions?.answersLength || profileAnswers?.answersLength}
 					</span>
 				</Link>
 			</div>

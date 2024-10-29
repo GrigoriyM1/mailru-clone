@@ -48,6 +48,7 @@ export interface IAnswer {
 	comments: IComment[];
 
 	user: IMinUser;
+	question: IQuestion;
 }
 
 export interface ICategories {
@@ -87,4 +88,11 @@ export interface IQuestionsWithLength {
 	questionsLength: number;
 	resolveQuestionsLength: number;
 	answersLength: number;
+}
+
+export interface IAnswersWithLength {
+	answers: IAnswer[];
+	answersLength: number;
+	questionsLength: number;
+	bestAnswersLength: number;
 }

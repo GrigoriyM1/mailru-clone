@@ -4,16 +4,17 @@ import { QuestionDto } from './dto/question.dto'
 import { Auth } from 'src/auth/decorators/auth.decorator';
 import { CurrentUser } from 'src/auth/decorators/user.decorator';
 import { AddAdditionalDto } from './dto/add-additional.dto';
+import { TimeFrame } from './utils/getTimeFrame';
 
 @Controller('question')
 export class QuestionController {
-  constructor(private readonly questionService: QuestionService) {}
-  
+  constructor(private readonly questionService: QuestionService) { }
+
   @Auth()
   @Get()
   async getAll(
-    @Query('category') category: string, 
-    @Query('skip') skip: string = '0', 
+    @Query('category') category: string,
+    @Query('skip') skip: string = '0',
     @Query('take') take: string = '20',
     @Query('skipAnswer') skipAnswer: string = '0',
     @Query('takeAnswer') takeAnswer: string = '20',
@@ -25,12 +26,12 @@ export class QuestionController {
   @Get('get-one/:id')
   async getOne(
     @Param('id') id: string,
-    @Query('skipAnswer') skipAnswer: string = '0', 
+    @Query('skipAnswer') skipAnswer: string = '0',
     @Query('takeAnswer') takeAnswer: string = '20',
   ) {
     return this.questionService.getOne(id, Number(skipAnswer), Number(takeAnswer));
   }
-  
+
   @UsePipes(new ValidationPipe())
   @HttpCode(200)
   @Auth()
@@ -40,12 +41,12 @@ export class QuestionController {
   }
 
   @UsePipes(new ValidationPipe())
-	@HttpCode(200)
+  @HttpCode(200)
   @Auth()
   @Put(':id')
   async update(
-    @Body() dto: Partial<QuestionDto>, 
-    @Param('id') id: string, 
+    @Body() dto: Partial<QuestionDto>,
+    @Param('id') id: string,
     @CurrentUser('id') userId: string
   ) {
     return this.questionService.update(dto, id, userId);
@@ -57,7 +58,7 @@ export class QuestionController {
   async delete(@Param('id') id: string) {
     return this.questionService.delete(id);
   }
-  
+
   @UsePipes(new ValidationPipe())
   @Auth()
   @Patch('like/:id')
@@ -70,8 +71,8 @@ export class QuestionController {
   @Patch('add-additional/:id')
   async addAdditional(
     @Body() dto: AddAdditionalDto,
-    @Param('id') id: string, 
-    @CurrentUser('id') userId: string, 
+    @Param('id') id: string,
+    @CurrentUser('id') userId: string,
   ) {
     return this.questionService.addAdditional(dto, id, userId);
   }
@@ -101,5 +102,29 @@ export class QuestionController {
     @Query('take') take: string = '20',
   ) {
     return this.questionService.getFromUser(userId, category, Number(skip), Number(take))
+  }
+
+  @Auth()
+  @Get('search/:searchText')
+  async search(
+    @Param('searchText') searchText: string,
+    @Query('skip') skip: string = '0',
+    @Query('take') take: string = '20',
+    @Query('category') category: string = '',
+    @Query('subcategory') subcategory: string = '',
+    @Query('time') time: TimeFrame = '',
+    @Query('type') type: 'all' | 'resolve' = 'all',
+    @Query('order') order: 'relevance' | 'date' = 'relevance',
+  ) {
+    return this.questionService.search(
+      searchText, 
+      category, 
+      subcategory, 
+      time, 
+      type,
+      order,
+      Number(skip), 
+      Number(take)
+    )
   }
 }

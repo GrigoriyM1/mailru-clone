@@ -37,5 +37,3 @@ const FetchUser = ({ children }: React.PropsWithChildren) => {
 };
 
 export default FetchUser;
-
-// TODO: ТУТ ОСТАНОВИЛСЯ

@@ -4,6 +4,7 @@ import { PrismaService } from 'src/prisma.service';
 import { isTimeUp } from './utils/isTimeUp';
 import { AddAdditionalDto } from './dto/add-additional.dto';
 import { CATEGORIES } from './constants/categories.constants';
+import { getTimeFrame, TimeFrame } from './utils/getTimeFrame';
 
 @Injectable()
 export class QuestionService {
@@ -241,7 +242,6 @@ export class QuestionService {
   }
 
   async getLeaders(category: string | undefined, skip: number, take: number) {
-    console.log('FETCH ', category)
     let orCase: any = {}
     if (category) {
       orCase = {
@@ -304,6 +304,9 @@ export class QuestionService {
             },
           },
         },
+        orderBy: {
+          createdAt: 'desc',
+        },
         skip,
         take,
       }),
@@ -329,6 +332,8 @@ export class QuestionService {
       })
     ]);
 
+    console.log('answersLength  ', answersLength, questionsLength, resolveQuestionsLength)
+
     // Возвращаем результаты
     return {
       questions,
@@ -336,6 +341,110 @@ export class QuestionService {
       answersLength,
       resolveQuestionsLength,
     };
-    
+  }
+
+
+
+
+
+  async search(
+    searchText: string, 
+    category: string, 
+    subcategory: string, 
+    time: TimeFrame,
+    type: 'all' | 'resolve',
+    order: 'relevance' | 'date',
+    skip: number, 
+    take: number
+  ) {
+    const formattedSearchText = searchText.trim().toLowerCase();
+
+    const [data, matchesLength] = await Promise.all([
+      this.prisma.question.findMany({
+        where: {
+          OR: [
+            {
+              themeText: {
+                contains: formattedSearchText,
+                mode: 'insensitive',
+              },
+            },
+            {
+              text: {
+                contains: formattedSearchText,
+                mode: 'insensitive',
+              },
+            },
+          ],
+          ...(category && {
+            OR: [
+              { category: category },
+              { subcategory: subcategory },
+            ],
+          }),
+  
+          ...(time && getTimeFrame(time) && { createdAt: { gte: getTimeFrame(time) } }),
+          ...(type === 'resolve' && {
+            answers: {
+              some: {
+                isBestAnswer: true,
+              },
+            },
+          })
+        },
+        include: {
+          user: {
+            select: {
+              id: true,
+              name: true,
+              lastName: true,
+              avatar: true,
+            },
+          },
+        },
+        orderBy: order === 'relevance' ? {
+          likes: 'desc',
+        } : {
+          createdAt: 'desc',
+        },
+        skip,
+        take,
+      }),
+      this.prisma.question.count({
+        where: {
+          OR: [
+            {
+              themeText: {
+                contains: formattedSearchText,
+                mode: 'insensitive',
+              },
+            },
+            {
+              text: {
+                contains: formattedSearchText,
+                mode: 'insensitive',
+              },
+            },
+          ],
+          ...(category && {
+            OR: [
+              { category: category },
+              { subcategory: subcategory },
+            ],
+          }),
+  
+          ...(time && getTimeFrame(time) && { createdAt: { gte: getTimeFrame(time) } }),
+          ...(type === 'resolve' && {
+            answers: {
+              some: {
+                isBestAnswer: true,
+              },
+            },
+          })
+        },
+      })
+    ])
+
+    return { data, matchesLength }
   }
 }

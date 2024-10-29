@@ -1,10 +1,11 @@
 import { GetByEmailDto } from './dto/get-by-email.dto';
-import { Body, Controller, HttpCode, Post, Get, Param, Patch } from '@nestjs/common';
+import { Body, Controller, HttpCode, Post, Get, Param, Patch, UploadedFile } from '@nestjs/common';
 import { UserService } from './user.service';
 import { Auth } from 'src/auth/decorators/auth.decorator';
 import { EditProfileDto } from './dto/edit-profile.dto';
 import { CurrentUser } from 'src/auth/decorators/user.decorator';
 import { EditProfilePageDto } from './dto/edit-profile-page.dto';
+import { FileUpload } from 'src/files/decorators/files.decorator';
 
 @Controller('user')
 export class UserController {
@@ -45,5 +46,15 @@ export class UserController {
   ) {
     const data = await this.userService.editProfilePage(dto, userId)
     return data
+  }
+
+  @Patch('edit-profile-avatar')
+  @Auth()
+  @FileUpload()
+  async editProfileAvatar(
+    @UploadedFile() file: Express.Multer.File,
+    @CurrentUser('id') userId: string,
+  ) {
+    return this.userService.editProfileAvatar(file, userId)
   }
 }

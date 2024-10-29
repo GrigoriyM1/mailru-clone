@@ -5,9 +5,13 @@ import { MessageCircleMore } from 'lucide-react';
 import { useProfileStore } from '@/store/use-profile-store';
 import ProfileQuestionsPagination from './ProfileQuestionsPagination/ProfileQuestionsPagination';
 
-interface IProfileQuestionsListProps {}
+interface IProfileQuestionsListProps {
+	isAnswers?: boolean;
+}
 
-const ProfileQuestionsList: React.FC<IProfileQuestionsListProps> = () => {
+const ProfileQuestionsList: React.FC<IProfileQuestionsListProps> = ({
+	isAnswers,
+}) => {
 	const { profileQuestions, isProfileQuestionsLoading } = useProfileStore();
 
 	return isProfileQuestionsLoading ? (
@@ -45,7 +49,7 @@ const ProfileQuestionsList: React.FC<IProfileQuestionsListProps> = () => {
 				</div>
 			))}
 
-			<ProfileQuestionsPagination />
+			<ProfileQuestionsPagination isAnswers={isAnswers} />
 		</div>
 	);
 };

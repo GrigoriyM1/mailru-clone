@@ -1,4 +1,3 @@
-import Avatar from '@/components/modules/Avatar';
 import { Button } from '@/components/ui/button';
 import { FormField } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
@@ -15,6 +14,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
+import EditProfileFileUpload from './EditProfileFileUpload';
 
 const EditProfile = () => {
 	const { user, mutate: userMutate } = useUserStore();
@@ -49,7 +49,6 @@ const EditProfile = () => {
 			userService.editProfilePage(data),
 		onSuccess() {
 			toast.success('Профиль успешно обновлен');
-			// queryClient.invalidateQueries({ queryKey: ['verify-auth'] });
 			userMutate?.();
 			queryClient.invalidateQueries({ queryKey: ['get-user-by-id', user?.id] });
 		},
@@ -64,18 +63,7 @@ const EditProfile = () => {
 
 	return (
 		<form onSubmit={handleSubmit(onSubmit)} className='flex gap-20'>
-			<div className='flex flex-col items-center'>
-				<Avatar
-					user={user!}
-					size='normal'
-					isLink={false}
-					className='min-w-[160px] min-h-[160px] text-[40px]'
-				/>
-
-				<Button variant='ghost' className='mt-4' size='lg'>
-					Изменить фото
-				</Button>
-			</div>
+			<EditProfileFileUpload />
 
 			<div className='w-[500px]'>
 				<Input

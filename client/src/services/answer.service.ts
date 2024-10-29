@@ -1,5 +1,9 @@
 import { axiosWithAuth } from '@/api/interceptors';
-import { IAnswer, IAnswerForm } from '@/types/questions.types';
+import {
+	IAnswer,
+	IAnswerForm,
+	IAnswersWithLength,
+} from '@/types/questions.types';
 
 class AnswerService {
 	private BASE_URL = '/answer';
@@ -46,6 +50,24 @@ class AnswerService {
 		const response = await axiosWithAuth.put<IAnswer>(
 			`${this.BASE_URL}/best-answer/${id}`,
 			{ questionId }
+		);
+		return response.data;
+	}
+
+	async getFromUser(
+		id: string,
+		category: string,
+		take?: number,
+		skip?: number
+	) {
+		const response = await axiosWithAuth.get<IAnswersWithLength>(
+			`${this.BASE_URL}/user/${id}/${category}`,
+			{
+				params: {
+					skip,
+					take,
+				},
+			}
 		);
 		return response.data;
 	}

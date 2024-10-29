@@ -87,8 +87,8 @@ export const questionsService = {
 	getFromUser: async (
 		userId: string,
 		category: string,
-		take?: number, // тут 
 		skip?: number,
+		take?: number, // тут 
 	) => {
 		console.log('GET FORM USER  ', userId, category, take, skip);
 		const response = await axiosWithAuth.get<IQuestionsWithLength>(

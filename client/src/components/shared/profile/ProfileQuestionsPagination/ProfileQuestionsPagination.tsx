@@ -1,21 +1,33 @@
-import { useParams, useRouter } from 'next/navigation';
+import { useParams, usePathname, useRouter } from 'next/navigation';
 import { useProfileStore } from '@/store/use-profile-store';
 import ReactPaginate from 'react-paginate';
 
-const ProfileQuestionsPagination = () => {
+interface IProfileQuestionsPaginationProps {
+	isAnswers?: boolean;
+}
+
+const ProfileQuestionsPagination: React.FC<
+	IProfileQuestionsPaginationProps
+> = ({ isAnswers }) => {
 	const { id, category, pageNumber } = useParams();
-	const { profileQuestions } = useProfileStore();
+	const { profileQuestions, profileAnswers } = useProfileStore();
 	const { push } = useRouter();
+	const pathname = usePathname();
 
-	const BASE_URL = `/profile/${id}/questions/${category}`;
+	console.log('isanswers  ', isAnswers);
+
+	const BASE_URL = isAnswers
+		? `/profile/${id}/answers/${category}`
+		: `/profile/${id}/questions/${category}`;
 	const PER_PAGE = 20;
-	const TOTAL_PAGES =
-		category === 'resolve'
+	const TOTAL_PAGES = pathname.includes('/questions')
+		? category === 'resolve'
 			? profileQuestions?.resolveQuestionsLength
-			: profileQuestions?.questionsLength;
+			: profileQuestions?.questionsLength
+		: category === 'resolve'
+		? profileAnswers?.bestAnswersLength
+		: profileAnswers?.answersLength;
 	const formattedPageNumber = Number(pageNumber) || 1;
-
-	console.log('category  ', profileQuestions?.resolveQuestionsLength);
 
 	return (
 		<div>
@@ -42,3 +54,5 @@ const ProfileQuestionsPagination = () => {
 };
 
 export default ProfileQuestionsPagination;
+
+// TODO: ЩАС ИСПРАВИТЬ БАГ ПРИ СМЕНЕ СТРАНИЦЫ

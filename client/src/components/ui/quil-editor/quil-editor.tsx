@@ -1,11 +1,6 @@
 'use client';
 
-import React, {
-	useState,
-	forwardRef,
-	useImperativeHandle,
-	useMemo,
-} from 'react';
+import React, { useState, forwardRef, useMemo } from 'react';
 import ReactQuill, { ReactQuillProps } from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import './quil-editor.scss';
@@ -102,7 +97,6 @@ const QuilEditor = forwardRef<ReactQuill, IQuilEditorProps>(
 							'Content-Type': 'multipart/form-data',
 						},
 					});
-					console.log(data);
 
 					const imageUrl = data.filePath; // Assuming the server returns the uploaded image URL
 

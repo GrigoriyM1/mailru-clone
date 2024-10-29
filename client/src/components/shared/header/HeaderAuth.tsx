@@ -12,7 +12,7 @@ import Dropdown from '@/components/ui/dropdown';
 import MenuItem from '@/components/ui/menu-item';
 import { Separator } from '@/components/ui/separator';
 import { toast } from 'sonner';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { authService } from '@/services/auth.service';
 import { useRouter } from 'next/navigation';
 import { useUserStore } from '@/store/use-user-store';
@@ -20,11 +20,19 @@ import Avatar from '@/components/modules/Avatar';
 import { IMinUser } from '@/types/auth.types';
 
 const HeaderAuth = () => {
-	const { isLoading, user, setUser, setIsAuth } = useUserStore();
+	const {
+		isLoading,
+		user,
+		setUser,
+		setIsAuth,
+		mutate: userMutate,
+	} = useUserStore();
 
 	const [isProfileOpen, setIsProfileOpen] = useState(false);
 
 	const { push } = useRouter();
+
+	const queryClient = useQueryClient();
 
 	const { mutate } = useMutation({
 		mutationKey: ['logout'],
@@ -32,6 +40,7 @@ const HeaderAuth = () => {
 		onSuccess() {
 			push('/register');
 			toast.success('Вы успешно вышли из аккаунта');
+			userMutate?.();
 		},
 		onError(error) {
 			toast.error('Произошла ошибка, попробуйте снова...');

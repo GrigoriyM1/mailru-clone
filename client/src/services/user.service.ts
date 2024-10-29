@@ -37,6 +37,19 @@ class UserService {
 		);
 		return response.data;
 	}
+
+	async editProfileAvatar(formData: FormData) {
+		const response = await axiosWithAuth.patch<boolean>(
+			this.BASE_URL + '/edit-profile-avatar',
+			formData,
+			{
+				headers: {
+					'Content-Type': 'multipart/form-data',
+				},
+			}
+		);
+		return response.data;
+	}
 }
 
 export const userService = new UserService();
