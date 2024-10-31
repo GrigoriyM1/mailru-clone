@@ -34,7 +34,6 @@ const ProfileAnswersCategoryPage = () => {
 	const isMyProfile = data?.id === user?.id;
 
 	useEffect(() => {
-		console.log('getAnswersFromUser.data  ', getAnswersFromUser.data);
 		if (getAnswersFromUser.data) {
 			setProfileAnswers(getAnswersFromUser.data);
 		}

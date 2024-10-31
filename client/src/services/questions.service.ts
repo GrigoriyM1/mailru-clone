@@ -6,6 +6,7 @@ import {
 	IQuestionsWithLength,
 	IUpdatedLikes,
 } from '@/types/questions.types';
+import { IQuestionsSearch } from '@/types/search.types';
 
 export const questionsService = {
 	getAll: async (
@@ -88,15 +89,41 @@ export const questionsService = {
 		userId: string,
 		category: string,
 		skip?: number,
-		take?: number, // тут 
+		take?: number // тут
 	) => {
-		console.log('GET FORM USER  ', userId, category, take, skip);
 		const response = await axiosWithAuth.get<IQuestionsWithLength>(
 			`/question/user/${userId}/${category}`,
 			{
 				params: {
 					take,
 					skip,
+				},
+			}
+		);
+		return response.data;
+	},
+
+	search: async (
+		searchText: string,
+		category: string,
+		subcategory: string,
+		time: string,
+		type: string,
+		order: string,
+		skip?: number,
+		take?: number
+	) => {
+		const response = await axiosWithAuth.get<IQuestionsSearch>(
+			`/question/search/${searchText}`,
+			{
+				params: {
+					take,
+					skip,
+					category: category === 'all' ? undefined : category,
+					subcategory,
+					time,
+					type,
+					order,
 				},
 			}
 		);

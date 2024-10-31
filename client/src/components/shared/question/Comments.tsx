@@ -12,7 +12,6 @@ const Comments: React.FC<ICommentsProps> = ({ answer }) => {
 
 	useEffect(() => {
 		if (addCommentRef?.current) {
-			console.log(addCommentRef?.current?.offsetTop, addCommentRef.current);
 			const elementTopPosition = addCommentRef.current.getBoundingClientRect().top
 			const offsetPosition = elementTopPosition + window.pageYOffset - 30; // - offset
 			

@@ -34,8 +34,6 @@ const QuestionLeadersSidebar = () => {
 	});
 
 	useEffect(() => {
-		console.log('YES  ', category, id, question?.category);
-		console.log('SECOND  ', data);
 	}, [category, question?.category, id]);
 
 	return (

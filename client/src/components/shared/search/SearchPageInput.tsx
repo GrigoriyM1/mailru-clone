@@ -1,13 +1,11 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ISearchForm } from '@/types/search.types';
-import { useParams } from 'next/navigation';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 const SearchPageInput = () => {
 	const { register, control } = useFormContext<ISearchForm>();
-	const { searchText: searchTextValue } = useWatch({ control });
-	const { searchText } = useParams();
+	const { category, subcategory } = useWatch({ control });
 
 	return (
 		<div className='flex items-center'>
@@ -15,7 +13,7 @@ const SearchPageInput = () => {
 			<Button
 				size='lg'
 				type='submit'
-				disabled={searchTextValue === decodeURIComponent(searchText as string)}
+				disabled={!!category && category !== 'all' && !subcategory}
 			>
 				Искать
 			</Button>

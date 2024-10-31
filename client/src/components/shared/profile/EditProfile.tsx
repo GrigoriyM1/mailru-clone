@@ -39,8 +39,6 @@ const EditProfile = () => {
 		resolver: zodResolver(editProfilePageSchema),
 	});
 
-	console.log('USER  ', user?.birthdate);
-
 	const queryClient = useQueryClient();
 
 	const editProfilePageMutation = useMutation({

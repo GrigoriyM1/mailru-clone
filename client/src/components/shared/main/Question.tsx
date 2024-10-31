@@ -47,8 +47,6 @@ const Question: React.FC<IQuestionProps> = ({
 
 	const isBest = categoryParams === 'best' || type === 'best';
 
-	console.log('isBest  ', isBest);
-
 	return (
 		<div
 			className='py-6 px-9 flex justify-between'

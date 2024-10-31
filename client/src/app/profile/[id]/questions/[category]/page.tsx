@@ -29,7 +29,7 @@ const ProfileQuestionsCategoryPage = () => {
 			questionsService.getFromUser(
 				id as string,
 				category as string,
-				(20 * Number(pageNumber)) || 20
+				(20 * Number(pageNumber)) || 20,
 			),
 	});
 	const isMyProfile = data?.id === user?.id;

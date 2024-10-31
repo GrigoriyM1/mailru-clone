@@ -14,8 +14,6 @@ const ProfileQuestionsPagination: React.FC<
 	const { push } = useRouter();
 	const pathname = usePathname();
 
-	console.log('isanswers  ', isAnswers);
-
 	const BASE_URL = isAnswers
 		? `/profile/${id}/answers/${category}`
 		: `/profile/${id}/questions/${category}`;

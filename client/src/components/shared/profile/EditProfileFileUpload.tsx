@@ -15,7 +15,6 @@ const EditProfileFileUpload = () => {
 		mutationKey: ['profile-upload-file-avatar'],
 		mutationFn: (formData: FormData) => userService.editProfileAvatar(formData),
 		onSuccess: data => {
-			console.log(data);
 			if (data) {
 				userMutate?.();
 			}

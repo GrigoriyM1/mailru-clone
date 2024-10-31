@@ -79,7 +79,6 @@ const RegisterPage = () => {
 	});
 
 	const onSubmit: SubmitHandler<IRegisterForm> = data => {
-		console.log('SUBMIT DATA  ', data);
 		const obj = {
 			...data,
 			name: data.name.trim(),

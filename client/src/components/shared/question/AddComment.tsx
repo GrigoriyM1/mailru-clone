@@ -25,7 +25,6 @@ const AddComment = forwardRef<HTMLDivElement, IAddCommentProps>(
 			mutationKey: ['comment-answer'],
 			mutationFn: () => answerService.comment(answerId, commentText.html),
 			onSuccess(data) {
-				console.log('success ', data);
 				queryClient.invalidateQueries({ queryKey: [`get-one-question`] });
 				setCommentText({
 					text: '',
@@ -36,7 +35,6 @@ const AddComment = forwardRef<HTMLDivElement, IAddCommentProps>(
 
 		const handleComment = () => {
 			commentMutation.mutate();
-			console.log('handleComment');
 		};
 
 		return (

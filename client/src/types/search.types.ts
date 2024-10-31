@@ -1,3 +1,5 @@
+import { IQuestion } from "./questions.types";
+
 export interface ISearchForm {
 	searchText: string;
 	category: string;
@@ -5,4 +7,9 @@ export interface ISearchForm {
 	time: string;
 	type: string;
 	order: string;
+}
+
+export interface IQuestionsSearch {
+	data: IQuestion[];
+	matchesLength: number;
 }

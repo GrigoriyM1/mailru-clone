@@ -24,7 +24,6 @@ const AdditionalModal = () => {
 		mutationFn: (variables: { id: string; additional: string }) =>
 			questionsService.addAdditional(variables.id, variables.additional),
 		onSuccess(data) {
-			console.log(data);
 			setIsAdditionalModalOpen(false);
 			setText({
 				html: '',

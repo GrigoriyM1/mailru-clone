@@ -378,8 +378,8 @@ export class QuestionService {
           ],
           ...(category && {
             OR: [
-              { category: category },
               { subcategory: subcategory },
+              { category: category },
             ],
           }),
   
@@ -393,6 +393,7 @@ export class QuestionService {
           })
         },
         include: {
+          answers: true,
           user: {
             select: {
               id: true,

@@ -64,6 +64,7 @@
   },
   "devDependencies": {
     "@types/node": "^20",
+    "@types/qs": "^6.9.16",
     "@types/quill": "^2.0.14",
     "@types/react": "^18",
     "@types/react-dom": "^18",

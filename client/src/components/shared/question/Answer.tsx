@@ -50,7 +50,6 @@ const Answer: React.FC<IAnswer & IAnswerProps> = props => {
 	const isLiked = props.likedBy.find(item => item.id === currentUser?.id);
 	const handleLike = () => {
 		if (isMyQuestion && isLiked) {
-			console.log('NO');
 			return toast.error('Вы уже поблагодарили автора за ответ');
 		}
 		likeMutation.mutate();
@@ -65,7 +64,6 @@ const Answer: React.FC<IAnswer & IAnswerProps> = props => {
 	};
 
 	const handleBestAnswer = () => {
-		console.log('best answer');
 		bestAnswerMutation.mutate();
 	};
 

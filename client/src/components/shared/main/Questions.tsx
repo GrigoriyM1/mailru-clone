@@ -16,11 +16,8 @@ const Questions = () => {
 
 	// const queryClient = useQueryClient();
 
-	const {
-		data = [],
-		isPending,
-	} = useQuery({
-		queryKey: ['questions', category, skip], // TODO: убрать из querykey в state
+	const { data = [], isPending } = useQuery({
+		queryKey: ['questions', category, skip],
 		queryFn: () =>
 			category === 'smstop'
 				? questionsService.getLeaders({})
@@ -28,9 +25,11 @@ const Questions = () => {
 		refetchOnWindowFocus: true,
 	});
 	const [questions, setQuestions] = useState<IQuestion[]>([]);
+	const [isShowMoreLoading, setIsShowMoreLoading] = useState(false);
 
 	const handleShowMore = () => {
 		setSkip(prevSkip => prevSkip + take);
+		setIsShowMoreLoading(true);
 	};
 
 	useEffect(() => {
@@ -48,9 +47,15 @@ const Questions = () => {
 		}
 	}, [data]);
 
+	useEffect(() => {
+		if (!questions.length) return;
+
+		setIsShowMoreLoading(isPending);
+	}, [isPending]);
+
 	return (
 		<div>
-			{isPending ? (
+			{isPending && !isShowMoreLoading ? (
 				<QuestionSkeleton />
 			) : (
 				<div>
@@ -73,7 +78,6 @@ const Questions = () => {
 						/>
 					))}
 
-					{/* исправить ошибку при добавлении */}
 					{(data.length === take || isPending) && (
 						<button
 							className='w-full flex items-center justify-center gap-2 text-[17px] p-6 hover:cursor-pointer hover:underline'
