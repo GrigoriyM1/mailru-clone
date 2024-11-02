@@ -21,33 +21,35 @@ const HeaderSearch = () => {
 
 	return (
 		<form
-			className='max-w-[450px] w-full flex items-center'
 			onSubmit={handleSearch}
+			className='max-w-[450px] w-full flex items-center'
 		>
-			<Input
-				placeholder='Поиск по вопросам'
-				className='w-full'
-				value={searchValue}
-				onChange={e => setSearchValue(e.target.value)}
-				onFocus={() => setIsFocused(true)}
-				onBlur={() => setIsFocused(false)}
-				ref={searchInputRef}
-			/>
-			<Button
-				variant='outline'
-				className={cn(
-					'w-[32px] h-[32px]',
-					isFocused && 'bg-primary hover:bg-primary focus:bg-primary'
-				)}
-				type='submit'
-			>
-				<Search
-					className={cn(
-						'text-primary min-w-[18px] min-h-[18px]',
-						isFocused && 'text-white'
-					)}
+			<div className='max-w-[450px] w-full flex items-center'>
+				<Input
+					placeholder='Поиск по вопросам'
+					className='w-full'
+					value={searchValue}
+					onChange={e => setSearchValue(e.target.value)}
+					onFocus={() => setIsFocused(true)}
+					onBlur={() => setIsFocused(false)}
+					ref={searchInputRef}
 				/>
-			</Button>
+				<Button
+					variant='outline'
+					className={cn(
+						'w-[32px] h-[32px]',
+						isFocused && 'bg-primary hover:bg-primary focus:bg-primary'
+					)}
+					type='submit'
+				>
+					<Search
+						className={cn(
+							'text-primary min-w-[18px] min-h-[18px]',
+							isFocused && 'text-white'
+						)}
+					/>
+				</Button>
+			</div>
 		</form>
 	);
 };

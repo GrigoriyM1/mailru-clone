@@ -1,12 +1,12 @@
 import { questionsService } from '@/services/questions.service';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { useParams, useSearchParams, usePathname } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { Spinner } from '@/components/ui/spinner';
 import { MoveDown } from 'lucide-react';
 import Question from '../main/Question';
 import { IQuestion } from '@/types/questions.types';
-import QuestionSkeleton from '../main/QuestionSkeleton';
+import SearchQuestionSkeleton from '../main/SearchQuestionSkeleton';
 import { useSearchStore } from '@/store/use-search-store';
 
 const SearchQuestions = () => {
@@ -20,20 +20,9 @@ const SearchQuestions = () => {
 	const [questions, setQuestions] = useState<IQuestion[]>([]);
 	const [isShowMoreLoading, setIsShowMoreLoading] = useState(false);
 
-	const queryClient = useQueryClient()
-
-	const { data, isPending, refetch } = useQuery({
-		queryKey: [
-			'search-questions',
-			searchText,
-			searchParams.get('category'),
-			searchParams.get('subcategory'),
-			searchParams.get('time'),
-			searchParams.get('type'),
-			searchParams.get('order'),
-			skip,
-		],
-		queryFn: () =>
+	const { data, isPending, mutate } = useMutation({
+		mutationKey: ['search-questions', searchText],
+		mutationFn: (type: 'default' | 'show-more' = 'default') =>
 			questionsService.search(
 				searchText as string,
 				searchParams.get('category')!,
@@ -43,54 +32,51 @@ const SearchQuestions = () => {
 				searchParams.get('order')!,
 				skip
 			),
+		onSuccess: (data, type) => {
+			setIsShowMoreLoading(false);
+			if (type === 'default') {
+				setQuestions(data?.data);
+			} else {
+				if (data?.data?.length && data?.data?.length > 0) {
+					const settedQuestionsData = data?.data
+						.map(item => {
+							if (questions.find(i => i.id === item.id)) {
+								return;
+							}
+							return item;
+						})
+						.filter(item => item !== undefined);
+					setQuestions([...questions, ...settedQuestionsData]);
+				}
+			}
+		},
+		onMutate: type => {
+			if (type === 'show-more') {
+				setIsShowMoreLoading(true);
+			}
+		},
 	});
 
 	// todo: ЩАС ФИКСИТЬ БАГ С ФИЛЬТРАМИ
 
+	useEffect(() => {
+		mutate('default');
+		console.log('PATHNAME CHANGE');
+	}, [pathname, searchParams]);
+
 	const handleShowMore = () => {
 		setSkip(prevSkip => prevSkip + take);
 		setIsShowMoreLoading(true);
+		mutate('show-more');
 	};
 
-	useEffect(() => {
-		// Проверяем, что в новых данных есть вопросы и что они не дублируются
-		if (data?.data?.length && data?.data?.length > 0) {
-			const settedQuestionsData = data?.data
-				.map(item => {
-					if (questions.find(i => i.id === item.id)) {
-						return;
-					}
-					return item;
-				})
-				.filter(item => item !== undefined);
-			setQuestions([...questions, ...settedQuestionsData]);
-		}
-	}, [data]);
-
-	useEffect(() => {
-		if (!questions.length) return;
-
-		setIsShowMoreLoading(isPending);
-	}, [isPending]);
-
-	useEffect(() => {
-		// console.log('NO IF ', data?.data, data, isPending);
-		// if (data?.data) {
-		// 	// console.log('SET QUERIONS ', data?.data, data);
-		// 	setQuestions(data?.data);
-		// }
-		refetch();
-		console.log('CHANGE URL');
-	}, [pathname, searchParams]);
-
-	useEffect(() => {
-		console.log('REFETCH');
-	}, [refetch]);
+	// TODO ПОФИКСИТЬ SKELETON
+	console.log('LOADS ', isCategoriesPending, isPending, isShowMoreLoading);
 
 	return (
 		<div className='bg-white p-4 w-full mb-4 mt-4'>
 			{(isCategoriesPending || isPending) && !isShowMoreLoading ? (
-				<QuestionSkeleton />
+				<SearchQuestionSkeleton />
 			) : (
 				<div>
 					<div className='flex justify-between items-center pb-5 border-b border-gray-200'>
@@ -119,9 +105,7 @@ const SearchQuestions = () => {
 								userName={question.user.name}
 								userLastName={question.user.lastName}
 								repliesCount={question.answers.length}
-								// isCategory={
-								// 	category === 'open' || category === 'best' || !category
-								// }
+								isSearch={searchText as string}
 								likes={question.likes}
 							/>
 						))}

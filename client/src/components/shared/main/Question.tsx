@@ -28,6 +28,7 @@ interface IQuestionProps {
 	repliesCount: number;
 	isCategory?: boolean;
 	likes: number;
+	isSearch?: string;
 }
 
 const Question: React.FC<IQuestionProps> = ({
@@ -42,10 +43,24 @@ const Question: React.FC<IQuestionProps> = ({
 	userId,
 	isCategory,
 	likes,
+	isSearch,
 }) => {
 	const { category: categoryParams, type } = useParams();
 
 	const isBest = categoryParams === 'best' || type === 'best';
+
+	const highlighted = (name: string): JSX.Element[] => {
+		const parts = name.split(new RegExp(`(${isSearch})`, 'gi'));
+		return parts.map((part, index) =>
+			part.toLowerCase() === isSearch?.toLowerCase?.() ? (
+				<span key={index} className='font-bold'>
+					{part}
+				</span>
+			) : (
+				<span key={index}>{part}</span>
+			)
+		);
+	};
 
 	return (
 		<div
@@ -69,7 +84,7 @@ const Question: React.FC<IQuestionProps> = ({
 						href={`/question/${id}`}
 						className='block text-[17px] mb-2 hover:underline word-break'
 					>
-						{theme}
+						{highlighted(theme)}
 					</Link>
 					<div className='flex'>
 						<div className='flex text-gray-400 text-[13px] mr-3'>

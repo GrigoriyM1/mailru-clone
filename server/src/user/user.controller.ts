@@ -1,11 +1,12 @@
 import { GetByEmailDto } from './dto/get-by-email.dto';
-import { Body, Controller, HttpCode, Post, Get, Param, Patch, UploadedFile } from '@nestjs/common';
+import { Body, Controller, HttpCode, Post, Get, Param, Patch, UploadedFile, Query } from '@nestjs/common';
 import { UserService } from './user.service';
 import { Auth } from 'src/auth/decorators/auth.decorator';
 import { EditProfileDto } from './dto/edit-profile.dto';
 import { CurrentUser } from 'src/auth/decorators/user.decorator';
 import { EditProfilePageDto } from './dto/edit-profile-page.dto';
 import { FileUpload } from 'src/files/decorators/files.decorator';
+import { GetLeadersTime, GetLeadersType } from './types/get-leaders.types';
 
 @Controller('user')
 export class UserController {
@@ -56,5 +57,18 @@ export class UserController {
     @CurrentUser('id') userId: string,
   ) {
     return this.userService.editProfileAvatar(file, userId)
+  }
+
+  @Get('leaders')
+  @Auth()
+  async getLeaders(
+    @Query('time') time: GetLeadersTime = 'week',
+    @Query('type') type: GetLeadersType = 'activity',
+    @Query('category') category: string,
+    @Query('subcategory') subcategory: string,
+    @Query('skip') skip: string,
+    @Query('take') take: string,
+  ) {
+    return this.userService.getLeaders(time, type, category, subcategory, Number(skip), Number(take))
   }
 }

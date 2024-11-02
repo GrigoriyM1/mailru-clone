@@ -376,10 +376,10 @@ export class QuestionService {
               },
             },
           ],
-          ...(category && {
+          ...(subcategory && {
             OR: [
-              { subcategory: subcategory },
-              { category: category },
+              { subcategory },
+              // { category: category },
             ],
           }),
   
@@ -427,10 +427,9 @@ export class QuestionService {
               },
             },
           ],
-          ...(category && {
+          ...(subcategory && {
             OR: [
-              { category: category },
-              { subcategory: subcategory },
+              { subcategory },
             ],
           }),
   

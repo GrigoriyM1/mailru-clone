@@ -4,6 +4,7 @@ import { RegisterDto } from 'src/auth/dto/register.dto';
 import { PrismaService } from 'src/prisma.service';
 import { EditProfileDto } from './dto/edit-profile.dto';
 import { EditProfilePageDto } from './dto/edit-profile-page.dto';
+import { GetLeadersTime, GetLeadersType } from './types/get-leaders.types';
 
 @Injectable()
 export class UserService {
@@ -78,5 +79,28 @@ export class UserService {
       }
     })
     return true
+  }
+
+  async getLeaders(
+    time: GetLeadersTime, 
+    type: GetLeadersType, 
+    category: string, 
+    subcategory: string, 
+    skip: number, 
+    take: number,
+  ) {
+    return this.prisma.user.findMany({
+      where: {
+        // TODO 
+      },
+      select: {
+        id: true,
+        name: true,
+        lastName: true,
+        avatar: true
+      },
+      skip,
+      take,
+    })
   }
 }
