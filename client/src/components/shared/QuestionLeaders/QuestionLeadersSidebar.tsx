@@ -33,8 +33,9 @@ const QuestionLeadersSidebar = () => {
 			}),
 	});
 
-	useEffect(() => {
-	}, [category, question?.category, id]);
+	// useEffect(() => {
+
+	// }, [category, question?.category, id]);
 
 	return (
 		<div>

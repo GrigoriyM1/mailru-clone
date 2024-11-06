@@ -47,7 +47,6 @@ const Question: React.FC = () => {
 		mutationFn: (id: string) => questionsService.like(id),
 		onSuccess() {
 			queryClient.invalidateQueries({ queryKey: ['get-one-question'] });
-			queryClient.invalidateQueries({ queryKey: ['questions'] });
 		},
 	});
 

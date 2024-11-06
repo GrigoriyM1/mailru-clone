@@ -59,7 +59,6 @@ const RegisterPage = () => {
 		onSuccess() {
 			push('/');
 			toast.success('Successfully registered!');
-			reset();
 		},
 		onError(error: IError) {
 			const errors = error?.response?.data?.errors;

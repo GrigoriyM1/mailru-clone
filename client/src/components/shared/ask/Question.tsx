@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
 import cn from 'clsx';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { questionsService } from '@/services/questions.service';
 import { Spinner } from '@/components/ui/spinner';
 import { Controller, useForm, useWatch } from 'react-hook-form';
@@ -24,6 +24,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import QuilEditor from '@/components/ui/quil-editor/quil-editor';
+import { useSocket } from '@/hooks/useSocket';
 
 const Question = () => {
 	const {
@@ -41,8 +42,7 @@ const Question = () => {
 	const [isLoading, setIsLoading] = useState(false);
 	const [isThemeError, setIsThemeError] = useState(false);
 	const [isTextError, setIsTextError] = useState(false);
-
-	const queryClient = useQueryClient();
+	const { socket } = useSocket();
 
 	const { data: categories, isPending } = useQuery({
 		queryKey: ['categories'],
@@ -51,12 +51,13 @@ const Question = () => {
 		},
 	});
 
-	const { mutate, data: createdQuestion } = useMutation({
+	const { mutate } = useMutation({
 		mutationKey: ['create-question'],
 		mutationFn: (data: IQuestionForm) => questionsService.create(data),
 		onSuccess(data) {
+			console.log('newQuestion  ', data);
+			socket?.emit('newQuestion', data);
 			push(`/question/${data?.id}`);
-			queryClient.invalidateQueries({ queryKey: ['questions'] });
 		},
 	});
 

@@ -9,8 +9,6 @@ type UseQuestionStoreState = {
 
 	question: IQuestion | null;
 	setQuestion: (question: IQuestion | null) => void;
-	questions: IQuestion[] | null;
-	setQuestions: (question: IQuestion[] | null) => void;
 };
 
 export const useQuestionStore = create<UseQuestionStoreState>(set => ({
@@ -21,6 +19,4 @@ export const useQuestionStore = create<UseQuestionStoreState>(set => ({
 
 	question: null,
 	setQuestion: (question: IQuestion | null) => set({ question }),
-	questions: null,
-	setQuestions: (questions: IQuestion[] | null) => set({ questions }),
 }));

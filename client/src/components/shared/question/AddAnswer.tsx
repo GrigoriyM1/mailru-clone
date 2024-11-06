@@ -10,6 +10,8 @@ import { answerService } from '@/services/answer.service';
 import { useQuestionStore } from '@/store/use-question-store';
 import Avatar from '@/components/modules/Avatar';
 import { IMinUser } from '@/types/auth.types';
+import { useSocket } from '@/hooks/useSocket';
+import { useParams } from 'next/navigation';
 
 const AddAnswer = () => {
 	const { question: questionData } = useQuestionStore();
@@ -24,12 +26,15 @@ const AddAnswer = () => {
 	const { user } = useUserStore();
 	const [text, setText] = useState('');
 	const queryClient = useQueryClient();
+	const { socket } = useSocket();
+	const { id } = useParams();
 
 	const { mutate, data } = useMutation({
 		mutationFn: () =>
 			answerService.create({ text }, questionData?.id as string),
-		onSuccess() {
-			queryClient.invalidateQueries({ queryKey: [`get-one-question`] });
+		onSuccess(data) {
+			// queryClient.invalidateQueries({ queryKey: [`get-one-question`] });
+			socket?.emit('newAnswer', { questionId: id, answer: data });
 		},
 	});
 

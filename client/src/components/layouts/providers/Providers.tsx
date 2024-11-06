@@ -17,10 +17,10 @@ const Providers = ({ children }: PropsWithChildren) => {
 	return (
 		<QueryClientProvider client={client}>
 			<FetchUser>
-				<Toaster position='bottom-left' theme='dark' />
-				<Modals />
+					<Toaster position='bottom-left' theme='dark' />
+					<Modals />
 
-				<Layout>{children}</Layout>
+					<Layout>{children}</Layout>
 			</FetchUser>
 		</QueryClientProvider>
 	);

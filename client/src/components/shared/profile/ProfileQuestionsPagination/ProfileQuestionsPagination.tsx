@@ -12,19 +12,21 @@ const ProfileQuestionsPagination: React.FC<
 	const { id, category, pageNumber } = useParams();
 	const { profileQuestions, profileAnswers } = useProfileStore();
 	const { push } = useRouter();
-	const pathname = usePathname();
 
 	const BASE_URL = isAnswers
-		? `/profile/${id}/answers/${category}`
-		: `/profile/${id}/questions/${category}`;
+		? `/profile/${id}/answers/${category || 'all'}`
+		: `/profile/${id}/questions/${category || 'all'}`;
 	const PER_PAGE = 20;
-	const TOTAL_PAGES = pathname.includes('/questions')
-		? category === 'resolve'
-			? profileQuestions?.resolveQuestionsLength
-			: profileQuestions?.questionsLength
-		: category === 'resolve'
-		? profileAnswers?.bestAnswersLength
-		: profileAnswers?.answersLength;
+	const TOTAL_PAGES = !isAnswers
+		? (
+			category === 'resolve'
+				? profileQuestions?.resolveQuestionsLength
+				: profileQuestions?.questionsLength
+		) : (
+			category === 'all' || !category
+				? profileAnswers?.bestAnswersLength
+				: profileAnswers?.answersLength
+		);
 	const formattedPageNumber = Number(pageNumber) || 1;
 
 	return (

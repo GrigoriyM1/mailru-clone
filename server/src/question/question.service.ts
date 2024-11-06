@@ -275,7 +275,7 @@ export class QuestionService {
 
   async getFromUser(userId: string, category: string, skip: number, take: number) {
     let whereClause: any = {};
-    
+
     if (category === 'resolve') whereClause = {
       userId,
       answers: {
@@ -284,12 +284,10 @@ export class QuestionService {
         }
       }
     }
-    console.log('YES RESOLVE   ', category)
+
     if (!Object.keys(whereClause).length) whereClause = {
       userId,
     }
-    console.log('TEST  ', whereClause, skip, take)
-    // todo: ТУТ ОСТАНОВИЛСЯ SKIP TAKE БАГ НА ФРОНТЕ И ТУТ 
     
     const [questions, questionsLength, answersLength, resolveQuestionsLength] = await Promise.all([
       this.prisma.question.findMany({
@@ -303,6 +301,9 @@ export class QuestionService {
               avatar: true,
             },
           },
+          answers: {
+            select: { id: true },
+          }
         },
         orderBy: {
           createdAt: 'desc',
@@ -331,8 +332,6 @@ export class QuestionService {
         },
       })
     ]);
-
-    console.log('answersLength  ', answersLength, questionsLength, resolveQuestionsLength)
 
     // Возвращаем результаты
     return {

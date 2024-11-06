@@ -14,7 +14,7 @@ const Category = () => {
 
 	return (
 		<div className='bg-white w-full'>
-			<div className='p-10 pb-0'>
+			<div className='p-10 pb-0 mb-6'>
 				<h1 className='mb-7 text-[25px]'>
 					{category === 'smstop' || isOpenOrBest || !category
 						? 'Вопросы лидеры'

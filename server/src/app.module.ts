@@ -5,9 +5,18 @@ import { ConfigModule } from '@nestjs/config';
 import { QuestionModule } from './question/question.module';
 import { AnswerModule } from './answer/answer.module';
 import { FilesModule } from './files/files.module';
+import { GatewayModule } from './gateway/gateway.module';
 
 @Module({
-  imports: [ConfigModule.forRoot(), AuthModule, UserModule, QuestionModule, AnswerModule, FilesModule], // ConfigModule.forRoot()  -  для env 
+  imports: [
+    ConfigModule.forRoot(), 
+    AuthModule, 
+    UserModule, 
+    QuestionModule, 
+    AnswerModule, 
+    FilesModule, 
+    GatewayModule
+  ],
   // controllers: [],
   // providers: [],
 })

@@ -8,14 +8,14 @@ import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import { useState } from 'react';
 import Question from '@/components/shared/ask/Question';
-import Survey from '@/components/shared/ask/Survey';
+// import Survey from '@/components/shared/ask/Survey';
 
 const AskPage = () => {
-	const [value, setValue] = useState<'question' | 'survey'>('question');
+	const [value, setValue] = useState<string>('question');
 
 	const handleChange = (
 		_e: React.SyntheticEvent,
-		newValue: 'question' | 'survey'
+		newValue: string
 	) => {
 		setValue(newValue);
 	};
@@ -32,22 +32,24 @@ const AskPage = () => {
 			<div className='bg-white p-10 w-full'>
 				<h1 className='text-[25px] mb-3'>Задать вопрос</h1>
 
-				<Box>
-					<TabContext value={value}>
-						<Box className='mb-10'>
+				{/* <Box> */}
+					{/* <TabContext value={value}> */}
+						{/* <Box className='mb-10'>
 							<TabList onChange={handleChange}>
-								<Tab label='Вопрос' value='question' defaultChecked />
-								<Tab label='Опрос' value='survey' />
-							</TabList>
-						</Box>
-						<TabPanel value='question' sx={{ padding: 0 }}>
-							<Question />
-						</TabPanel>
-						<TabPanel value='survey' sx={{ padding: 0 }}>
+								<Tab label='Вопрос' value='question' defaultChecked /> */}
+								{/* <Tab label='Опрос' value='survey' /> */}
+							{/* </TabList>
+						</Box> */}
+						{/* <TabPanel value='question' sx={{ padding: 0 }}> */}
+							{/* <Question /> */}
+						{/* </TabPanel> */}
+						{/* <TabPanel value='survey' sx={{ padding: 0 }}>
 							<Survey />
-						</TabPanel>
-					</TabContext>
-				</Box>
+						</TabPanel> */}
+					{/* </TabContext> */}
+				{/* </Box> */}
+
+				<Question />
 			</div>
 		</div>
 	);

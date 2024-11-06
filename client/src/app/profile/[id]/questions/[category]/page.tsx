@@ -29,7 +29,7 @@ const ProfileQuestionsCategoryPage = () => {
 			questionsService.getFromUser(
 				id as string,
 				category as string,
-				(20 * Number(pageNumber)) || 20,
+				pageNumber! === '1' || !pageNumber ? 0 : 20 * Number(pageNumber) // TODO: ТУТ ОСТАВНОИЛСЯ ТУТ ЭТА ОШИБКА
 			),
 	});
 	const isMyProfile = data?.id === user?.id;
@@ -49,7 +49,7 @@ const ProfileQuestionsCategoryPage = () => {
 				<ProfileSidebar isMyProfile={isMyProfile} data={data} />
 			)}
 
-			{isPending ? <ProfileLoading /> : <Profile data={data}  />}
+			{isPending ? <ProfileLoading /> : <Profile data={data} />}
 		</div>
 	);
 };

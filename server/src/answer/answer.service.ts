@@ -204,8 +204,6 @@ export class AnswerService {
       }),
     ])
 
-    console.log('HI  ', skip, take, answers, answersLength, category)
-
     return {
       answers,
       answersLength,
