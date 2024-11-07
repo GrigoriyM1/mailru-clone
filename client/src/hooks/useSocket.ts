@@ -8,11 +8,11 @@ export const useSocket = () => {
 
 	useEffect(() => {
 		const socketIo = io(process.env.NEXT_PUBLIC_SOCKET_URL!);
+		console.log('SOCKET  ', socketIo.connected, process.env.NEXT_PUBLIC_SOCKET_URL)
 
 		setSocket(socketIo);
 
 		return () => {
-			socketIo.off('newAnswer');
 			socketIo.disconnect();
 		};
 	}, []);

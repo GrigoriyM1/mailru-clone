@@ -1,10 +1,9 @@
 import { Controller, OnModuleInit } from "@nestjs/common";
 import { WebSocketGateway, SubscribeMessage, MessageBody, WebSocketServer, ConnectedSocket } from "@nestjs/websockets";
-import { Server, Socket } from 'socket.io';
 import { GatewayService } from "./gateway.service";
 
-@Controller('gateway')
-@WebSocketGateway(3001, {
+// @Controller('gateway')
+@WebSocketGateway(3001, { // TODO: ТУТ ОСТАНОВИЛСЯ ЭТО НЕ РАБОТАЕТ 
   cors: {
     origin: process.env.CLIENT_URL,
     methods: ["GET", "POST"],
@@ -13,20 +12,18 @@ import { GatewayService } from "./gateway.service";
   },
   namespace: '/'
 })
-export class GatewayController {
+export class GatewayController implements OnModuleInit {
   constructor(private readonly gatewayService: GatewayService) { }
-
-  @WebSocketServer()
-  server: Server;
 
   // private questionSockets: Map<number, Set<string>> = new Map();
 
-  // onModuleInit() {
-  //   // this.server.on('connection', socket => {
-  //     // console.log('Connected ', socket.id);
-  //   // });
-  //   console.log('server  ', this.server)
-  // }
+  onModuleInit() {
+    // this.server.on('connection', socket => {
+      // console.log('Connected ', socket.id);
+    // });
+    // console.log('server  ', this.server)
+    console.log('INITED  ')
+  }
 
   // @SubscribeMessage('joinQuestion')
   // handleJoinQuestion(
@@ -43,7 +40,7 @@ export class GatewayController {
 
   @SubscribeMessage('newQuestion')
   onNewQuestion(@MessageBody() body: any) {
-    this.server.emit('newQuestion', { data: body });
+    return this.gatewayService.onNewQuestion(body);
   }
 
   // @SubscribeMessage('newAnswer')
